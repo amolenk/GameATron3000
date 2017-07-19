@@ -67,3 +67,7 @@ ehthumbs.db
 Icon?
 Thumbs.db
 packages
+
+# dist
+/dist/index.html
+/dist/bundle.js
