@@ -3,6 +3,7 @@
 export class Narrator {
 
     private game: Phaser.Game;
+    private textBox: Phaser.BitmapText;
 
     constructor() {
     }
@@ -11,19 +12,21 @@ export class Narrator {
         this.game = game;
     }
 
+    public create(): void {
+        this.textBox = this.game.add.bitmapText(this.game.world.centerX, this.game.world.centerY, "onesize", "", 20);
+        this.textBox.anchor.setTo(0.5);
+    }
+
     public say(text: string): void {
 
-        console.log('narrator created');
+        this.textBox.setText("Hello, world!");
+//        this.textBox.updateText();
 
-        let textbox = this.game.add.bitmapText(200, 160, "onesize", text, 20);
-
-//           //  this.textbox.text = "Look at fridge";
-//             // this.textbox.updateText();
-//         }, this);
-
-
-//         // Print some test text.
-//         let text = game.add.bitmapText(200, 560, "onesize", "Talk to cleverly disguised Rolorob.", 20);
-
+        // var timer = this.game.time.events.add(Phaser.Timer.SECOND * 2, function(this) {
+        //     this.textBox.text = "";
+        //     this.textBox.updateText();    
+        // }, this);
+                
+        //at some point you want to remove itgame.time.events.remove(timer); MichaelD likes this
     }
 }

@@ -20,6 +20,7 @@ export class Cursor {
         // Lock the pointer on mousedown.
         game.canvas.addEventListener("mousedown", () => {
             game.input.mouse.requestPointerLock();
+            game.scale.startFullScreen(false);
         });
 
         // Register a move callback to render our own cursor.

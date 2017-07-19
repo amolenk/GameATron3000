@@ -33,7 +33,8 @@ gulp.task("default", ["copy-html"], function() {
 gulp.task("watch", ["default"], function() {
 
     browserSync.init({
-        server: "dist"
+        server: "dist",
+        browser: "google chrome"
     });
 
     gulp.watch(["src/**/**.ts"], ["default"]);
