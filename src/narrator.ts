@@ -29,7 +29,7 @@ export class Narrator {
             this.textBox.setText(line);
 
             var timer = this.game.time.events.add(
-                Phaser.Timer.SECOND * 2,
+                line.length * 80,
                 () => this.printNextLine(lines));
         } else {
             this.textBox.setText("");

@@ -72,7 +72,7 @@ class GameATron {
         this.cursor.create(this.game);
         this.narrator.create();
 
-        this.narrator.say([ "'You are in some kind of awesome pixelated spaceship "]);
+        this.narrator.say([ "You are in some kind of awesome pixelated spaceship!"]);
 
         this.verbBar.setRoom(this.room);
     }
