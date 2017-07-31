@@ -13,20 +13,26 @@ export class Narrator {
     }
 
     public create(): void {
-        this.textBox = this.game.add.bitmapText(this.game.world.centerX, this.game.world.centerY, "onesize", "", 20);
+        this.textBox = this.game.add.bitmapText(400, 200, "onesize", "", 24);
         this.textBox.anchor.setTo(0.5);
     }
 
-    public say(text: string): void {
+    public say(lines: string[]): void {
 
-        this.textBox.setText("Hello, world!");
-//        this.textBox.updateText();
+        this.printNextLine(lines.reverse());
+    }
 
-        // var timer = this.game.time.events.add(Phaser.Timer.SECOND * 2, function(this) {
-        //     this.textBox.text = "";
-        //     this.textBox.updateText();    
-        // }, this);
-                
-        //at some point you want to remove itgame.time.events.remove(timer); MichaelD likes this
+    private printNextLine(lines: string[]) : void {
+
+        var line = lines.pop();
+        if (line != null) {
+            this.textBox.setText(line);
+
+            var timer = this.game.time.events.add(
+                Phaser.Timer.SECOND * 2,
+                () => this.printNextLine(lines));
+        } else {
+            this.textBox.setText("");
+        }
     }
 }
