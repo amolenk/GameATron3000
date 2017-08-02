@@ -4,10 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
 
 namespace backend.Controllers
 {
@@ -25,6 +28,7 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFaceInfo(string id)
         {
+            Actor actor = await GetActorInfoFromBlobStorageAsync(id);
             byte[] imageData = await GetImageFromBlobStorageAsync(id);
 
             HttpClient client = new HttpClient();
@@ -50,16 +54,47 @@ namespace backend.Controllers
                 response = await client.PostAsync(uri, content);
 
                 // Get the JSON response.
-                string contentString = await response.Content.ReadAsStringAsync();
+                string faceInfo = await response.Content.ReadAsStringAsync();
 
-                return new ObjectResult(contentString);
+                // build result
+                ActorInfoResult result = new ActorInfoResult
+                {
+                    Id = id,
+                    Name = actor.Name,
+                    FaceInfo = JsonConvert.DeserializeObject<dynamic>(faceInfo)
+                };
+
+                return new ObjectResult(result);
             }
         }
 
         /// <summary>
-        /// Gets an image from blob storage by id.
+        /// Gets an actorinfo file from blob storage by id.
         /// </summary>
-        /// <param name="id">The id of the image.</param>
+        /// <param name="id">The id of the actor to get the info for.</param>
+        /// <returns>The string containing the image data.</returns>
+        private async Task<Actor> GetActorInfoFromBlobStorageAsync(string id)
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(Secrets.PictureStorageConnectionString);
+            var blobClient = storageAccount.CreateCloudBlobClient();
+            var container = blobClient.GetContainerReference("pictures");
+            CloudBlockBlob blob = container.GetBlockBlobReference($"{id}.json");
+            byte[] data;
+            using (var memoryStream = new MemoryStream())
+            {
+                await blob.DownloadToStreamAsync(memoryStream);
+                data = memoryStream.GetBuffer();
+            }
+
+            string json = Encoding.UTF8.GetString(data);
+
+            return JsonConvert.DeserializeObject<Actor>(json);
+        }
+
+        /// <summary>
+        /// Gets an image from blob storage by actor id.
+        /// </summary>
+        /// <param name="id">The id of the actor to get the image for.</param>
         /// <returns>The byte[] containing the image data.</returns>
         private async Task<byte[]> GetImageFromBlobStorageAsync(string id)
         {
@@ -67,8 +102,6 @@ namespace backend.Controllers
             var blobClient = storageAccount.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference("pictures");
             CloudBlockBlob blob = container.GetBlockBlobReference($"{id}-front.png");
-            // byte[] imageData = new byte[blob.Properties.Length];
-            // await blob.DownloadToByteArrayAsync(imageData, 0);
             byte[] imageData;
             using (var memoryStream = new MemoryStream())
             {
