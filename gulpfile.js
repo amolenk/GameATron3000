@@ -34,7 +34,7 @@ gulp.task("watch", ["default"], function() {
 
     browserSync.init({
         server: "dist",
-        browser: "chrome"
+        browser: "google chrome"
     });
 
     gulp.watch(["src/**/**.ts"], ["default"]);

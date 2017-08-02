@@ -3,6 +3,7 @@
 export class Narrator {
 
     private game: Phaser.Game;
+    private textBox: Phaser.BitmapText;
 
     constructor() {
     }
@@ -11,19 +12,27 @@ export class Narrator {
         this.game = game;
     }
 
-    public say(text: string): void {
+    public create(): void {
+        this.textBox = this.game.add.bitmapText(400, 200, "onesize", "", 24);
+        this.textBox.anchor.setTo(0.5);
+    }
 
-        console.log('narrator created');
+    public say(lines: string[]): void {
 
-        let textbox = this.game.add.bitmapText(200, 160, "onesize", text, 20);
+        this.printNextLine(lines.reverse());
+    }
 
-//           //  this.textbox.text = "Look at fridge";
-//             // this.textbox.updateText();
-//         }, this);
+    private printNextLine(lines: string[]) : void {
 
+        var line = lines.pop();
+        if (line != null) {
+            this.textBox.setText(line);
 
-//         // Print some test text.
-//         let text = game.add.bitmapText(200, 560, "onesize", "Talk to cleverly disguised Rolorob.", 20);
-
+            var timer = this.game.time.events.add(
+                line.length * 80,
+                () => this.printNextLine(lines));
+        } else {
+            this.textBox.setText("");
+        }
     }
 }

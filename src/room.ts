@@ -1,20 +1,33 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
+/// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 
+import { Action } from './action'
 import { Cursor } from './cursor'
+import { Narrator } from './narrator'
+import { RoomObject } from './room-object'
+import { VerbBar } from './verb-bar'
 
 export abstract class Room {
 
     private game: Phaser.Game;
     private cursor: Cursor;
+    private verbBar: VerbBar;
+    public roomObjects: Array<RoomObject>;
+    private actionMap: Map<string, Function>;
     private hitbox: Phaser.Sprite;
     private selectedObject: Phaser.Sprite;
+    private selectedAction: Action;
+    protected narrator: Narrator;
 
     constructor(private name: string) {
+        this.roomObjects = new Array<RoomObject>();
+        this.actionMap = new Map<string, Function>();
     }
 
-    public initialize(game: Phaser.Game, cursor: Cursor): void {
+    public initialize(game: Phaser.Game, cursor: Cursor, verbBar: VerbBar): void {
         this.game = game;
         this.cursor = cursor;
+        this.verbBar = verbBar;
     }
 
     public preload(): void {
@@ -28,30 +41,40 @@ export abstract class Room {
 
         this.game.add.sprite(0, 0, this.name + "-room-background");
 
-        this.enter();
+        this.narrator = new Narrator();
+        this.narrator.initialize(this.game);
+        this.narrator.create();
+
+        this.wireUp();
     }
 
-    public update(): void {
+    public setSelectedAction(action: Action): void {
+        this.selectedAction = action;
+    }
 
-        if (this.cursor.overlap(this.hitbox)) {
+    public executeAction(action: Action): void {
 
-            if (this.hitbox !== this.selectedObject) {
-                console.log("enter");
-                this.selectedObject = this.hitbox;
-            }
-        } else if (this.selectedObject != null) {
-            console.log("exit");
-            this.selectedObject = null;
+        var key = `${action.displayName}_${action.subjects[0].name}`;
+
+        var handler = this.actionMap.get(key);
+        if (handler != null) {
+            handler.apply(this);
         }
     }
 
-    public abstract enter(): void;
+    protected abstract wireUp(): void;
 
-    protected addObject(): void {
+    protected wireAction(actionVerb: string, subject: RoomObject, handler: Function) : void {
 
-        this.hitbox = this.game.add.sprite(500, 240, "ufo-room-background");
-        this.hitbox.scale.setTo(0.05, 0.25);
-        this.hitbox.inputEnabled = true;
-        this.hitbox.renderable = false;
+        var key = `${actionVerb}_${subject.name}`;
+
+        this.actionMap.set(key, handler);
+    }
+
+    protected addRoomObject(roomObject: RoomObject, x: number, y: number): void {
+
+        this.roomObjects.push(roomObject);
+
+        roomObject.initialize(x, y, this.verbBar, this.game);
     }
 }
