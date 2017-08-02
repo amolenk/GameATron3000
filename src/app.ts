@@ -2,14 +2,13 @@
 
 import { Cursor } from './cursor'
 import { Narrator } from './narrator'
+import { Settings } from './settings'
 import { VerbBar } from './verb-bar'
 
 import { Room } from './room'
 import { UfoRoom } from './rooms/room-ufo'
 
 class GameATron {
-
-    private START_FULL_SCREEN: boolean = true;
 
     private game: Phaser.Game;
     private cursor: Cursor;
@@ -29,7 +28,7 @@ class GameATron {
 
         this.cursor = new Cursor(() =>
         {
-            if (this.START_FULL_SCREEN)
+            if (Settings.ENABLE_FULL_SCREEN)
             {
                 this.game.scale.startFullScreen(false);
             }
@@ -46,6 +45,7 @@ class GameATron {
 
     private preload() {
 
+        this.game.load.image("actor-sonic", "../assets/objects/sonic.png");
         this.game.load.image("object-sonic", "../assets/objects/sonic.png");
 
         this.verbBar.preload(this.game);
@@ -72,9 +72,9 @@ class GameATron {
         this.cursor.create(this.game);
         this.narrator.create();
 
-        this.narrator.say([ "You are in some kind of awesome pixelated spaceship!"]);
-
         this.verbBar.setRoom(this.room);
+
+        this.room.enter();
     }
 
     private update() {

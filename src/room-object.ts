@@ -5,7 +5,8 @@ import { VerbBar } from './verb-bar'
 
 export abstract class RoomObject {
 
-    private sprite: Phaser.Sprite;
+    protected game: Phaser.Game;
+    protected sprite: Phaser.Sprite;
 
     constructor(public name: string) {
     }
@@ -30,7 +31,9 @@ export abstract class RoomObject {
         }, this);
     }
 
-    public initialize(x: number, y: number, verbBar: VerbBar, game: Phaser.Game) {
+    public initialize(x: number, y: number, game: Phaser.Game) {
+
+        this.game = game;
 
         this.sprite = game.add.sprite(x, y, "object-" + this.name);
         this.sprite.anchor.set(0.5);

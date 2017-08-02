@@ -1,5 +1,7 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 
+import { Settings } from './settings'
+
 export class Narrator {
 
     private game: Phaser.Game;
@@ -17,22 +19,18 @@ export class Narrator {
         this.textBox.anchor.setTo(0.5);
     }
 
-    public say(lines: string[]): void {
+    public say(text: string): Promise<void> {
 
-        this.printNextLine(lines.reverse());
-    }
+        this.textBox.setText('NARRATOR: ' + text);
 
-    private printNextLine(lines: string[]) : void {
-
-        var line = lines.pop();
-        if (line != null) {
-            this.textBox.setText(line);
-
-            var timer = this.game.time.events.add(
-                line.length * 80,
-                () => this.printNextLine(lines));
-        } else {
-            this.textBox.setText("");
-        }
+        return new Promise((resolve) => {
+            
+            this.game.time.events.add(
+                Math.max(text.length * Settings.TEXT_SPEED, Settings.MIN_TEXT_DURATION),
+                () => {
+                    this.textBox.setText('');
+                    resolve();
+                });
+        });
     }
 }

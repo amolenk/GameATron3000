@@ -2,6 +2,7 @@
 /// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 
 import { Action } from './action'
+import { Actor } from './actor'
 import { Cursor } from './cursor'
 import { Narrator } from './narrator'
 import { RoomObject } from './room-object'
@@ -13,6 +14,7 @@ export abstract class Room {
     private cursor: Cursor;
     private verbBar: VerbBar;
     public roomObjects: Array<RoomObject>;
+    public actors: Array<Actor>;
     private actionMap: Map<string, Function>;
     private hitbox: Phaser.Sprite;
     private selectedObject: Phaser.Sprite;
@@ -20,6 +22,7 @@ export abstract class Room {
     protected narrator: Narrator;
 
     constructor(private name: string) {
+        this.actors = new Array<Actor>();
         this.roomObjects = new Array<RoomObject>();
         this.actionMap = new Map<string, Function>();
     }
@@ -62,6 +65,9 @@ export abstract class Room {
         }
     }
 
+    public enter(): void {
+    }
+
     protected abstract wireUp(): void;
 
     protected wireAction(actionVerb: string, subject: RoomObject, handler: Function) : void {
@@ -71,10 +77,11 @@ export abstract class Room {
         this.actionMap.set(key, handler);
     }
 
-    protected addRoomObject(roomObject: RoomObject, x: number, y: number): void {
+    protected addObject(roomObject: RoomObject, x: number, y: number): void {
 
+        roomObject.initialize(x, y, this.game);
         this.roomObjects.push(roomObject);
 
-        roomObject.initialize(x, y, this.verbBar, this.game);
+        roomObject.initialize(x, y, this.game);
     }
 }
