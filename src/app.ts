@@ -7,6 +7,7 @@ import { VerbBar } from './verb-bar'
 
 import { Room } from './room'
 import { UfoRoom } from './rooms/room-ufo'
+import { VillageRoom } from './rooms/room-village'
 
 class GameATron {
 
@@ -39,18 +40,22 @@ class GameATron {
 
         this.verbBar = new VerbBar();
 
-        this.room = new UfoRoom();
+        this.room = new VillageRoom();
         this.room.initialize(this.game, this.cursor, this.verbBar);
     }
 
     private preload() {
 
-        this.game.load.image("actor-sonic", "../assets/objects/sonic.png");
+        this.game.load.bitmapFont("onesize", "../fonts/font.png", "../fonts/font.fnt");
+
+        this.game.load.spritesheet("object-guybrush", "../assets/objects/guybrush_talk.png", 69, 141);
+
+//        this.game.load.image("object-guybrush", "../assets/objects/guybrush.png");
+//        this.game.load.image("object-guybrush-talk", "../assets/objects/guybrush_talk.png");
         this.game.load.image("object-sonic", "../assets/objects/sonic.png");
 
         this.verbBar.preload(this.game);
 
-        this.game.load.bitmapFont("onesize", "../fonts/font.png", "../fonts/font.fnt");
 
         this.room.preload();
         this.cursor.preload(this.game);
