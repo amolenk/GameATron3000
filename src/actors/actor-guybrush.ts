@@ -7,6 +7,6 @@ export class GuybrushActor extends Actor {
     }
 
     get DisplayName() : string {
-        return 'mighty pirate';
+        return 'familiar looking fellow';
     }
 }

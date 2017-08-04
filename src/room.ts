@@ -81,7 +81,5 @@ export abstract class Room {
 
         roomObject.initialize(x, y, this.game);
         this.roomObjects.push(roomObject);
-
-        roomObject.initialize(x, y, this.game);
     }
 }

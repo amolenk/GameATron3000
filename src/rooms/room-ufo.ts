@@ -43,12 +43,12 @@ export class UfoRoom extends Room {
 
         await Promise.all([
                 this.narrator.say('Come on out here, Sonic!'),
-                this.sonic.walk(500, 10)
+                this.sonic.walkTo(500, 10)
             ])
             .then(() => this.sonic.say('Hi! I\'m Sonic!'))
             .then(() => Promise.all([
                 this.sonic.say('I\'m awesome!'),
-                this.sonic.walk(400)
+                this.sonic.walkTo(400, 400)
             ]));
     }
 }

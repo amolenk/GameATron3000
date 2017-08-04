@@ -49,6 +49,8 @@ class GameATron {
         this.game.load.bitmapFont("onesize", "../fonts/font.png", "../fonts/font.fnt");
 
         this.game.load.spritesheet("object-guybrush", "../assets/objects/guybrush_talk.png", 69, 141);
+        this.game.load.spritesheet("object-guybrush-walk", "../assets/objects/guybrush_walk.png", 96, 144);
+
 
 //        this.game.load.image("object-guybrush", "../assets/objects/guybrush.png");
 //        this.game.load.image("object-guybrush-talk", "../assets/objects/guybrush_talk.png");
