@@ -4,37 +4,31 @@
 import { Action } from './action'
 import { Actor } from './actor'
 import { ConversationUI } from "./ui-conversation"
-import { Cursor } from './cursor'
 import { Narrator } from './narrator'
 import { RoomObject } from './room-object'
-import { VerbBar } from './verb-bar'
+
+import { UIMediator } from "./ui-mediator"
 
 export abstract class Room {
 
     private game: Phaser.Game;
-    private cursor: Cursor;
-    private verbBar: VerbBar;
     public roomObjects: Array<RoomObject>;
-    public actors: Array<Actor>;
     private actionMap: Map<string, Function>;
-    private hitbox: Phaser.Sprite;
-    private selectedObject: Phaser.Sprite;
-    private selectedAction: Action;
     protected narrator: Narrator;
 
     private conversationUI: ConversationUI;
+    private uiMediator: UIMediator;
 
     constructor(private name: string) {
-        this.actors = new Array<Actor>();
         this.roomObjects = new Array<RoomObject>();
         this.actionMap = new Map<string, Function>();
     }
 
-    public initialize(game: Phaser.Game, cursor: Cursor, verbBar: VerbBar, conversationUI: ConversationUI): void {
+    public initialize(game: Phaser.Game, conversationUI: ConversationUI, uiMediator: UIMediator): void {
         this.game = game;
-        this.cursor = cursor;
-        this.verbBar = verbBar;
         this.conversationUI = conversationUI;
+        this.uiMediator = uiMediator;
+        this.uiMediator.setExecuteActionCallback((action) => this.executeAction(action));
     }
 
     public preload(): void {
@@ -55,21 +49,13 @@ export abstract class Room {
         this.wireUp();
     }
 
-    public setSelectedAction(action: Action): void {
-        this.selectedAction = action;
-    }
-
-    public executeAction(action: Action): void {
+    public async executeAction(action: Action) {
 
         var key = `${action.displayName}_${action.subjects[0].name}`;
 
         var handler = this.actionMap.get(key);
         if (handler != null) {
-
-            this.verbBar.setEnabled(false);
-
-            handler.apply(this)
-                .then(() => this.verbBar.setEnabled(true));
+            await handler.apply(this);
         }
     }
 
@@ -85,9 +71,17 @@ export abstract class Room {
         this.actionMap.set(key, handler);
     }
 
+    // TODO Rename to PlaceObject
     protected addObject(roomObject: RoomObject, x: number, y: number): void {
 
         roomObject.initialize(x, y, this.game);
+
+
+        roomObject.onInputOver((roomObject) => this.uiMediator.focusObject(roomObject));
+        roomObject.onInputOut((roomObject) => this.uiMediator.focusObject(null));
+        roomObject.onInputDown((roomObject) => this.uiMediator.selectObject(roomObject));
+
+
         this.roomObjects.push(roomObject);
     }
 

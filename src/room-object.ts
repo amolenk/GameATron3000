@@ -1,7 +1,6 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 
 import { Cursor } from './cursor'
-import { VerbBar } from './verb-bar'
 
 export abstract class RoomObject {
 

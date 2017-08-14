@@ -4,8 +4,8 @@ import { Cursor } from './cursor'
 import { Narrator } from './narrator'
 import { Settings } from './settings'
 
-import { VerbBar } from './verb-bar'
 import { ConversationUI } from "./ui-conversation"
+import { UIMediator } from "./ui-mediator"
 
 import { ConversationService } from "./services/service-conversation"
 
@@ -18,10 +18,10 @@ class GameATron {
     private game: Phaser.Game;
     private cursor: Cursor;
     private narrator: Narrator;
-    private verbBar: VerbBar;
     private room: Room;
 
     private conversationUI: ConversationUI;
+    private uiMediator: UIMediator;
 
     constructor() {
         this.game = new Phaser.Game(
@@ -45,10 +45,10 @@ class GameATron {
         this.narrator.initialize(this.game);
 
         this.conversationUI = new ConversationUI();
-        this.verbBar = new VerbBar();
+        this.uiMediator = new UIMediator();
 
         this.room = new VillageRoom();
-        this.room.initialize(this.game, this.cursor, this.verbBar, this.conversationUI);
+        this.room.initialize(this.game, this.conversationUI, this.uiMediator);
     }
 
     private preload() {
@@ -64,8 +64,8 @@ class GameATron {
         this.game.load.image("object-sonic", "../assets/objects/sonic.png");
 
         this.conversationUI.preload(this.game);
-        this.verbBar.preload(this.game);
 
+        this.uiMediator.preload(this.game);
 
 
         this.room.preload();
@@ -73,6 +73,8 @@ class GameATron {
     }
 
     private create() {
+
+        this.uiMediator.create(this.game);
 
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.game.stage.smoothed = true;
@@ -83,12 +85,10 @@ class GameATron {
         // this.game.scale.pageAlignHorizontally = true;
         // this.game.scale.pageAlignVertically = true;
 
-        this.verbBar.create(this.game);
         this.room.create();
         this.cursor.create(this.game);
         this.narrator.create();
 
-        this.verbBar.setRoom(this.room);
 
         this.room.enter();
     }
