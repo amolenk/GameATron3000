@@ -15,13 +15,10 @@ export class VillageRoom extends Room {
         this.guybrush = new GuybrushActor();
 
         // Let's keep Guybrush off-screen for now.
-        // TODO Expose width property.
         this.addObject(this.guybrush, 150, 430);
 
-        
-
         this.wireAction(Action.TalkToVerb, this.guybrush, async () => {
-            await this.guybrush.say('Game-a-tron 3000 rules!');
+            await this.startConversation('topic', this.guybrush);
         });
 
         this.wireAction(Action.PushVerb, this.guybrush, async () => {

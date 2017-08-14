@@ -3,7 +3,11 @@
 import { Cursor } from './cursor'
 import { Narrator } from './narrator'
 import { Settings } from './settings'
+
 import { VerbBar } from './verb-bar'
+import { ConversationUI } from "./ui-conversation"
+
+import { ConversationService } from "./services/service-conversation"
 
 import { Room } from './room'
 import { UfoRoom } from './rooms/room-ufo'
@@ -16,6 +20,8 @@ class GameATron {
     private narrator: Narrator;
     private verbBar: VerbBar;
     private room: Room;
+
+    private conversationUI: ConversationUI;
 
     constructor() {
         this.game = new Phaser.Game(
@@ -38,10 +44,11 @@ class GameATron {
         this.narrator = new Narrator();
         this.narrator.initialize(this.game);
 
+        this.conversationUI = new ConversationUI();
         this.verbBar = new VerbBar();
 
         this.room = new VillageRoom();
-        this.room.initialize(this.game, this.cursor, this.verbBar);
+        this.room.initialize(this.game, this.cursor, this.verbBar, this.conversationUI);
     }
 
     private preload() {
@@ -56,7 +63,9 @@ class GameATron {
 //        this.game.load.image("object-guybrush-talk", "../assets/objects/guybrush_talk.png");
         this.game.load.image("object-sonic", "../assets/objects/sonic.png");
 
+        this.conversationUI.preload(this.game);
         this.verbBar.preload(this.game);
+
 
 
         this.room.preload();

@@ -3,6 +3,7 @@
 
 import { Action } from './action'
 import { Actor } from './actor'
+import { ConversationUI } from "./ui-conversation"
 import { Cursor } from './cursor'
 import { Narrator } from './narrator'
 import { RoomObject } from './room-object'
@@ -21,16 +22,19 @@ export abstract class Room {
     private selectedAction: Action;
     protected narrator: Narrator;
 
+    private conversationUI: ConversationUI;
+
     constructor(private name: string) {
         this.actors = new Array<Actor>();
         this.roomObjects = new Array<RoomObject>();
         this.actionMap = new Map<string, Function>();
     }
 
-    public initialize(game: Phaser.Game, cursor: Cursor, verbBar: VerbBar): void {
+    public initialize(game: Phaser.Game, cursor: Cursor, verbBar: VerbBar, conversationUI: ConversationUI): void {
         this.game = game;
         this.cursor = cursor;
         this.verbBar = verbBar;
+        this.conversationUI = conversationUI;
     }
 
     public preload(): void {
@@ -61,7 +65,11 @@ export abstract class Room {
 
         var handler = this.actionMap.get(key);
         if (handler != null) {
-            handler.apply(this);
+
+            this.verbBar.setEnabled(false);
+
+            handler.apply(this)
+                .then(() => this.verbBar.setEnabled(true));
         }
     }
 
@@ -81,5 +89,10 @@ export abstract class Room {
 
         roomObject.initialize(x, y, this.game);
         this.roomObjects.push(roomObject);
+    }
+
+    protected async startConversation(topicName: string, actor: Actor) {
+
+        await this.conversationUI.startConversation(topicName, actor);
     }
 }

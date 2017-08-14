@@ -8,9 +8,8 @@ import { RoomObject } from './room-object'
 
 export class VerbBar {
 
-
-
     private textBox: Phaser.BitmapText;
+    private verbSprites: Array<Phaser.Sprite>;
     private room: Room;
     private selectedAction: Action;
     private overObject: RoomObject;
@@ -24,6 +23,8 @@ export class VerbBar {
 
         this.textBox = game.add.bitmapText(game.world.centerX, 470, "onesize", "", 20);
         this.textBox.anchor.setTo(0.5, 0.5);
+
+        this.verbSprites = new Array<Phaser.Sprite>();
 
         this.addVerb("01_give", 0, 0, () => new Action(Action.GiveVerb, "to"), game);
         this.addVerb("02_pickup", 1, 0, () => new Action(Action.PickUpVerb), game);
@@ -44,6 +45,17 @@ export class VerbBar {
             roomObject.onInputOver((roomObject) => this.onRoomObjectInputOver(roomObject));
             roomObject.onInputOut((roomObject) => this.onRoomObjectInputOut(roomObject));
             roomObject.onInputDown((roomObject) => this.onRoomObjectInputDown(roomObject));
+        }
+    }
+
+    public setEnabled(enabled: boolean) : void {
+
+        console.log("enabled: " + enabled);
+
+        // TODO Enable/disable textbox
+
+        for (var sprite of this.verbSprites) {
+            sprite.visible = enabled;
         }
     }
 
@@ -107,6 +119,8 @@ export class VerbBar {
             this.selectedAction = actionFactory();
             this.updateText();
         }, this);
+
+        this.verbSprites.push(sprite);
     }
 
     private updateText(): void {
