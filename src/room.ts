@@ -3,90 +3,107 @@
 
 import { Action } from './action'
 import { Actor } from './actor'
-import { ConversationUI } from "./ui-conversation"
 import { Narrator } from './narrator'
 import { RoomObject } from './room-object'
-
+import { InventoryItem } from './inventory-item'
 import { UIMediator } from "./ui-mediator"
 
 export abstract class Room {
 
     private game: Phaser.Game;
-    public roomObjects: Array<RoomObject>;
+    private roomObjects: Array<RoomObject>;
     private actionMap: Map<string, Function>;
-    protected narrator: Narrator;
-
-    private conversationUI: ConversationUI;
     private uiMediator: UIMediator;
+    protected narrator: Narrator;
 
     constructor(private name: string) {
         this.roomObjects = new Array<RoomObject>();
         this.actionMap = new Map<string, Function>();
     }
 
-    public initialize(game: Phaser.Game, conversationUI: ConversationUI, uiMediator: UIMediator): void {
+    public initialize(game: Phaser.Game, uiMediator: UIMediator) {
         this.game = game;
-        this.conversationUI = conversationUI;
         this.uiMediator = uiMediator;
         this.uiMediator.setExecuteActionCallback((action) => this.executeAction(action));
+        this.narrator = new Narrator(game);
     }
 
-    public preload(): void {
+    public preload() {
 
         this.game.load.image(this.name + "-room-background", "assets/backgrounds/" + this.name + ".png");
 
         // TODO Load other sprites.
     }
 
-    public create(): void {
+    public create() {
 
         this.game.add.sprite(0, 0, this.name + "-room-background");
 
-        this.narrator = new Narrator();
-        this.narrator.initialize(this.game);
         this.narrator.create();
-
-        this.wireUp();
     }
 
-    public async executeAction(action: Action) {
-
-        var key = `${action.displayName}_${action.subjects[0].name}`;
-
-        var handler = this.actionMap.get(key);
-        if (handler != null) {
-            await handler.apply(this);
-        }
+    public enter() {
+        return this.wireUp();
     }
 
-    public enter(): void {
-    }
+    protected abstract wireUp();
 
-    protected abstract wireUp(): void;
-
-    protected wireAction(actionVerb: string, subject: RoomObject, handler: Function) : void {
+    protected wireAction(actionVerb: string, subject: RoomObject, handler: Function) {
 
         var key = `${actionVerb}_${subject.name}`;
 
         this.actionMap.set(key, handler);
     }
 
-    // TODO Rename to PlaceObject
-    protected addObject(roomObject: RoomObject, x: number, y: number): void {
+    protected wireComplexAction(actionVerb: string, subject1: RoomObject, subject2: RoomObject, handler: Function) {
 
-        roomObject.initialize(x, y, this.game);
+        var key = `${actionVerb}_${subject1.name}_${subject2.name}`;
 
-
-        roomObject.onInputOver((roomObject) => this.uiMediator.focusObject(roomObject));
-        roomObject.onInputOut((roomObject) => this.uiMediator.focusObject(null));
-        roomObject.onInputDown((roomObject) => this.uiMediator.selectObject(roomObject));
-
-
-        this.roomObjects.push(roomObject);
+        this.actionMap.set(key, handler);
     }
 
-    protected async startConversation(topicName: string, actor: Actor) {
+    protected add(object: RoomObject, x: number, y: number) {
 
-        await this.conversationUI.startConversation(topicName, actor);
+        object.init(this.game, this.uiMediator, x, y);
+
+        this.roomObjects.push(object);
+
+        return Promise.resolve();
+    }
+
+    protected remove(object: RoomObject) {
+
+        // The object no longer needs a visual representation in the room.
+        object.kill();
+
+        return Promise.resolve();
+    }
+
+    protected addToInventory(item: InventoryItem) {
+
+        return this.uiMediator.addToInventory(item);
+    }
+
+    protected removeFromInventory(item: InventoryItem) {
+
+        return this.uiMediator.removeFromInventory(item);
+    }
+
+    protected startConversation(topicName: string, actor: Actor) {
+
+        return this.uiMediator.startConversation(topicName, actor);
+    }
+
+    private async executeAction(action: Action) {
+
+        var key = action.displayName;
+        for (var subject of action.subjects) {
+            key += `_${subject.name}`;
+        }
+
+        var handler = this.actionMap.get(key);
+        if (handler != null) {
+            await handler.apply(this);
+        }
     }
 }

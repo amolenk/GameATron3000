@@ -1,9 +1,12 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 
-import { RoomObject } from './room-object'
-import { Settings } from './settings'
+import { RoomObject } from "./room-object"
+import { Settings } from "./settings"
+import { UIMediator } from "./ui-mediator"
 
-export abstract class Actor extends RoomObject {
+export class Actor extends RoomObject {
+
+    private game: Phaser.Game;
 
     private originX: number;
     private originY: number;
@@ -15,9 +18,11 @@ export abstract class Actor extends RoomObject {
     private talkAnimation: Phaser.Animation;
     private walkAnimation: Phaser.Animation;
 
-    public initialize(x: number, y: number, game: Phaser.Game) {
+    public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number) {
 
-        super.initialize(x, y, game);
+        super.init(game, uiMediator, x, y);
+
+        this.game = game;
 
         this.originX = x;
         this.originY = y;
@@ -25,7 +30,7 @@ export abstract class Actor extends RoomObject {
         // Actors are anchored at the bottom instead of middle for easier placement.
         this.sprite.anchor.set(0.5, 1);
 
-        this.walkSprite = game.add.sprite(x, y, "object-" + this.name + "-walk");
+        this.walkSprite = game.add.sprite(x, y, this.name + "-walk");
         this.walkSprite.anchor.set(0.5, 1);
         this.walkSprite.inputEnabled = true;
         this.walkSprite.input.pixelPerfectClick = true;
@@ -59,21 +64,15 @@ export abstract class Actor extends RoomObject {
         this.spriteGroup.addMultiple([ this.sprite, this.text, this.walkSprite ]);
     }
 
-    public say(text: string): Promise<void> {
+    public kill() {
+    }
 
-        this.talkAnimation.play(6, true);
-        this.text.setText(text);
+    public async say(text: string) {
 
-        return new Promise((resolve) => {
-            
-            this.game.time.events.add(
-                Math.max(text.length * Settings.TEXT_SPEED, Settings.MIN_TEXT_DURATION),
-                () => {
-                    this.text.setText('');
-                    this.talkAnimation.stop(true);
-                    resolve();
-                });
-        });
+        var lines = text.split('\n');
+        for (var line of lines) {
+            await this.sayLine(line);
+        }
     }
 
     public walkTo(x: number, y: number): Promise<void> {
@@ -118,6 +117,23 @@ export abstract class Actor extends RoomObject {
 
                 resolve();
             });
+        });
+    }
+
+    private sayLine(text: string) {
+
+        this.talkAnimation.play(6, true);
+        this.text.setText(text);
+
+        return new Promise((resolve) => {
+            
+            this.game.time.events.add(
+                Math.max(text.length * Settings.TEXT_SPEED, Settings.MIN_TEXT_DURATION),
+                () => {
+                    this.text.setText('');
+                    this.talkAnimation.stop(true);
+                    resolve();
+                });
         });
     }
 }

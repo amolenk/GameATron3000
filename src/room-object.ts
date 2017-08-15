@@ -1,43 +1,44 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
+/// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 
-import { Cursor } from './cursor'
+import { UIMediator } from "./ui-mediator"
 
-export abstract class RoomObject {
+export class RoomObject {
 
-    protected game: Phaser.Game;
     protected sprite: Phaser.Sprite;
+    private stateMap: Map<string, any>;
 
-    constructor(public name: string) {
+    constructor(public name: string, public displayName: string) {
+        this.stateMap = new Map<string, any>();
     }
 
-    public abstract DisplayName : string;
+    public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number) {
 
-    public onInputOver(listener: Function, listenerContext?: any) : void {
-        this.sprite.events.onInputOver.add(() => {
-            listener.apply(listenerContext, [ this ]);
-        }, this);
-    }
-
-    public onInputOut(listener: Function, listenerContext?: any) : void {
-        this.sprite.events.onInputOut.add(() => {
-            listener.apply(listenerContext, [ this ]);
-        }, this);
-    }
-
-    public onInputDown(listener: Function, listenerContext?: any) : void {
-        this.sprite.events.onInputDown.add(() => {
-            listener.apply(listenerContext, [ this ]);
-        }, this);
-    }
-
-    public initialize(x: number, y: number, game: Phaser.Game) {
-
-        this.game = game;
-
-        this.sprite = game.add.sprite(x, y, "object-" + this.name);
+        this.sprite = game.add.sprite(x, y, this.name);
         this.sprite.anchor.set(0.5);
         this.sprite.inputEnabled = true;
         this.sprite.input.pixelPerfectClick = true;
         this.sprite.input.pixelPerfectOver = true;
+
+        this.sprite.events.onInputOver.add(() => uiMediator.focusObject(this));
+        this.sprite.events.onInputOut.add(() => uiMediator.focusObject(null));
+        this.sprite.events.onInputDown.add(() => uiMediator.selectObject(this));
+    }
+
+    public kill() {
+        this.sprite.destroy();
+        this.sprite = null;
+    }
+
+    public getState(key: string) {
+        return this.stateMap.get(key);
+    }
+
+    public setState(key: string, value: any) {
+        this.stateMap.set(key, value);
+    }
+
+    public setVisible(visible: boolean) : void {
+        this.sprite.visible = visible;
     }
 }

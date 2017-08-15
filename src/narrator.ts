@@ -4,14 +4,9 @@ import { Settings } from './settings'
 
 export class Narrator {
 
-    private game: Phaser.Game;
     private text: Phaser.Text;
 
-    constructor() {
-    }
-
-    public initialize(game: Phaser.Game): void {
-        this.game = game;
+    constructor(private game: Phaser.Game) {
     }
 
     public create(): void {
@@ -33,7 +28,15 @@ export class Narrator {
         this.text.scale.y = 0.5;
     }
 
-    public say(text: string): Promise<void> {
+    public async say(text: string) {
+
+        var lines = text.split('\n');
+        for (var line of lines) {
+            await this.sayLine(line);
+        }
+    }
+
+    private sayLine(text: string) {
 
         this.text.setText(text);
 

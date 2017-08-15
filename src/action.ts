@@ -20,17 +20,39 @@ export class Action {
         this.subjects = new Array<RoomObject>();
     }
 
-    public addSubject(roomObject: RoomObject): boolean {
+    public addSubject(subject: RoomObject) {
 
-        // Only add the subject if it differs from the first subject (if any).
-        if (this.subjects.length == 0 || this.subjects[0] != roomObject) {
-            this.subjects.push(roomObject);
+        var isComplexAction = this.subjectSeparator != null;
+
+        if (isComplexAction) {
+
+            // For complex actions (Give, Use), the first subject must always
+            // be an inventory item.
+            if (this.subjects.length == 0 && !subject.name.startsWith("inventory-")) {
+                return false;
+            }
+
+            // For the Give action, the second subject must always be an actor.
+            if (this.displayName == Action.GiveVerb
+                && this.subjects.length == 1
+                && !subject.name.startsWith("actor-")) {
+                return false;
+            }
+
+            // Don't add the subject if it's the same as an already selected subject.
+            if (this.subjects.length == 1 && this.subjects[0] == subject) {
+                return false;
+            }
         }
 
-        return this.subjects.length == (this.subjectSeparator != null ? 2 : 1);
+        this.subjects.push(subject);
+
+        var readyToExecute = this.subjects.length == (isComplexAction ? 2 : 1);
+
+        return readyToExecute;
     }
 
-    public getDisplayText(roomObject?: RoomObject): string {
+    public getDisplayText(roomObject?: RoomObject) {
 
         // Ignore the current room object that the mouse is over if it's the same as
         // the first subject (if any).
@@ -39,24 +61,24 @@ export class Action {
         }
 
         if (this.subjects.length == 2) {
-            return `${this.displayName} ${this.subjects[0].DisplayName} ${this.subjectSeparator} ${this.subjects[1].DisplayName}`;
+            return `${this.displayName} ${this.subjects[0].displayName} ${this.subjectSeparator} ${this.subjects[1].displayName}`;
         }
 
         if (this.subjects.length == 1) {
 
             if (roomObject != null) {
-                return `${this.displayName} ${this.subjects[0].DisplayName} ${this.subjectSeparator} ${roomObject.DisplayName}`;
+                return `${this.displayName} ${this.subjects[0].displayName} ${this.subjectSeparator} ${roomObject.displayName}`;
             }
 
             if (this.subjectSeparator != null) {
-                return `${this.displayName} ${this.subjects[0].DisplayName} ${this.subjectSeparator}`;
+                return `${this.displayName} ${this.subjects[0].displayName} ${this.subjectSeparator}`;
             }
 
-            return `${this.displayName} ${this.subjects[0].DisplayName}`;
+            return `${this.displayName} ${this.subjects[0].displayName}`;
         }
 
         if (this.subjects.length == 0 && roomObject != null) {
-            return `${this.displayName} ${roomObject.DisplayName}`;
+            return `${this.displayName} ${roomObject.displayName}`;
         }
 
         return this.displayName;

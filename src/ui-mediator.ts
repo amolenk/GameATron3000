@@ -2,12 +2,18 @@
 
 import { Action } from "./action"
 import { ActionUI } from "./ui-action"
+import { Actor } from "./actor"
+import { ConversationUI } from "./ui-conversation"
+import { InventoryItem } from "./inventory-item"
+import { InventoryUI } from "./ui-inventory"
 import { RoomObject } from "./room-object"
 import { VerbsUI } from "./ui-verbs"
 
 export class UIMediator {
 
     private actionUI: ActionUI;
+    private conversationUI: ConversationUI;
+    private inventoryUI: InventoryUI;
     private verbsUI: VerbsUI;
 
     private selectedAction: Action;
@@ -15,18 +21,20 @@ export class UIMediator {
 
     private executeAction: Function;
 
-    constructor() {
-        this.actionUI = new ActionUI();
-        this.verbsUI = new VerbsUI(this);
+    constructor(game: Phaser.Game) {
+        this.actionUI = new ActionUI(game);
+        this.conversationUI = new ConversationUI(game);
+        this.inventoryUI = new InventoryUI(game, this);
+        this.verbsUI = new VerbsUI(game, this);
     }
 
-    public preload(game: Phaser.Game) {
-        this.verbsUI.preload(game);
+    public preload() {
+        this.verbsUI.preload();
     }
 
-    public create(game: Phaser.Game) {
-        this.actionUI.create(game);
-        this.verbsUI.create(game);
+    public create() {
+        this.actionUI.create();
+        this.verbsUI.create();
     }
 
     public setExecuteActionCallback(executeAction: Function) {
@@ -48,9 +56,9 @@ export class UIMediator {
             if (this.selectedAction.addSubject(roomObject)) {
 
                 // If the action is complete it can be executed.
-                this.setUIEnabled(false);
+                this.setUIVisible(false);
                 this.executeAction(this.selectedAction)
-                    .then(() => this.setUIEnabled(true));
+                    .then(() => this.setUIVisible(true));
 
                 // Set the selected action to null now that we've executed it.
                 // Also set the object that the mouse is hovering over to null.
@@ -65,12 +73,25 @@ export class UIMediator {
         this.updateText();
     }
 
-    private setUIEnabled(enabled: boolean) {
-        this.actionUI.setEnabled(enabled);
-        this.verbsUI.setEnabled(enabled);
+    public startConversation(topicName: string, actor: Actor) {
+        return this.conversationUI.startConversation(topicName, actor);
     }
 
-    private updateText(): void {
+    public addToInventory(item: InventoryItem) {
+        return this.inventoryUI.addToInventory(item);
+    }
+
+    public removeFromInventory(item: InventoryItem) {
+        return this.inventoryUI.removeFromInventory(item);
+    }
+
+    private setUIVisible(visible: boolean) {
+        this.actionUI.setVisible(visible);
+        this.inventoryUI.setVisible(visible);
+        this.verbsUI.setVisible(visible);
+    }
+
+    private updateText() {
 
         var text = "";
 
@@ -78,7 +99,7 @@ export class UIMediator {
             text = this.selectedAction.getDisplayText(this.focussedObject);
         }
         else if (this.focussedObject != null) {
-            text = this.focussedObject.DisplayName;
+            text = this.focussedObject.displayName;
         }
 
         this.actionUI.setText(text);

@@ -4,6 +4,12 @@
 // https://docs.microsoft.com/en-us/bot-framework/rest-api/bot-framework-rest-connector-api-reference#create-conversation
 export class ConversationService {
 
+    private hardcodedActions = [
+        "Any treasure around these parts?",
+        "Ken sent me",
+        "I'm selling these fine plastic action figures!",
+        "Nevermind" ];
+
     public constructor(private onReceivedReply: Function, private onConversationEnded: Function) {
     }
 
@@ -24,7 +30,7 @@ export class ConversationService {
                 "conversationId": conversationId,
                 "type": "message",
                 "text": "Hi!",
-                "suggestedActions": [ "Option 1", "Option 2", "Option 3" ]
+                "suggestedActions": this.hardcodedActions
             });
         }, 250);
 
@@ -37,13 +43,41 @@ export class ConversationService {
 
         // Simulate a second call from the Bot after we've send our reply.
         setTimeout(() => {
-            this.processBotEvent({
-                "conversationId": conversationId,
-                "type": "endOfConversation",
-                "text": `You selected '${text}'.`
-            });
+            if (text == "Any treasure around these parts?") {
+                this.processBotEvent({
+                    "conversationId": conversationId,
+                    "type": "message",
+                    "text": "There's not much left actually.\n"
+                        + "I did have this expensive mint condition Sonic action figure.\n"
+                        + "I was planning to sell it on BootyBay™\n"
+                        + "But I seem to have lost it...",
+                    "suggestedActions": this.hardcodedActions
+                });
+            }
+            else if (text == "Ken sent me") {
+                this.processBotEvent({
+                    "conversationId": conversationId,
+                    "type": "message",
+                    "text": "Wrong game.",
+                    "suggestedActions": this.hardcodedActions
+                });
+            }
+            else if (text == "I'm selling these fine plastic action figures!") {
+                this.processBotEvent({
+                    "conversationId": conversationId,
+                    "type": "message",
+                    "text": "Me too!\nUntil I lost my merchandise...",
+                    "suggestedActions": this.hardcodedActions
+                });
+            }
+            else {
+                this.processBotEvent({
+                    "conversationId": conversationId,
+                    "type": "endOfConversation",
+                    "text": "Let me know if you find my Sonic action figure!"
+                });
+            }
         }, 250);
-
     }
 
     public processBotEvent(event: any): void {

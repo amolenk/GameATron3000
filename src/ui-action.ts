@@ -4,17 +4,20 @@ export class ActionUI {
 
     private textBox: Phaser.BitmapText;
 
-    public create(game: Phaser.Game) {
-
-        this.textBox = game.add.bitmapText(game.world.centerX, 470, "onesize", "", 20);
-        this.textBox.anchor.setTo(0.5, 0.5);
+    constructor(private game: Phaser.Game) {
     }
 
-    public setEnabled(enabled: boolean) {
-        this.textBox.visible = enabled;
+    public create() {
+
+        this.textBox = this.game.add.bitmapText(this.game.world.centerX, 466, "onesize", "", 20);
+        this.textBox.anchor.setTo(0.5, 0.5);
     }
 
     public setText(text: string) {
         this.textBox.setText(text);
+    }
+
+    public setVisible(visible: boolean) {
+        this.textBox.visible = visible;
     }
 }

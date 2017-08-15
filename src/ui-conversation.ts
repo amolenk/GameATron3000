@@ -7,23 +7,15 @@ import { Settings } from "./settings"
 export class ConversationUI {
 
     private conversationService: ConversationService;
-    private game: Phaser.Game;
 
     private currentActor: Actor;
     private currentConversationId: string;
     private currentPromiseResolver: Function;
 
-    constructor() {
+    constructor(private game: Phaser.Game) {
         this.conversationService = new ConversationService(
             (text, suggestedActions) => this.onReceivedReply(text, suggestedActions),
             (text) => this.onConversationEnded(text));
-    }
-
-    public preload(game: Phaser.Game) {
-        this.game = game;
-    }
-
-    public create(game: Phaser.Game): void {
     }
 
     public startConversation(topicName: string, actor: Actor) {
@@ -49,6 +41,7 @@ export class ConversationUI {
 
             var optionText = this.game.add.text(10, y, action, Settings.TEXTSTYLE_CONVERSATION_OPTION);
             optionText.inputEnabled = true;
+            optionText.sendToBack(); // So the cursor stays on top.
 
             optionText.events.onInputOver.add((option) => {
                 option.addColor("Yellow", 0); // TODO GET FROM SETTINGS
