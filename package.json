@@ -4,6 +4,7 @@
   "description": "",
   "main": "gulpfile.js",
   "dependencies": {
+    "botframework-directlinejs": "^0.9.11",
     "gulp": "^3.9.1",
     "phaser": "^2.6.2"
   },

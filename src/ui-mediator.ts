@@ -4,8 +4,12 @@ import { Action } from "./action"
 import { ActionUI } from "./ui-action"
 import { Actor } from "./actor"
 import { ConversationUI } from "./ui-conversation"
+import { Cursor } from "./cursor"
+import { DirectLine } from '../node_modules/botframework-directlinejs/built/directline';
 import { InventoryItem } from "./inventory-item"
 import { InventoryUI } from "./ui-inventory"
+import { Narrator } from "./narrator"
+import { Room } from "./room"
 import { RoomObject } from "./room-object"
 import { VerbsUI } from "./ui-verbs"
 
@@ -19,13 +23,65 @@ export class UIMediator {
     private selectedAction: Action;
     private focussedObject: RoomObject;
 
-    private executeAction: Function;
+    private conversationId: string;
+    private room: Room;
 
-    constructor(game: Phaser.Game) {
+//    private executeAction: Function;
+
+    constructor(game: Phaser.Game, private cursor: Cursor, private botClient: DirectLine) {
         this.actionUI = new ActionUI(game);
         this.conversationUI = new ConversationUI(game);
         this.inventoryUI = new InventoryUI(game, this);
         this.verbsUI = new VerbsUI(game, this);
+
+        botClient.activity$
+            .filter(activity => activity.type === "message" && activity.from.id === "gameatron3000")
+            .flatMap(a => {
+                var activity = <any>a;
+                
+                console.log(activity.from.name + ": " + (<any>activity).text);
+
+                if (activity.roomId) {
+
+                    this.conversationId = activity.conversation.id;
+                    
+                    this.room = new Room(activity.roomId);
+                    this.room.initialize(game, this);
+                    this.room.create();
+
+                    if (activity.objects) {
+                        for (var objectData of activity.objects) {
+                            var object = new RoomObject("object-" + objectData.id, objectData.text);
+                            this.room.add(object, objectData.x, objectData.y);
+                        }
+                    }
+
+                    this.cursor.bringToTop();
+
+                    if (activity.complete) {
+                        this.setUIVisible(true);
+                    }
+
+                    
+                    return Promise.resolve();
+                }
+                else if (activity.type == "message")
+                {
+                    return this.room.narrator.say(activity.text)
+                        .then(() => this.room.narrator.say("continuation"));
+                }
+
+                if (activity.complete) {
+                    this.setUIVisible(true);
+                }
+
+//                    console.log(activity);
+
+                console.log("done");
+
+                return Promise.resolve();
+            })
+            .subscribe(_ => console.log("done"));
     }
 
     public preload() {
@@ -35,10 +91,27 @@ export class UIMediator {
     public create() {
         this.actionUI.create();
         this.verbsUI.create();
+
+        this.setUIVisible(false);        
     }
 
     public setExecuteActionCallback(executeAction: Function) {
-        this.executeAction = executeAction;
+        //this.executeAction = executeAction;
+    }
+
+    private async executeAction(action: Action) {
+
+        console.log("Player: " + action.getDisplayText());
+
+        this.botClient.postActivity({
+            from: { id: this.conversationId },
+            type: "message",
+            text: action.getDisplayText()
+        })        
+        .subscribe(
+          // id => console.log("Posted activity, assigned ID ", id),
+          // error => console.log("Error posting activity", error)
+        );
     }
 
     public selectAction(action: Action) {
@@ -57,8 +130,8 @@ export class UIMediator {
 
                 // If the action is complete it can be executed.
                 this.setUIVisible(false);
-                this.executeAction(this.selectedAction)
-                    .then(() => this.setUIVisible(true));
+                this.executeAction(this.selectedAction);
+//                    .then(() => this.setUIVisible(true));
 
                 // Set the selected action to null now that we've executed it.
                 // Also set the object that the mouse is hovering over to null.

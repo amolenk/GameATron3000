@@ -71,3 +71,5 @@ packages
 # dist
 /dist/index.html
 /dist/bundle.js
+
+/src/settings-secrets.ts

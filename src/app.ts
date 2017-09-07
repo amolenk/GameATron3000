@@ -2,12 +2,15 @@
 
 import { Cursor } from './cursor'
 import { Settings } from './settings'
+import { SecretSettings } from './settings-secrets'
 
 import { UIMediator } from "./ui-mediator"
 
 import { Room } from './room'
 // import { UfoRoom } from './rooms/room-ufo'
 import { VillageRoom } from './gameplay/room-village'
+
+import { DirectLine } from '../node_modules/botframework-directlinejs/built/directline';
 
 class GameATron {
 
@@ -35,10 +38,28 @@ class GameATron {
             }
         });    
 
-        this.uiMediator = new UIMediator(this.game);
+        var botClient = new DirectLine({
+            secret: SecretSettings.BOT_DIRECT_LINE_SECRET,
+            //domain: "europe.directline.botframework.com"
+        });
 
-        this.room = new VillageRoom();
-        this.room.initialize(this.game, this.uiMediator);
+
+
+        // directLine.postActivity({
+        //     from: { id: "player", name: "Player" },
+        //     type: "event",
+        //     name: "start",
+        //     value: true
+        // })        
+        // .subscribe(
+        //   // id => console.log("Posted activity, assigned ID ", id),
+        //   // error => console.log("Error posting activity", error)
+        // );
+
+        this.uiMediator = new UIMediator(this.game, this.cursor, botClient);
+
+//        this.room = new VillageRoom();
+//        this.room.initialize(this.game, this.uiMediator);
     }
 
     private preload() {
@@ -48,13 +69,16 @@ class GameATron {
         this.game.load.spritesheet("actor-guybrush", "../assets/objects/guybrush_talk.png", 69, 141);
         this.game.load.spritesheet("actor-guybrush-walk", "../assets/objects/guybrush_walk.png", 96, 144);
 
+        this.game.load.image("ufo-room-background", "assets/backgrounds/ufo.png");
+        this.game.load.image("village-room-background", "assets/backgrounds/village.png");
+        
         this.game.load.image("object-sonic", "../assets/sprites/object-sonic.png");
         this.game.load.image("inventory-sonic", "../assets/sprites/inventory-sonic.png");
 
         this.uiMediator.preload();
 
 
-        this.room.preload();
+//        this.room.preload();
         this.cursor.preload();
     }
 
@@ -71,11 +95,11 @@ class GameATron {
         // this.game.scale.pageAlignHorizontally = true;
         // this.game.scale.pageAlignVertically = true;
 
-        this.room.create();
+        //this.room.create();
         this.cursor.create();
 
-        this.room.enter()
-            .then(() => this.cursor.bringToTop());
+        // this.room.enter()
+        //     .then(() => this.cursor.bringToTop());
     }
 }
 

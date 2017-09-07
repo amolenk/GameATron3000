@@ -8,13 +8,14 @@ import { RoomObject } from './room-object'
 import { InventoryItem } from './inventory-item'
 import { UIMediator } from "./ui-mediator"
 
-export abstract class Room {
+export class Room {
+
+    public narrator: Narrator;
 
     private game: Phaser.Game;
     private roomObjects: Array<RoomObject>;
     private actionMap: Map<string, Function>;
     private uiMediator: UIMediator;
-    protected narrator: Narrator;
 
     constructor(private name: string) {
         this.roomObjects = new Array<RoomObject>();
@@ -30,7 +31,6 @@ export abstract class Room {
 
     public preload() {
 
-        this.game.load.image(this.name + "-room-background", "assets/backgrounds/" + this.name + ".png");
 
         // TODO Load other sprites.
     }
@@ -42,11 +42,11 @@ export abstract class Room {
         this.narrator.create();
     }
 
-    public enter() {
-        return this.wireUp();
-    }
+//    public enter() {
+//        return this.wireUp();
+//    }
 
-    protected abstract wireUp();
+//    protected abstract wireUp();
 
     protected wireAction(actionVerb: string, subject: RoomObject, handler: Function) {
 
@@ -62,7 +62,7 @@ export abstract class Room {
         this.actionMap.set(key, handler);
     }
 
-    protected add(object: RoomObject, x: number, y: number) {
+    public add(object: RoomObject, x: number, y: number) {
 
         object.init(this.game, this.uiMediator, x, y);
 
@@ -94,6 +94,7 @@ export abstract class Room {
         return this.uiMediator.startConversation(topicName, actor);
     }
 
+    // Obsolete
     private async executeAction(action: Action) {
 
         var key = action.displayName;
