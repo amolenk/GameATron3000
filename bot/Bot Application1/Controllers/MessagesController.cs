@@ -27,7 +27,7 @@ namespace Bot_Application1
                     if (activity.MembersAdded.Any(m => m.Name == "Game-a-tron 3000 (TM)"
                         || m.Name == "Bot"))
                     {
-                        await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                        await Conversation.SendAsync(activity, () => new Dialogs.VillageRoomDialog());
                     }
                     break;
 
@@ -43,12 +43,12 @@ namespace Bot_Application1
                     // the dialog.
                     if (activity.Name == "start")
                     {
-                        await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                        await Conversation.SendAsync(activity, () => new Dialogs.VillageRoomDialog());
                     }
                     break;
 
                 case ActivityTypes.Message:
-                    await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                    await Conversation.SendAsync(activity, () => new Dialogs.VillageRoomDialog());
                     break;
             }
 
