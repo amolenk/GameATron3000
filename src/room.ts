@@ -22,11 +22,31 @@ export class Room {
         this.actionMap = new Map<string, Function>();
     }
 
-    public initialize(game: Phaser.Game, uiMediator: UIMediator) {
+    public initialize(game: Phaser.Game, uiMediator: UIMediator, objects?: any, actors?: any) : Promise<void> {
         this.game = game;
         this.uiMediator = uiMediator;
         this.uiMediator.setExecuteActionCallback((action) => this.executeAction(action));
+
+        this.game.add.sprite(0, 0, this.name + "-room-background");
+
+        if (objects) {
+            for (var objectData of objects) {
+                var object = new RoomObject("object-" + objectData.id, objectData.description);
+                this.add(object, objectData.x, objectData.y);
+            }
+        }
+
+        if (actors) {
+            for (var actorData of actors) {
+                var actor = new Actor("actor-" + actorData.id, actorData.description);
+                this.add(actor, actorData.x, actorData.y);
+            }
+        }
+
         this.narrator = new Narrator(game);
+        this.narrator.create();
+
+        return Promise.resolve();
     }
 
     public preload() {
@@ -62,13 +82,29 @@ export class Room {
         this.actionMap.set(key, handler);
     }
 
+    public get(objectId: string) {
+        for (var object of this.roomObjects) {
+            if (object.name == objectId) {
+                return object;
+            }
+        }
+        return null;
+    }
+
+    public getActor(actorId: string) : Actor {
+        for (var object of this.roomObjects) {
+            if (object.name == "actor-" + actorId) {
+                return <Actor>object;
+            }
+        }
+        return null;
+    }
+
     public add(object: RoomObject, x: number, y: number) {
 
         object.init(this.game, this.uiMediator, x, y);
 
         this.roomObjects.push(object);
-
-        return Promise.resolve();
     }
 
     protected remove(object: RoomObject) {
