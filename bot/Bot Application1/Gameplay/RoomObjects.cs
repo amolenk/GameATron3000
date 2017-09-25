@@ -2,6 +2,6 @@
 {
     public static class RoomObjects
     {
-        public static readonly RoomObject SonicActionFigure = new RoomObject("sonic", "Sonic action figure");
+        public static readonly RoomObject Newspaper = new RoomObject("newspaper", "Newspaper");
     }
 }

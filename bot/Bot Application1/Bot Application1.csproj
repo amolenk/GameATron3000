@@ -112,11 +112,14 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Engine\AddToInventoryAction.cs" />
+    <Compile Include="Engine\Inventory.cs" />
     <Compile Include="Engine\Player.cs" />
     <Compile Include="Engine\MessageAction.cs" />
     <Compile Include="Dialogs\RoomDialog.cs" />
     <Compile Include="Engine\RoomObject.cs" />
     <Compile Include="Engine\Actor.cs" />
+    <Compile Include="Engine\StateThingie.cs" />
     <Compile Include="Gameplay\Actors.cs" />
     <Compile Include="Engine\IAction.cs" />
     <Compile Include="Obsolete\PickUpSonicDialog.cs" />
@@ -125,7 +128,7 @@
     <Compile Include="Dialogs\GraphDialog.cs" />
     <Compile Include="Obsolete\IanDialog.cs" />
     <Compile Include="Gameplay\RoomObjects.cs" />
-    <Compile Include="Gameplay\VillageRoomDialog.cs" />
+    <Compile Include="Gameplay\ParkRoom.cs" />
     <Compile Include="Engine\RoomManager.cs" />
     <Compile Include="Engine\WalkAction.cs" />
     <Compile Include="Engine\WireManager.cs" />

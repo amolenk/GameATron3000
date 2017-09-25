@@ -1,4 +1,6 @@
-﻿using Microsoft.Bot.Connector;
+﻿using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
 
 namespace Bot_Application1.Dialogs
@@ -16,7 +18,7 @@ namespace Bot_Application1.Dialogs
             _from = from;
         }
 
-        public Activity CreateReply(Activity activity)
+        public Task<Activity> CreateReplyAsync(Activity activity, IDialogContext context)
         {
             var reply = activity.CreateReply();
             reply.Type = ActivityTypes.Message;
@@ -31,7 +33,7 @@ namespace Bot_Application1.Dialogs
                 });
             }
 
-            return reply;
+            return Task.FromResult(reply);
         }
     }
 }

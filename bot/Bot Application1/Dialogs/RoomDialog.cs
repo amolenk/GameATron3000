@@ -9,14 +9,14 @@ using Newtonsoft.Json.Linq;
 namespace Bot_Application1.Dialogs
 {
     [Serializable]
-    public abstract class RoomDialog : IDialog<object>
+    public abstract class Room : IDialog<object>
     {
         private readonly string _roomId;
 
         [NonSerialized]
         private WireManager _wireManager;
 
-        protected RoomDialog(string roomId)
+        protected Room(string roomId)
         {
             _roomId = roomId;
         }
@@ -35,6 +35,11 @@ namespace Bot_Application1.Dialogs
             SetEnableUIFlag(roomActivity);
 
             await context.PostAsync(roomActivity);
+
+
+            _wireManager = new WireManager();
+            WireRoom(_wireManager);
+
 
             context.Wait(MessageReceivedAsync);
         }
@@ -59,16 +64,18 @@ namespace Bot_Application1.Dialogs
 
             if (activity.Type == ActivityTypes.Message)
             {
-                var replies = _wireManager.GetActions(activity.Text)
-                    .Select(action => action.CreateReply(activity))
+                var actions = _wireManager.GetActions(activity.Text, context)
+//                    .Select(action => action.CreateReplyAsync(activity))
                     .ToList();
 
                 int count = 0;
-                foreach (var reply in replies)
+                foreach (var action in actions)
                 {
+                    var reply = await action.CreateReplyAsync(activity, context);
+
                     // If this is the last reply, add a flag so the client knows
                     // it can re-enable the UI.
-                    if (++count == replies.Count)
+                    if (++count == actions.Count)
                     {
                         SetEnableUIFlag(reply);
                     }

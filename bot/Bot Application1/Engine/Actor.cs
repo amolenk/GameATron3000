@@ -11,12 +11,12 @@ namespace Bot_Application1.Dialogs
 
         public IAction Say(string text)
         {
-            return new MessageAction(this.Id, text, Description);
+            return new MessageAction(Id, text, Description);
         }
 
         public IAction WalkTo(int x, int y)
         {
-            return new WalkAction(this.Id, x, y); 
+            return new WalkAction(Id, x, y); 
         }
     }
 }
