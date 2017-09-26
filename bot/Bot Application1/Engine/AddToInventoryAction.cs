@@ -6,20 +6,23 @@ namespace Bot_Application1.Dialogs
 {
     public class AddToInventoryAction : IAction
     {
-        public AddToInventoryAction()
+        private readonly RoomObject _object;
+
+        public AddToInventoryAction(RoomObject @object)
         {
+            _object = @object;
         }
 
-        public async Task<Activity> CreateReplyAsync(Activity activity, IDialogContext context)
+        public Task ExecuteAsync(Activity activity, IDialogContext context, ResumeAfter<object> resume)
         {
             var reply = activity.CreateReply();
             reply.Type = ActivityTypes.Message;
             reply.Text = "OK, inventory updated!";
             reply.From.Name = "player";
 
-            context.ConversationData.SetValue("foo", "bar");
+            context.ConversationData.SetValue($"inv_{_object.Id}", true);
 
-            return reply;
+            return context.PostAsync(reply);
         }
     }
 }

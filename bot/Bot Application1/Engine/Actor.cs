@@ -1,4 +1,5 @@
 ﻿using System;
+using Bot_Application1.Engine;
 
 namespace Bot_Application1.Dialogs
 {
@@ -12,6 +13,11 @@ namespace Bot_Application1.Dialogs
         public IAction Say(string text)
         {
             return new MessageAction(Id, text, Description);
+        }
+
+        public IAction TalkTo(string topic)
+        {
+            return new TalkToAction(topic);
         }
 
         public IAction WalkTo(int x, int y)

@@ -6,6 +6,6 @@ namespace Bot_Application1.Dialogs
 {
     public interface IAction
     {
-        Task<Activity> CreateReplyAsync(Activity activity, IDialogContext context);
+        Task ExecuteAsync(Activity activity, IDialogContext context, ResumeAfter<object> resume);
     }
 }

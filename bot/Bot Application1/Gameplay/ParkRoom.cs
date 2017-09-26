@@ -27,6 +27,8 @@ namespace Bot_Application1.Dialogs
                 return Actors.Narrator.Say("It's yesterday's newspaper.");
             });
 
+            wireManager.TalkTo(Actors.Guy, _ => Actors.Guy.TalkTo("topic"));
+
             wireManager.PickUp(RoomObjects.Newspaper, (inventory) =>
             {
                 if (inventory.Contains(RoomObjects.Newspaper))
@@ -38,12 +40,9 @@ namespace Bot_Application1.Dialogs
                 }
                 else
                 {
-                    // TODO Return an action so we can update the client.
-                    inventory.Add(RoomObjects.Newspaper);
-
                     return new[]
                     {
-//                        Player.AddToInventory(RoomObjects.Newspaper),
+                        inventory.Add(RoomObjects.Newspaper),
                         Actors.Guy.Say("Foo"),
                         Actors.Guy.WalkTo(250, 500)
                     };

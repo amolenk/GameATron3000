@@ -18,7 +18,7 @@ namespace Bot_Application1.Dialogs
             _y = y;
         }
 
-        public Task<Activity> CreateReplyAsync(Activity activity, IDialogContext context)
+        public Task ExecuteAsync(Activity activity, IDialogContext context, ResumeAfter<object> resume)
         {
             var reply = activity.CreateReply();
             reply.Type = ActivityTypes.Event;
@@ -30,7 +30,7 @@ namespace Bot_Application1.Dialogs
                 y = _y
             });
 
-            return Task.FromResult(reply);
+            return context.PostAsync(reply);
         }
     }
 }

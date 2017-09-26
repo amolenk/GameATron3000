@@ -18,14 +18,12 @@ namespace Bot_Application1.Engine
 
         public bool Contains(RoomObject @object)
         {
-            return _context.ConversationData.ContainsKey(@object.Id);
+            return _context.ConversationData.ContainsKey($"inv_{@object.Id}");
         }
 
-        public void Add(RoomObject @object)
+        public IAction Add(RoomObject @object)
         {
-            _context.ConversationData.SetValue(@object.Id, true);
+            return new AddToInventoryAction(@object);
         }
-
-        // TODO GetKey method with inventory: prefix
     }
 }

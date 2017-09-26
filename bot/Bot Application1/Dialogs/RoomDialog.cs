@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using Bot_Application1.Engine;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
@@ -50,6 +51,11 @@ namespace Bot_Application1.Dialogs
 
         protected abstract void WireRoom(WireManager wireManager);
 
+        protected void TalkTo(Actor actor)
+        {
+
+        }
+
         [OnDeserialized()]
         private void OnDeserialized(StreamingContext context)
         {
@@ -71,18 +77,37 @@ namespace Bot_Application1.Dialogs
                 int count = 0;
                 foreach (var action in actions)
                 {
-                    var reply = await action.CreateReplyAsync(activity, context);
-
-                    // If this is the last reply, add a flag so the client knows
-                    // it can re-enable the UI.
-                    if (++count == actions.Count)
+                    switch (action)
                     {
-                        SetEnableUIFlag(reply);
+                        case TalkToAction a:
+                            context.Call(new ConversationTreeDialog(), ResumeAfterConversationTree);
+                            return;
+
+                        case AddToInventoryAction a:
+                            break;
                     }
 
-                    await context.PostAsync(reply);
+                    await action.ExecuteAsync(activity, context, ResumeAfterConversationTree);
+
+                    //var reply = await action.CreateReplyAsync(activity, context);
+
+                    //// If this is the last reply, add a flag so the client knows
+                    //// it can re-enable the UI.
+                    //if (++count == actions.Count)
+                    //{
+                    //    SetEnableUIFlag(reply);
+                    //}
+
+                    //await context.PostAsync(reply);
                 }
             }
+
+            context.Wait(MessageReceivedAsync);
+        }
+
+        private async Task ResumeAfterConversationTree(IDialogContext context, IAwaitable<object> result)
+        {
+            await SendMessageReplyAsync("End of conversation!", context);
 
             context.Wait(MessageReceivedAsync);
         }
@@ -95,6 +120,16 @@ namespace Bot_Application1.Dialogs
             }
 
             activity.Properties.Add("enableUI", true);
+        }
+
+        private static Task SendMessageReplyAsync(string text, IDialogContext context)
+        {
+            var reply = ((Activity)context.Activity).CreateReply();
+            reply.Type = ActivityTypes.Message;
+            reply.Text = text;
+            //            reply.From.Name = _from;
+
+            return context.PostAsync(reply);
         }
     }
 }

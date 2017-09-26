@@ -35,6 +35,16 @@ namespace Bot_Application1.Dialogs
             _wiredActions[$"pick up {roomObject.Description}".ToLowerInvariant()] = onExecute;
         }
 
+        public void TalkTo(Actor actor, Func<Inventory, IAction> onExecute)
+        {
+            TalkTo(actor, (i) => new[] { onExecute(i) });
+        }
+
+        public void TalkTo(Actor actor, Func<Inventory, IEnumerable<IAction>> onExecute)
+        {
+            _wiredActions[$"talk to {actor.Description}".ToLowerInvariant()] = onExecute;
+        }
+
         public IEnumerable<IAction> GetActions(string command, IDialogContext context)
         {
             var inventory = new Inventory(context);

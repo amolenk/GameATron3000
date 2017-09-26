@@ -11,15 +11,19 @@ using Newtonsoft.Json.Linq;
 namespace Bot_Application1.Dialogs
 {
     [Serializable]
-    public class GraphDialog<TResult> : IDialog<TResult>
+    public class ConversationTreeDialog : IDialog<object>
     {
-        public Task StartAsync(IDialogContext context)
+        public async Task StartAsync(IDialogContext context)
         {
             GraphNode = LoadGraph("graph");
 
-            context.Wait(MessageReceivedAsync);
+            var reply = ((Activity)context.Activity).CreateReply("Hi, let's converse!");
+            reply.Type = ActivityTypes.Message;
+            reply.TextFormat = TextFormatTypes.Plain;
 
-            return Task.CompletedTask;
+            await context.PostAsync(reply);
+
+            context.Wait(MessageReceivedAsync);
         }
 
         public JToken GraphNode { get; private set; }
@@ -28,9 +32,10 @@ namespace Bot_Application1.Dialogs
         {
             var activity = await result as Activity;
 
-            if (activity.Text == "hi")
+            if (activity.Text == "end")
             {
-                
+                context.Done<object>(null);
+                return;
             }
             else
             {
