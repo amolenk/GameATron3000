@@ -2,6 +2,7 @@
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
+using Bot_Application1.Engine;
 
 namespace Bot_Application1.Dialogs
 {
@@ -18,19 +19,21 @@ namespace Bot_Application1.Dialogs
             _y = y;
         }
 
-        public Task ExecuteAsync(Activity activity, IDialogContext context, ResumeAfter<object> resume)
+        public async Task<bool> ExecuteAsync(IDialogContext context)
         {
-            var reply = activity.CreateReply();
-            reply.Type = ActivityTypes.Event;
-            reply.Name = "WalkTo";
-            reply.Properties = JObject.FromObject(new
-            {
-                actorId = _actorId,
-                x = _x,
-                y = _y
-            });
+            await context.PostMessageAsync("WALKTO!");
+            //var reply = activity.CreateReply();
+            //reply.Type = ActivityTypes.Event;
+            //reply.Name = "WalkTo";
+            //reply.Properties = JObject.FromObject(new
+            //{
+            //    actorId = _actorId,
+            //    x = _x,
+            //    y = _y
+            //});
 
-            return context.PostAsync(reply);
+            return false;
+            //return context.PostAsync(reply);
         }
     }
 }

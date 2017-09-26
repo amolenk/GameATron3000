@@ -15,11 +15,6 @@ namespace Bot_Application1.Dialogs
             return new MessageAction(Id, text, Description);
         }
 
-        public IAction TalkTo(string topic)
-        {
-            return new TalkToAction(topic);
-        }
-
         public IAction WalkTo(int x, int y)
         {
             return new WalkAction(Id, x, y); 

@@ -1,28 +1,26 @@
 ﻿using System.Threading.Tasks;
+using Bot_Application1.Engine;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Connector;
 
 namespace Bot_Application1.Dialogs
 {
     public class AddToInventoryAction : IAction
     {
-        private readonly RoomObject _object;
+        private readonly RoomObject _roomObject;
 
-        public AddToInventoryAction(RoomObject @object)
+        public AddToInventoryAction(RoomObject roomObject)
         {
-            _object = @object;
+            _roomObject = roomObject;
         }
 
-        public Task ExecuteAsync(Activity activity, IDialogContext context, ResumeAfter<object> resume)
+        public async Task<bool> ExecuteAsync(IDialogContext context)
         {
-            var reply = activity.CreateReply();
-            reply.Type = ActivityTypes.Message;
-            reply.Text = "OK, inventory updated!";
-            reply.From.Name = "player";
+            var gameState = new GameState(context);
+            gameState.AddInventoryItem(_roomObject);
 
-            context.ConversationData.SetValue($"inv_{_object.Id}", true);
+            await context.PostMessageAsync("ADDTOINVENTORY!");
 
-            return context.PostAsync(reply);
+            return false;
         }
     }
 }

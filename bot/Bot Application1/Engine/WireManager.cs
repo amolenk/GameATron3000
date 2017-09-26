@@ -8,51 +8,49 @@ namespace Bot_Application1.Dialogs
 {
     public class WireManager
     {
-        private readonly Dictionary<string, Func<Inventory, IEnumerable<IAction>>> _wiredActions;
+        private readonly Dictionary<string, Func<GameState, IEnumerable<IAction>>> _wiredActions;
 
         public WireManager()
         {
-            _wiredActions = new Dictionary<string, Func<Inventory, IEnumerable<IAction>>>();
+            _wiredActions = new Dictionary<string, Func<GameState, IEnumerable<IAction>>>();
         }
 
-        public void LookAt(RoomObject roomObject, Func<Inventory, IAction> onExecute)
+        public void LookAt(RoomObject roomObject, Func<GameState, IAction> onExecute)
         {
-            LookAt(roomObject, (i) => new[] { onExecute(i) });
+            LookAt(roomObject, (state) => new[] { onExecute(state) });
         }
 
-        public void LookAt(RoomObject roomObject, Func<Inventory, IEnumerable<IAction>> onExecute)
+        public void LookAt(RoomObject roomObject, Func<GameState, IEnumerable<IAction>> onExecute)
         {
             _wiredActions[$"look at {roomObject.Description}".ToLowerInvariant()] = onExecute;
         }
 
-        public void PickUp(RoomObject roomObject, Func<Inventory, IAction> onExecute)
+        public void PickUp(RoomObject roomObject, Func<GameState, IAction> onExecute)
         {
-            PickUp(roomObject, (i) => new[] { onExecute(i) });
+            PickUp(roomObject, (state) => new[] { onExecute(state) });
         }
 
-        public void PickUp(RoomObject roomObject, Func<Inventory, IEnumerable<IAction>> onExecute)
+        public void PickUp(RoomObject roomObject, Func<GameState, IEnumerable<IAction>> onExecute)
         {
             _wiredActions[$"pick up {roomObject.Description}".ToLowerInvariant()] = onExecute;
         }
 
-        public void TalkTo(Actor actor, Func<Inventory, IAction> onExecute)
+        public void TalkTo(Actor actor, Func<GameState, IAction> onExecute)
         {
-            TalkTo(actor, (i) => new[] { onExecute(i) });
+            TalkTo(actor, (state) => new[] { onExecute(state) });
         }
 
-        public void TalkTo(Actor actor, Func<Inventory, IEnumerable<IAction>> onExecute)
+        public void TalkTo(Actor actor, Func<GameState, IEnumerable<IAction>> onExecute)
         {
             _wiredActions[$"talk to {actor.Description}".ToLowerInvariant()] = onExecute;
         }
 
-        public IEnumerable<IAction> GetActions(string command, IDialogContext context)
+        public IEnumerable<IAction> GetActions(string command, GameState gameState)
         {
-            var inventory = new Inventory(context);
-
-            Func<Inventory, IEnumerable<IAction>> _actionFactory;
+            Func<GameState, IEnumerable<IAction>> _actionFactory;
             if (_wiredActions.TryGetValue(command.ToLowerInvariant(), out _actionFactory))
             {
-                return _actionFactory(inventory);
+                return _actionFactory(gameState);
             }
 
             return Enumerable.Empty<IAction>();

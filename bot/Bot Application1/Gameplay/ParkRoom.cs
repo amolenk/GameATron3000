@@ -1,37 +1,36 @@
 ﻿using System;
+using Bot_Application1.Engine;
 
 namespace Bot_Application1.Dialogs
 {
     [Serializable]
     public class ParkRoom : Room
     {
-        public ParkRoom()
-            : base("park")
+        protected override RoomDefinition GetRoomDefinition()
         {
-        }
+            var roomDefinition = new RoomDefinition(
+                "park",
+                "You are standing in a park.\nThere's a newspaper on the ground.");
 
-        protected override string IntroductionText => "You are standing in a park."
-            + "\nThere's a newspaper on the ground.";
+            roomDefinition.Add(Actors.Guy, 100, 430);
 
-        protected override void PopulateRoom(RoomManager roomManager)
-        {
-            roomManager.Add(Actors.Guy, 100, 430);
+            roomDefinition.Add(RoomObjects.Newspaper, 450, 400);
 
-            roomManager.Add(RoomObjects.Newspaper, 450, 400);
+            return roomDefinition;
         }
 
         protected override void WireRoom(WireManager wireManager)
         {
-            wireManager.LookAt(RoomObjects.Newspaper, (inventory) =>
+            wireManager.LookAt(RoomObjects.Newspaper, _ =>
             {
                 return Actors.Narrator.Say("It's yesterday's newspaper.");
             });
 
-            wireManager.TalkTo(Actors.Guy, _ => Actors.Guy.TalkTo("topic"));
+            wireManager.TalkTo(Actors.Guy, _ => StartConversation("topic"));
 
-            wireManager.PickUp(RoomObjects.Newspaper, (inventory) =>
+            wireManager.PickUp(RoomObjects.Newspaper, (gameState) =>
             {
-                if (inventory.Contains(RoomObjects.Newspaper))
+                if (gameState.ContainsInventoryItem(RoomObjects.Newspaper))
                 {
                     return new[]
                     {
@@ -42,7 +41,7 @@ namespace Bot_Application1.Dialogs
                 {
                     return new[]
                     {
-                        inventory.Add(RoomObjects.Newspaper),
+                        Player.AddToInventory(RoomObjects.Newspaper),
                         Actors.Guy.Say("Foo"),
                         Actors.Guy.WalkTo(250, 500)
                     };

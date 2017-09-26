@@ -1,67 +1,38 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Bot_Application1.Engine;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json.Linq;
 
 namespace Bot_Application1.Dialogs
 {
     [Serializable]
     public abstract class Room : IDialog<object>
     {
-        private readonly string _roomId;
-
         [NonSerialized]
         private WireManager _wireManager;
 
-        protected Room(string roomId)
+        protected Room()
         {
-            _roomId = roomId;
         }
 
         public async Task StartAsync(IDialogContext context)
         {
-            var activity = (Activity)context.Activity;
+            var roomDefinition = GetRoomDefinition();
 
-            var roomManager = new RoomManager(_roomId);
-            PopulateRoom(roomManager);
-
-            var roomActivity = activity.CreateReply();
-            roomActivity.Text = IntroductionText;
-            roomActivity.Properties = roomManager.GetRoomDefinition();
-
-            SetEnableUIFlag(roomActivity);
-
-            await context.PostAsync(roomActivity);
-
-
-            _wireManager = new WireManager();
-            WireRoom(_wireManager);
-
+            await context.PostEventAsync(Event.EnteredRoom, roomDefinition.ToJObject());
+            await context.PostMessageAsync(roomDefinition.IntroductionText);
 
             context.Wait(MessageReceivedAsync);
         }
 
-        protected abstract string IntroductionText { get; }
-
-        protected abstract void PopulateRoom(RoomManager roomManager);
+        protected abstract RoomDefinition GetRoomDefinition();
 
         protected abstract void WireRoom(WireManager wireManager);
 
-        protected void TalkTo(Actor actor)
+        protected IAction StartConversation(string topic)
         {
-
-        }
-
-        [OnDeserialized()]
-        private void OnDeserialized(StreamingContext context)
-        {
-            _wireManager = new WireManager();
-
-            WireRoom(_wireManager);
+            return new TalkToAction(topic, ResumeAfterConversationTree);
         }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
@@ -70,36 +41,21 @@ namespace Bot_Application1.Dialogs
 
             if (activity.Type == ActivityTypes.Message)
             {
-                var actions = _wireManager.GetActions(activity.Text, context)
-//                    .Select(action => action.CreateReplyAsync(activity))
-                    .ToList();
+                var gameState = new GameState(context);
 
-                int count = 0;
+                var wireManager = GetWireManager();
+                var actions = wireManager.GetActions(activity.Text, gameState);
+
                 foreach (var action in actions)
                 {
-                    switch (action)
+                    var contextHandled = await action.ExecuteAsync(context);
+                    if (contextHandled)
                     {
-                        case TalkToAction a:
-                            context.Call(new ConversationTreeDialog(), ResumeAfterConversationTree);
-                            return;
-
-                        case AddToInventoryAction a:
-                            break;
+                        return;
                     }
-
-                    await action.ExecuteAsync(activity, context, ResumeAfterConversationTree);
-
-                    //var reply = await action.CreateReplyAsync(activity, context);
-
-                    //// If this is the last reply, add a flag so the client knows
-                    //// it can re-enable the UI.
-                    //if (++count == actions.Count)
-                    //{
-                    //    SetEnableUIFlag(reply);
-                    //}
-
-                    //await context.PostAsync(reply);
                 }
+
+                await context.PostEventAsync(Event.Idle);
             }
 
             context.Wait(MessageReceivedAsync);
@@ -107,29 +63,23 @@ namespace Bot_Application1.Dialogs
 
         private async Task ResumeAfterConversationTree(IDialogContext context, IAwaitable<object> result)
         {
-            await SendMessageReplyAsync("End of conversation!", context);
+            // TODO Check this
+            await context.PostMessageAsync("End of conversation!");
+            await context.PostEventAsync(Event.Idle);
 
             context.Wait(MessageReceivedAsync);
         }
 
-        private void SetEnableUIFlag(Activity activity)
+        private WireManager GetWireManager()
         {
-            if (activity.Properties == null)
+            if (_wireManager == null)
             {
-                activity.Properties = new JObject();
+                _wireManager = new WireManager();
+
+                WireRoom(_wireManager);
             }
 
-            activity.Properties.Add("enableUI", true);
-        }
-
-        private static Task SendMessageReplyAsync(string text, IDialogContext context)
-        {
-            var reply = ((Activity)context.Activity).CreateReply();
-            reply.Type = ActivityTypes.Message;
-            reply.Text = text;
-            //            reply.From.Name = _from;
-
-            return context.PostAsync(reply);
+            return _wireManager;
         }
     }
 }
