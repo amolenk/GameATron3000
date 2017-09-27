@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GameATron3000.Bot.Engine;
 
 namespace GameATron3000.Bot.Gameplay
@@ -10,9 +11,10 @@ namespace GameATron3000.Bot.Gameplay
         {
             var roomDefinition = new RoomDefinition(
                 "park",
-                "You are standing in a park.\nThere's a newspaper on the ground.");
+                "You've just done your grocery shopping and decided to take a detour through the park.\nIt's a nice day!");
 
-            roomDefinition.Add(Actors.Guy, 100, 430);
+            // Let's keep our hero offscreen for now.
+            roomDefinition.Add(Actors.Guy, -50, 430);
 
             roomDefinition.Add(RoomObjects.Newspaper, 450, 400);
 
@@ -21,10 +23,30 @@ namespace GameATron3000.Bot.Gameplay
 
         protected override void WireRoom(WireManager wireManager)
         {
-            wireManager.LookAt(RoomObjects.Newspaper, _ => new[]
+            // Full Shopping Gag
+
+            wireManager.LookAt(RoomObjects.FullShoppingBag, _ =>
+                Actors.Guy.Say("It's my shopping bag with groceries.\nI managed to get some nice discounts!")
+            );
+
+
+            wireManager.LookAt(RoomObjects.Newspaper, (gameState) =>
             {
-                Actors.Guy.WalkTo(400, 400),
-                Actors.Guy.Say("It's yesterday's newspaper.")
+                if (gameState.ContainsInventoryItem(RoomObjects.Newspaper))
+                {
+                    return new[]
+                    {
+                        Actors.Guy.Say("It's the newspaper I just picked up!")
+                    };
+                }
+                else
+                {
+                    return new[]
+                    {
+                        Actors.Guy.WalkTo(400, 400),
+                        Actors.Guy.Say("It's yesterday's newspaper.")
+                    };
+                }
             });
 
             wireManager.TalkTo(Actors.Guy, _ => Actors.Guy.StartConversation("graph"));
@@ -43,7 +65,7 @@ namespace GameATron3000.Bot.Gameplay
                     return new[]
                     {
                         Player.AddToInventory(RoomObjects.Newspaper),
-                        Actors.Guy.Say("Foo")
+                        Actors.Guy.Say("Got it!")
                     };
                 }
             });

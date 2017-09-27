@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
+using Newtonsoft.Json.Linq;
 
 namespace GameATron3000.Bot.Engine
 {
@@ -17,7 +18,11 @@ namespace GameATron3000.Bot.Engine
             var gameState = new GameState(context);
             gameState.AddInventoryItem(_roomObject);
 
-            await context.PostMessageAsync("ADDTOINVENTORY!");
+            await context.PostEventAsync(Event.InventoryItemAdded, JObject.FromObject(new
+            {
+                objectId = _roomObject.Id,
+                description = _roomObject.Description
+            }));
 
             return false;
         }

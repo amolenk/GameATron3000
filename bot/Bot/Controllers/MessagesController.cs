@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using GameATron3000.Bot.Engine;
 using GameATron3000.Bot.Gameplay;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
@@ -27,7 +28,7 @@ namespace GameATron3000.Bot.Controllers
                     if (activity.MembersAdded.Any(m => m.Name == "Game-a-tron 3000 (TM)"
                         || m.Name == "Bot"))
                     {
-                        await Conversation.SendAsync(activity, () => new ParkRoom());
+                        await Conversation.SendAsync(activity, () => new RootDialog(new Game()));
                     }
                     break;
 
@@ -43,12 +44,12 @@ namespace GameATron3000.Bot.Controllers
                     // the dialog.
                     if (activity.Name == "start")
                     {
-                        await Conversation.SendAsync(activity, () => new ParkRoom());
+                        await Conversation.SendAsync(activity, () => new RootDialog(new Game()));
                     }
                     break;
 
                 case ActivityTypes.Message:
-                    await Conversation.SendAsync(activity, () => new ParkRoom());
+                    await Conversation.SendAsync(activity, () => new RootDialog(new Game()));
                     break;
             }
 
