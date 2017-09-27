@@ -22,7 +22,7 @@ namespace GameATron3000.Bot.Engine
             var roomDefinition = GetRoomDefinition();
 
             await context.PostEventAsync(Event.RoomEntered, roomDefinition.ToJObject());
-            //await context.PostMessageAsync(roomDefinition.IntroductionText);
+            await context.PostMessageAsync(roomDefinition.IntroductionText);
             await context.PostEventAsync(Event.Idle);
 
             context.Wait(MessageReceivedAsync);

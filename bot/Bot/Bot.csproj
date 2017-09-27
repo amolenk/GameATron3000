@@ -23,6 +23,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -121,6 +122,8 @@
     <Compile Include="Engine\GameState.cs" />
     <Compile Include="Engine\Actions\MessageAction.cs" />
     <Compile Include="Engine\RootDialog.cs" />
+    <Compile Include="Engine\LuisRoom.cs" />
+    <Compile Include="Engine\MessageAction.cs" />
     <Compile Include="Engine\Room.cs" />
     <Compile Include="Engine\Player.cs" />
     <Compile Include="Engine\RoomObject.cs" />
@@ -129,6 +132,7 @@
     <Compile Include="Gameplay\Actors.cs" />
     <Compile Include="Engine\IAction.cs" />
     <Compile Include="Engine\ConversationTree.cs" />
+    <Compile Include="Gameplay\UfoRoom.cs" />
     <Compile Include="Gameplay\Game.cs" />
     <Compile Include="Gameplay\RoomObjects.cs" />
     <Compile Include="Gameplay\ParkRoom.cs" />

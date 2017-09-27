@@ -6,6 +6,8 @@ namespace GameATron3000.Bot.Gameplay
     {
         public static readonly RoomObject Newspaper = new RoomObject("newspaper", "newspaper");
         public static readonly RoomObject FullShoppingBag = new RoomObject("fullshoppingbag", "shopping bag");
+        public static readonly RoomObject Refrigerator = new RoomObject("refrigerator", "fridge");
+        public static readonly RoomObject SnatchList = new RoomObject("snatchlist", "snatchlist");
         public static readonly RoomObject TractorBeam = new RoomObject("tractorbeam", "tractor beam");
     }
 }
