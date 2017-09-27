@@ -127,6 +127,7 @@
     <Compile Include="Gameplay\Actors.cs" />
     <Compile Include="Engine\IAction.cs" />
     <Compile Include="Engine\ConversationTree.cs" />
+    <Compile Include="Gameplay\UfoRoom.cs" />
     <Compile Include="Gameplay\RoomObjects.cs" />
     <Compile Include="Gameplay\ParkRoom.cs" />
     <Compile Include="Engine\RoomDefinition.cs" />

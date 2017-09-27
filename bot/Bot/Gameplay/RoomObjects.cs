@@ -5,5 +5,7 @@ namespace GameATron3000.Bot.Gameplay
     public static class RoomObjects
     {
         public static readonly RoomObject Newspaper = new RoomObject("newspaper", "Newspaper");
+        public static readonly RoomObject SnatchList = new RoomObject("snatchlist", "Snatchlist");
+        public static readonly RoomObject Refrigerator = new RoomObject("refrigerator", "Refrigerator");
     }
 }

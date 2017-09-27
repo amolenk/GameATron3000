@@ -27,7 +27,7 @@ namespace GameATron3000.Bot.Controllers
                     if (activity.MembersAdded.Any(m => m.Name == "Game-a-tron 3000 (TM)"
                         || m.Name == "Bot"))
                     {
-                        await Conversation.SendAsync(activity, () => new ParkRoom());
+                        await Conversation.SendAsync(activity, () => new UfoRoom());
                     }
                     break;
 
@@ -43,12 +43,12 @@ namespace GameATron3000.Bot.Controllers
                     // the dialog.
                     if (activity.Name == "start")
                     {
-                        await Conversation.SendAsync(activity, () => new ParkRoom());
+                        await Conversation.SendAsync(activity, () => new UfoRoom());
                     }
                     break;
 
                 case ActivityTypes.Message:
-                    await Conversation.SendAsync(activity, () => new ParkRoom());
+                    await Conversation.SendAsync(activity, () => new UfoRoom());
                     break;
             }
 
