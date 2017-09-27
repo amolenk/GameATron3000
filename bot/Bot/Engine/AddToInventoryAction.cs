@@ -12,7 +12,7 @@ namespace GameATron3000.Bot.Engine
             _roomObject = roomObject;
         }
 
-        public async Task<bool> ExecuteAsync(IDialogContext context)
+        public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
         {
             var gameState = new GameState(context);
             gameState.AddInventoryItem(_roomObject);

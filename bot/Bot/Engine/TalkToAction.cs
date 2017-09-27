@@ -5,18 +5,18 @@ namespace GameATron3000.Bot.Engine
 {
     public class TalkToAction : IAction
     {
+        private readonly Actor _actor;
         private readonly string _topic;
-        private readonly ResumeAfter<object> _resume;
 
-        public TalkToAction(string topic, ResumeAfter<object> resume)
+        public TalkToAction(Actor actor, string topic)
         {
+            _actor = actor;
             _topic = topic;
-            _resume = resume;
         }
 
-        public Task<bool> ExecuteAsync(IDialogContext context)
+        public Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
         {
-            context.Call(new ConversationTree(_topic), _resume);
+            context.Call(new ConversationTree(_actor, _topic), resume);
 
             return Task.FromResult(true);
         }

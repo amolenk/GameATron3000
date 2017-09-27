@@ -13,8 +13,10 @@ namespace GameATron3000.Bot.Engine
     [Serializable]
     public class ConversationTree : IDialog<object>
     {
-        public ConversationTree(string topic)
+        public ConversationTree(Actor actor, string topic)
         {
+            ActorId = actor.Id;
+            ActorDescription = actor.Description;
             Topic = topic;
         }
 
@@ -30,6 +32,10 @@ namespace GameATron3000.Bot.Engine
         public JToken Model { get; private set; }
 
         public string Topic { get; private set; }
+
+        public string ActorId { get; private set; }
+
+        public string ActorDescription { get; private set; }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
@@ -57,7 +63,7 @@ namespace GameATron3000.Bot.Engine
                 Model = LoadConversationTreeModel(Topic);
             }
 
-            await PostReply(context, replyText);
+            await PostReply(context, replyText, isDone);
 
             if (isDone)
             {
@@ -69,23 +75,32 @@ namespace GameATron3000.Bot.Engine
             }
         }
 
-        private Task PostReply(IDialogContext context, string replyText)
+        private Task PostReply(IDialogContext context, string replyText, bool isDone = false)
         {
             var reply = ((Activity)context.Activity).CreateReply(replyText);
             reply.Type = ActivityTypes.Message;
             reply.TextFormat = TextFormatTypes.Plain;
 
-            reply.SuggestedActions = new SuggestedActions()
+            reply.From.Name = ActorDescription;
+            reply.Properties = JObject.FromObject(new
             {
-                Actions = Model["actions"].Select(
-                    action => new CardAction
-                    {
-                        Title = action["value"].Value<string>(),
-                        Type = ActionTypes.ImBack,
-                        Value = action["value"].Value<string>()
-                    })
-                    .ToList()
-            };
+                actorId = ActorId
+            });
+
+            if (!isDone)
+            {
+                reply.SuggestedActions = new SuggestedActions()
+                {
+                    Actions = Model["actions"].Select(
+                        action => new CardAction
+                        {
+                            Title = action["value"].Value<string>(),
+                            Type = ActionTypes.ImBack,
+                            Value = action["value"].Value<string>()
+                        })
+                        .ToList()
+                };
+            }
 
             return context.PostAsync(reply);
         }
