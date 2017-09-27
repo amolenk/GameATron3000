@@ -61,13 +61,25 @@ namespace GameATron3000.Bot.Engine
             var wireManager = GetWireManager();
             var gameState = new GameState(context);
 
-            // build activity from LUIS result
+            // determine intent
             string intent = luisResult.TopScoringIntent.Intent;
-            string subject = luisResult.Entities.Count > 0 ? luisResult.Entities[0].Type : "unknown";
-            string activityFromLuis = $"{intent} {subject}";
+
+            // determine entity
+            string subject = "unknown";
+            EntityRecommendation entityRecomendation = luisResult.Entities.Count > 0 ? luisResult.Entities[0] : null;
+            if (entityRecomendation != null)
+            {
+                if (entityRecomendation?.Score > 0.9)
+                {
+                    subject = entityRecomendation.Type;
+                }
+            }
+
+            // build command
+            string gameCommand = $"{intent} {subject}";
 
             // execute actions
-            var actions = wireManager.GetActions(activityFromLuis, gameState);
+            var actions = wireManager.GetActions(gameCommand, gameState);
             foreach (var action in actions)
             {
                 var contextHandled = await action.ExecuteAsync(context, ResumeAfterConversationTree);
