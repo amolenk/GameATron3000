@@ -4,7 +4,7 @@ using GameATron3000.Bot.Engine;
 namespace GameATron3000.Bot.Gameplay
 {
     [Serializable]
-    public class ParkRoom : LuisRoom
+    public class ParkRoom : Room
     {
         protected override RoomDefinition GetRoomDefinition()
         {
