@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Bot_Application1.Dialogs;
-
-namespace Bot_Application1.Engine
+﻿namespace GameATron3000.Bot.Engine
 {
     public static class Player
     {

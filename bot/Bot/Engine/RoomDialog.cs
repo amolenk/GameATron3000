@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Bot_Application1.Engine;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
-namespace Bot_Application1.Dialogs
+namespace GameATron3000.Bot.Engine
 {
     [Serializable]
     public abstract class Room : IDialog<object>

@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Connector;
 
-namespace Bot_Application1.Dialogs
+namespace GameATron3000.Bot.Engine
 {
     public interface IAction
     {

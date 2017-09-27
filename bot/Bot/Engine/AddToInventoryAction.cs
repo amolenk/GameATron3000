@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Bot_Application1.Engine;
 using Microsoft.Bot.Builder.Dialogs;
 
-namespace Bot_Application1.Dialogs
+namespace GameATron3000.Bot.Engine
 {
     public class AddToInventoryAction : IAction
     {

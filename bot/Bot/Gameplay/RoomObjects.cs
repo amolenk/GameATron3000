@@ -1,4 +1,6 @@
-﻿namespace Bot_Application1.Dialogs
+﻿using GameATron3000.Bot.Engine;
+
+namespace GameATron3000.Bot.Gameplay
 {
     public static class RoomObjects
     {

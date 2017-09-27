@@ -1,7 +1,7 @@
 ﻿using System;
-using Bot_Application1.Engine;
+using GameATron3000.Bot.Engine;
 
-namespace Bot_Application1.Dialogs
+namespace GameATron3000.Bot.Gameplay
 {
     [Serializable]
     public class ParkRoom : Room

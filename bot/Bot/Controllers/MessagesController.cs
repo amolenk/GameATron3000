@@ -1,13 +1,13 @@
-﻿using System;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using GameATron3000.Bot.Gameplay;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using System.Linq;
 
-namespace Bot_Application1
+namespace GameATron3000.Bot.Controllers
 {
     [BotAuthentication]
     public class MessagesController : ApiController
@@ -27,7 +27,7 @@ namespace Bot_Application1
                     if (activity.MembersAdded.Any(m => m.Name == "Game-a-tron 3000 (TM)"
                         || m.Name == "Bot"))
                     {
-                        await Conversation.SendAsync(activity, () => new Dialogs.ParkRoom());
+                        await Conversation.SendAsync(activity, () => new ParkRoom());
                     }
                     break;
 
@@ -43,12 +43,12 @@ namespace Bot_Application1
                     // the dialog.
                     if (activity.Name == "start")
                     {
-                        await Conversation.SendAsync(activity, () => new Dialogs.ParkRoom());
+                        await Conversation.SendAsync(activity, () => new ParkRoom());
                     }
                     break;
 
                 case ActivityTypes.Message:
-                    await Conversation.SendAsync(activity, () => new Dialogs.ParkRoom());
+                    await Conversation.SendAsync(activity, () => new ParkRoom());
                     break;
             }
 

@@ -8,7 +8,7 @@ using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Bot_Application1.Dialogs
+namespace GameATron3000.Bot.Engine
 {
     [Serializable]
     public class ConversationTreeDialog : IDialog<object>
@@ -92,7 +92,7 @@ namespace Bot_Application1.Dialogs
 
         private static JObject LoadConversationTree(string name)
         {
-            var resourceName = $"Bot_Application1.Dialogs.{name}.json";
+            var resourceName = $"GameATron3000.Bot.Gameplay.ConversationTrees.{name}.json";
 
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             using (var reader = new JsonTextReader(new StreamReader(stream)))

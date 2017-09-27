@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using Bot_Application1.Dialogs;
+﻿using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
 
-namespace Bot_Application1.Engine
+namespace GameATron3000.Bot.Engine
 {
     public static class DialogContextExtensions
     {

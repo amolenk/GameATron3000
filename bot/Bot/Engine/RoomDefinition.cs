@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace Bot_Application1.Dialogs
+namespace GameATron3000.Bot.Engine
 {
     public class RoomDefinition
     {

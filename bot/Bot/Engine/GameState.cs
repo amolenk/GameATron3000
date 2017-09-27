@@ -1,7 +1,6 @@
-﻿using Bot_Application1.Dialogs;
-using Microsoft.Bot.Builder.Dialogs;
+﻿using Microsoft.Bot.Builder.Dialogs;
 
-namespace Bot_Application1.Engine
+namespace GameATron3000.Bot.Engine
 {
     public class GameState
     {

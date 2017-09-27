@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using GameATron3000.Bot.Gameplay;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
 
-namespace Bot_Application1.Dialogs
+namespace GameATron3000.Bot.Engine
 {
     public class MessageAction : IAction
     {
@@ -17,8 +18,6 @@ namespace Bot_Application1.Dialogs
             _text = text;
             _from = from;
         }
-
-
 
         public async Task<bool> ExecuteAsync(IDialogContext context)
         {
