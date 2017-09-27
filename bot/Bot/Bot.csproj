@@ -113,6 +113,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Engine\Actions\RemoveRoomObjectAction.cs" />
     <Compile Include="Engine\Actions\DelayAction.cs" />
     <Compile Include="Engine\Actions\CloseUpAction.cs" />
     <Compile Include="Engine\Actions\AddRoomObjectAction.cs" />
@@ -148,6 +149,8 @@
       <SubType>Designer</SubType>
     </Content>
     <EmbeddedResource Include="Gameplay\ConversationTrees\graph.json" />
+    <EmbeddedResource Include="Gameplay\ConversationTrees\meet-al.json" />
+    <EmbeddedResource Include="Gameplay\ConversationTrees\meet-ian.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

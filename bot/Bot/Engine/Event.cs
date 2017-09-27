@@ -23,7 +23,11 @@
         // A new object has been added to the room.
         RoomObjectAdded,
 
+        // An object is removed from the room.
+        RoomObjectRemoved,
+
         // Bot is waiting for input from client.
-        Idle
+        Idle,
+
     }
 }

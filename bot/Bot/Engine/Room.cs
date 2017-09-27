@@ -37,6 +37,11 @@ namespace GameATron3000.Bot.Engine
             return new AddRoomObjectAction(roomObject, x, y);
         }
 
+        protected IAction RemoveRoomObject(RoomObject roomObject)
+        {
+            return new RemoveRoomObjectAction(roomObject);
+        }
+
         protected IAction Delay(TimeSpan time)
         {
             return new DelayAction(time);
