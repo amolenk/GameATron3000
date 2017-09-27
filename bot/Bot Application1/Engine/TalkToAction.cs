@@ -17,7 +17,7 @@ namespace Bot_Application1.Engine
 
         public Task<bool> ExecuteAsync(IDialogContext context)
         {
-            context.Call(new ConversationTreeDialog(), _resume);
+            context.Call(new ConversationTreeDialog(_topic), _resume);
 
             return Task.FromResult(true);
         }

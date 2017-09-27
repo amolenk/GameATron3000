@@ -36,7 +36,8 @@
     {
       "value": "Nevermind",
       "reply": {
-        "text": "Let me know if you find my Sonic action figure!"
+        "text": "Let me know if you find my Sonic action figure!",
+        "done":  true
       }
     }
   ]

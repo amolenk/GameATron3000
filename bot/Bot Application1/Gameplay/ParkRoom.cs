@@ -26,7 +26,7 @@ namespace Bot_Application1.Dialogs
                 return Actors.Narrator.Say("It's yesterday's newspaper.");
             });
 
-            wireManager.TalkTo(Actors.Guy, _ => StartConversation("topic"));
+            wireManager.TalkTo(Actors.Guy, _ => StartConversation("graph"));
 
             wireManager.PickUp(RoomObjects.Newspaper, (gameState) =>
             {

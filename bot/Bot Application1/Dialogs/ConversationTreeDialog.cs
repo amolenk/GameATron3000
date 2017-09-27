@@ -13,55 +13,71 @@ namespace Bot_Application1.Dialogs
     [Serializable]
     public class ConversationTreeDialog : IDialog<object>
     {
+        public ConversationTreeDialog(string topic)
+        {
+            Topic = topic;
+        }
+
         public async Task StartAsync(IDialogContext context)
         {
-            GraphNode = LoadGraph("graph");
+            ConversationTree = LoadConversationTree(Topic);
 
-            var reply = ((Activity)context.Activity).CreateReply("Hi, let's converse!");
-            reply.Type = ActivityTypes.Message;
-            reply.TextFormat = TextFormatTypes.Plain;
-
-            await context.PostAsync(reply);
+            await PostReply(context, ConversationTree["text"].Value<string>());
 
             context.Wait(MessageReceivedAsync);
         }
 
-        public JToken GraphNode { get; private set; }
+        public JToken ConversationTree { get; private set; }
+
+        public string Topic { get; private set; }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
             var activity = await result as Activity;
 
-            if (activity.Text == "end")
+            // Try to find the input text in the conversation tree actions.
+            var match = ConversationTree["actions"]
+                .Children()
+                .Where(action => action["value"].Value<string>() == activity.Text)
+                .FirstOrDefault();
+
+            // If we found the input text, position the graph at the reply.
+            if (match != null)
+            {
+                ConversationTree = match["reply"];
+            }
+
+            var replyText = ConversationTree["text"].Value<string>();
+            var isDone = ConversationTree["done"] != null;
+
+            // If the reply does not contain any actions, we've reached a leaf and need to reset
+            // back to the top.
+            if (ConversationTree["actions"] == null)
+            {
+                ConversationTree = LoadConversationTree(Topic);
+            }
+
+            await PostReply(context, replyText);
+
+            if (isDone)
             {
                 context.Done<object>(null);
-                return;
             }
             else
             {
-                var match = GraphNode["actions"]
-                    .Children()
-                    .Where(action => action["value"].Value<string>() == activity.Text)
-                    .FirstOrDefault();
-
-                if (match != null)
-                {
-                    GraphNode = match["reply"];
-                }
+                context.Wait(MessageReceivedAsync);
             }
+        }
 
-            var reply = activity.CreateReply(GraphNode["text"].Value<string>());
+        private Task PostReply(IDialogContext context, string replyText)
+        {
+            var reply = ((Activity)context.Activity).CreateReply(replyText);
             reply.Type = ActivityTypes.Message;
             reply.TextFormat = TextFormatTypes.Plain;
 
-            if (GraphNode["actions"] == null)
-            {
-                GraphNode = LoadGraph("graph");
-            }
-
             reply.SuggestedActions = new SuggestedActions()
             {
-                Actions = GraphNode["actions"].Select(
+                Actions = ConversationTree["actions"].Select(
                     action => new CardAction
                     {
                         Title = action["value"].Value<string>(),
@@ -71,12 +87,10 @@ namespace Bot_Application1.Dialogs
                     .ToList()
             };
 
-            await context.PostAsync(reply);
-
-            context.Wait(MessageReceivedAsync);
+            return context.PostAsync(reply);
         }
 
-        private static JObject LoadGraph(string name)
+        private static JObject LoadConversationTree(string name)
         {
             var resourceName = $"Bot_Application1.Dialogs.{name}.json";
 
