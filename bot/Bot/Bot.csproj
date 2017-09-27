@@ -139,7 +139,7 @@
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Gameplay\ConversationTrees\graph.json" />
+    <EmbeddedResource Include="Gameplay\ConversationTrees\graph.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

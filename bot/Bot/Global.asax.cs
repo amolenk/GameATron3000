@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 
-namespace Bot_Application1
+namespace GameATron3000.Bot
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

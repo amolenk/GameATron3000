@@ -52,42 +52,6 @@ namespace GameATron3000.Bot.Controllers
                     break;
             }
 
-            //if (activity is )
-            //{
-            //    await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
-            //}
-
-            //if (activity.Type == ActivityTypes.Message)
-            //{
-            //    await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
-            //}
-            //else if (activity.Type == ActivityTypes.ConversationUpdate)
-            //{
-            //    if (activity.MembersAdded.Any(m => m.Id == activity.Recipient.Id))
-            //    {
-            //        // Use the data stored previously to create the required objects.
-            //        //var userAccount = new ChannelAccount(activity.From.Id, activity.From.Name);
-            //        //var botAccount = new ChannelAccount(activity.Recipient.Id, activity.Recipient.Name);
-            //        //var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-
-            //        //var client = new ConnectorClient(new Uri(activity.ServiceUrl));
-
-            //        //var reply = activity.CreateReply();
-            //        //reply.Text = "Welcome to Game-A-Tron 3000™";
-
-            //        //await client.Conversations.ReplyToActivityAsync(reply);
-
-            //        await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
-            //    }
-            //}
-            //else
-            //{
-            //    HandleSystemMessage(activity);
-            //}
-
-            //var response = Request.CreateResponse(HttpStatusCode.OK);
-            //return response;
-
             return new HttpResponseMessage(HttpStatusCode.Accepted);
         }
 
