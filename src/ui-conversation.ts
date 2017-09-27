@@ -1,45 +1,21 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 
-import { Actor } from "./actor"
-import { ConversationService } from "./services/service-conversation"
+import { BotClient } from "./botclient"
 import { Settings } from "./settings"
 
 export class ConversationUI {
 
-    private conversationService: ConversationService;
-
-    private currentActor: Actor;
-    private currentConversationId: string;
-    private currentPromiseResolver: Function;
-
-    constructor(private game: Phaser.Game) {
-        this.conversationService = new ConversationService(
-            (text, suggestedActions) => this.onReceivedReply(text, suggestedActions),
-            (text) => this.onConversationEnded(text));
+    constructor(private game: Phaser.Game, private botClient: BotClient) {
     }
 
-    public startConversation(topicName: string, actor: Actor) {
-
-        this.currentActor = actor;
-        this.currentConversationId = this.conversationService.createConversation(topicName);
-
-        // Return a Promise that completes when the conversation has ended.
-        return new Promise((resolve) => {
-            this.currentPromiseResolver = resolve;
-        });
-    }
-
-    protected async onReceivedReply(text: string, suggestedActions: string[]) {
-        
-        await this.currentActor.say(text);
-
+    public displaySuggestedActions(suggestedActions) {
         var options = [];
         var y = 460;
 
         // Render suggested actions.
         for (var action of suggestedActions) {
 
-            var optionText = this.game.add.text(10, y, action, Settings.TEXTSTYLE_CONVERSATION_OPTION);
+            var optionText = this.game.add.text(10, y, action.value, Settings.TEXTSTYLE_CONVERSATION_OPTION);
             optionText.inputEnabled = true;
             optionText.sendToBack(); // So the cursor stays on top.
 
@@ -59,18 +35,12 @@ export class ConversationUI {
                     optionToDestroy.destroy();
                 }
 
-                this.conversationService.sendMessage(this.currentConversationId, selectedText);
+                this.botClient.sendMessageToBot(selectedText);
+
             }, this);
 
             options.push(optionText);
             y += optionText.height;
         }
-    }
-
-    protected async onConversationEnded(text: string) {
-        
-        await this.currentActor.say(text);
-        
-        this.currentPromiseResolver();
     }
 }

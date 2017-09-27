@@ -25,7 +25,7 @@ export class Room {
     public initialize(game: Phaser.Game, uiMediator: UIMediator, objects?: any, actors?: any) : Promise<void> {
         this.game = game;
         this.uiMediator = uiMediator;
-        this.uiMediator.setExecuteActionCallback((action) => this.executeAction(action));
+//        this.uiMediator.setExecuteActionCallback((action) => this.executeAction(action));
 
         this.game.add.sprite(0, 0, this.name + "-room-background");
 
@@ -82,9 +82,9 @@ export class Room {
         this.actionMap.set(key, handler);
     }
 
-    public get(objectId: string) {
+    public getObject(objectId: string) {
         for (var object of this.roomObjects) {
-            if (object.name == objectId) {
+            if (object.name == "object-" + objectId) {
                 return object;
             }
         }
@@ -107,7 +107,7 @@ export class Room {
         this.roomObjects.push(object);
     }
 
-    protected remove(object: RoomObject) {
+    public remove(object: RoomObject) {
 
         // The object no longer needs a visual representation in the room.
         object.kill();
@@ -115,20 +115,20 @@ export class Room {
         return Promise.resolve();
     }
 
-    protected addToInventory(item: InventoryItem) {
+    // protected addToInventory(item: InventoryItem) {
 
-        return this.uiMediator.addToInventory(item);
-    }
+    //     return this.uiMediator.addToInventory(item);
+    // }
 
-    protected removeFromInventory(item: InventoryItem) {
+    // protected removeFromInventory(item: InventoryItem) {
 
-        return this.uiMediator.removeFromInventory(item);
-    }
+    //     return this.uiMediator.removeFromInventory(item);
+    // }
 
-    protected startConversation(topicName: string, actor: Actor) {
+    // protected startConversation(topicName: string, actor: Actor) {
 
-        return this.uiMediator.startConversation(topicName, actor);
-    }
+    //     return this.uiMediator.startConversation(topicName, actor);
+    // }
 
     // Obsolete
     private async executeAction(action: Action) {

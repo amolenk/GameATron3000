@@ -1,5 +1,6 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 
+import { BotClient } from './botclient'
 import { Cursor } from './cursor'
 import { Settings } from './settings'
 import { SecretSettings } from './settings-secrets'
@@ -38,42 +39,24 @@ class GameATron {
             }
         });    
 
-        var botClient = new DirectLine({
-            secret: SecretSettings.BOT_DIRECT_LINE_SECRET,
-            //domain: "europe.directline.botframework.com"
-        });
-
-
-
-        // directLine.postActivity({
-        //     from: { id: "player", name: "Player" },
-        //     type: "event",
-        //     name: "start",
-        //     value: true
-        // })        
-        // .subscribe(
-        //   // id => console.log("Posted activity, assigned ID ", id),
-        //   // error => console.log("Error posting activity", error)
-        // );
+        var botClient = new BotClient();
 
         this.uiMediator = new UIMediator(this.game, this.cursor, botClient);
-
-//        this.room = new VillageRoom();
-//        this.room.initialize(this.game, this.uiMediator);
     }
 
     private preload() {
 
         this.game.load.bitmapFont("onesize", "../fonts/font.png", "../fonts/font.fnt");
 
-        this.game.load.spritesheet("actor-guybrush", "../assets/objects/guybrush_talk.png", 69, 141);
-        this.game.load.spritesheet("actor-guybrush-walk", "../assets/objects/guybrush_walk.png", 96, 144);
-
+        // Room backgrounds
+        this.game.load.image("park-room-background", "assets/backgrounds/village.png");
         this.game.load.image("ufo-room-background", "assets/backgrounds/ufo.png");
-        this.game.load.image("village-room-background", "assets/backgrounds/village.png");
         
-        this.game.load.image("object-sonic", "../assets/sprites/object-sonic.png");
-        this.game.load.image("inventory-sonic", "../assets/sprites/inventory-sonic.png");
+        this.game.load.spritesheet("actor-guy", "../assets/objects/guybrush_talk.png", 69, 141);
+        this.game.load.spritesheet("actor-guy-walk", "../assets/objects/guybrush_walk.png", 96, 144);
+        
+        this.game.load.image("object-newspaper", "../assets/sprites/object-sonic.png");
+        this.game.load.image("inventory-newspaper", "../assets/sprites/inventory-sonic.png");
 
         this.uiMediator.preload();
 

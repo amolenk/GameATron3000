@@ -13,7 +13,9 @@ export class InventoryUI {
         this.visible = true;
     }
 
-    public addToInventory(item: InventoryItem) {
+    public addToInventory(objectId: string, description: string) {
+
+        var item = new InventoryItem("inventory-" + objectId, description);
 
         item.init(this.game, this.uiMediator, 400, 476);
         item.setVisible(this.visible);
@@ -23,13 +25,13 @@ export class InventoryUI {
         return Promise.resolve();
     }
 
-    public removeFromInventory(item: InventoryItem) {
+    // public removeFromInventory(item: InventoryItem) {
 
-        item.kill();
-        this.items.delete(item.name);
+    //     item.kill();
+    //     this.items.delete(item.name);
 
-        return Promise.resolve();
-    }
+    //     return Promise.resolve();
+    // }
 
     public setVisible(visible: boolean) {
         this.visible = visible;
