@@ -19,7 +19,7 @@ namespace GameATron3000.Bot.Engine
         {
             var roomDefinition = GetRoomDefinition();
 
-            await context.PostEventAsync(Event.EnteredRoom, roomDefinition.ToJObject());
+            await context.PostEventAsync(Event.RoomEntered, roomDefinition.ToJObject());
             //await context.PostMessageAsync(roomDefinition.IntroductionText);
             await context.PostEventAsync(Event.Idle);
 
@@ -29,11 +29,6 @@ namespace GameATron3000.Bot.Engine
         protected abstract RoomDefinition GetRoomDefinition();
 
         protected abstract void WireRoom(WireManager wireManager);
-
-        protected IAction StartConversation(string topic)
-        {
-            return new TalkToAction(topic, ResumeAfterConversationTree);
-        }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
@@ -47,7 +42,7 @@ namespace GameATron3000.Bot.Engine
 
                 foreach (var action in actions)
                 {
-                    var contextHandled = await action.ExecuteAsync(context);
+                    var contextHandled = await action.ExecuteAsync(context, ResumeAfterConversationTree);
                     if (contextHandled)
                     {
                         return;

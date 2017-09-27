@@ -19,7 +19,7 @@ namespace GameATron3000.Bot.Engine
             _from = from;
         }
 
-        public async Task<bool> ExecuteAsync(IDialogContext context)
+        public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
         {
             var reply = ((Activity)context.Activity).CreateReply();
             reply.Type = ActivityTypes.Message;

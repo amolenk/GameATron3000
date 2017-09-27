@@ -2,8 +2,11 @@
 {
     public enum Event
     {
+        // Actor has moved to a different position.
+        ActorMoved,
+
         // Player has entered a new room.
-        EnteredRoom,
+        RoomEntered,
 
         // Bot is waiting for input from client.
         Idle

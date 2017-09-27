@@ -21,12 +21,13 @@ namespace GameATron3000.Bot.Gameplay
 
         protected override void WireRoom(WireManager wireManager)
         {
-            wireManager.LookAt(RoomObjects.Newspaper, _ =>
+            wireManager.LookAt(RoomObjects.Newspaper, _ => new[]
             {
-                return Actors.Narrator.Say("It's yesterday's newspaper.");
+                Actors.Guy.WalkTo(400, 400),
+                Actors.Guy.Say("It's yesterday's newspaper.")
             });
 
-            wireManager.TalkTo(Actors.Guy, _ => StartConversation("graph"));
+            wireManager.TalkTo(Actors.Guy, _ => Actors.Guy.StartConversation("graph"));
 
             wireManager.PickUp(RoomObjects.Newspaper, (gameState) =>
             {
@@ -42,8 +43,7 @@ namespace GameATron3000.Bot.Gameplay
                     return new[]
                     {
                         Player.AddToInventory(RoomObjects.Newspaper),
-                        Actors.Guy.Say("Foo"),
-                        Actors.Guy.WalkTo(250, 500)
+                        Actors.Guy.Say("Foo")
                     };
                 }
             });

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
+using Newtonsoft.Json.Linq;
 
 namespace GameATron3000.Bot.Engine
 {
@@ -16,21 +17,16 @@ namespace GameATron3000.Bot.Engine
             _y = y;
         }
 
-        public async Task<bool> ExecuteAsync(IDialogContext context)
+        public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
         {
-            await context.PostMessageAsync("WALKTO!");
-            //var reply = activity.CreateReply();
-            //reply.Type = ActivityTypes.Event;
-            //reply.Name = "WalkTo";
-            //reply.Properties = JObject.FromObject(new
-            //{
-            //    actorId = _actorId,
-            //    x = _x,
-            //    y = _y
-            //});
+            await context.PostEventAsync(Event.ActorMoved, JObject.FromObject(new
+            {
+                actorId = _actorId,
+                x = _x,
+                y = _y
+            }));
 
             return false;
-            //return context.PostAsync(reply);
         }
     }
 }

@@ -12,6 +12,11 @@
             return new MessageAction(Id, text, Description);
         }
 
+        public IAction StartConversation(string topic)
+        {
+            return new TalkToAction(this, topic);
+        }
+
         public IAction WalkTo(int x, int y)
         {
             return new WalkAction(Id, x, y); 

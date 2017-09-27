@@ -13,8 +13,10 @@ namespace GameATron3000.Bot.Engine
     [Serializable]
     public class ConversationTree : IDialog<object>
     {
-        public ConversationTree(string topic)
+        public ConversationTree(Actor actor, string topic)
         {
+            ActorId = actor.Id;
+            ActorDescription = actor.Description;
             Topic = topic;
         }
 
@@ -30,6 +32,10 @@ namespace GameATron3000.Bot.Engine
         public JToken Model { get; private set; }
 
         public string Topic { get; private set; }
+
+        public string ActorId { get; private set; }
+
+        public string ActorDescription { get; private set; }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
@@ -74,6 +80,12 @@ namespace GameATron3000.Bot.Engine
             var reply = ((Activity)context.Activity).CreateReply(replyText);
             reply.Type = ActivityTypes.Message;
             reply.TextFormat = TextFormatTypes.Plain;
+
+            reply.From.Name = ActorDescription;
+            reply.Properties = JObject.FromObject(new
+            {
+                actorId = ActorId
+            });
 
             reply.SuggestedActions = new SuggestedActions()
             {
