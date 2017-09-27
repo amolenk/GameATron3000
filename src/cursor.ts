@@ -11,11 +11,13 @@ export class Cursor {
         this.game.load.spritesheet("cursor", "assets/sprites/cursor58x58.png", 58, 58);
     }
 
-    public create() {
+    public create(group: Phaser.Group) {
 
         // Create a sprite for the cursor.
         this.sprite = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, "cursor");
         this.sprite.anchor.set(0.5);
+
+        group.add(this.sprite);
 
         let cursorBlink = this.sprite.animations.add("blink");
 

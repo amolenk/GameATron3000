@@ -16,17 +16,17 @@ export class VerbsUI {
         this.game.load.atlas("verbs", "../assets/sprites/verbs.png", "../assets/sprites/verbs.json");
     }
 
-    public create() {
-
-        this.addVerb("01_give", 0, 0, () => new Action(Action.GiveVerb, "to"), this.game);
-        this.addVerb("02_pickup", 1, 0, () => new Action(Action.PickUpVerb), this.game);
-        this.addVerb("03_use", 2, 0, () => new Action(Action.UseVerb, "with"), this.game);
-        this.addVerb("04_open", 0, 1, () => new Action(Action.OpenVerb), this.game);
-        this.addVerb("05_lookat", 1, 1, () => new Action(Action.LookAtVerb), this.game);
-        this.addVerb("06_push", 2, 1, () => new Action(Action.PushVerb), this.game);
-        this.addVerb("07_close", 0, 2, () => new Action(Action.CloseVerb), this.game);
-        this.addVerb("08_talkto", 1, 2, () => new Action(Action.TalkToVerb), this.game);
-        this.addVerb("09_pull", 2, 2, () => new Action(Action.PullVerb), this.game);
+    public create(group: Phaser.Group) {
+        
+        this.addVerb("01_give", 0, 0, () => new Action(Action.GiveVerb, "to"), this.game, group);
+        this.addVerb("02_pickup", 1, 0, () => new Action(Action.PickUpVerb), this.game, group);
+        this.addVerb("03_use", 2, 0, () => new Action(Action.UseVerb/*, "with"*/), this.game, group);
+        this.addVerb("04_open", 0, 1, () => new Action(Action.OpenVerb), this.game, group);
+        this.addVerb("05_lookat", 1, 1, () => new Action(Action.LookAtVerb), this.game, group);
+        this.addVerb("06_push", 2, 1, () => new Action(Action.PushVerb), this.game, group);
+        this.addVerb("07_close", 0, 2, () => new Action(Action.CloseVerb), this.game, group);
+        this.addVerb("08_talkto", 1, 2, () => new Action(Action.TalkToVerb), this.game, group);
+        this.addVerb("09_pull", 2, 2, () => new Action(Action.PullVerb), this.game, group);
     }
 
     public setVisible(visible: boolean) : void {
@@ -40,7 +40,8 @@ export class VerbsUI {
         posX: number,
         posY: number,
         actionFactory: Function,
-        game: Phaser.Game) {
+        game: Phaser.Game,
+        group: Phaser.Group) {
 
         var x = 4;
         if (posX > 0) x += (posX == 1 ? 100 : 260);
@@ -63,6 +64,8 @@ export class VerbsUI {
             this.uiMediator.selectAction(actionFactory());
         }, this);
 
+        group.add(sprite);
+        
         this.verbSprites.push(sprite);
     }
 }
