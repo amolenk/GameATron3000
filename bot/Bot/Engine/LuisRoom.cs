@@ -62,30 +62,33 @@ namespace GameATron3000.Bot.Engine
             var gameState = new GameState(context);
 
             // determine intent
-            string intent = luisResult.TopScoringIntent.Intent;
-
-            // determine entity
-            string subject = "unknown";
-            EntityRecommendation entityRecomendation = luisResult.Entities.Count > 0 ? luisResult.Entities[0] : null;
-            if (entityRecomendation != null)
+            if (luisResult.TopScoringIntent?.Score > 0.9)
             {
-                if (entityRecomendation?.Score > 0.9)
+                string intent = luisResult.TopScoringIntent.Intent;
+
+                // determine entity
+                string subject = "unknown";
+                EntityRecommendation entityRecomendation = luisResult.Entities.Count > 0 ? luisResult.Entities[0] : null;
+                if (entityRecomendation != null)
                 {
-                    subject = entityRecomendation.Type;
+                    if (entityRecomendation?.Score > 0.9)
+                    {
+                        subject = entityRecomendation.Type;
+                    }
                 }
-            }
 
-            // build command
-            string gameCommand = $"{intent} {subject}";
+                // build command
+                string gameCommand = $"{intent} {subject}";
 
-            // execute actions
-            var actions = wireManager.GetActions(gameCommand, gameState);
-            foreach (var action in actions)
-            {
-                var contextHandled = await action.ExecuteAsync(context, ResumeAfterConversationTree);
-                if (contextHandled)
+                // execute actions
+                var actions = wireManager.GetActions(gameCommand, gameState);
+                foreach (var action in actions)
                 {
-                    return;
+                    var contextHandled = await action.ExecuteAsync(context, ResumeAfterConversationTree);
+                    if (contextHandled)
+                    {
+                        return;
+                    }
                 }
             }
 
