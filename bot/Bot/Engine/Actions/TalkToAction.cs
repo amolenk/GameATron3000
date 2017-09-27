@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 
-namespace GameATron3000.Bot.Engine
+namespace GameATron3000.Bot.Engine.Actions
 {
     public class TalkToAction : IAction
     {

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameATron3000.Bot.Engine.Actions;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -29,6 +31,21 @@ namespace GameATron3000.Bot.Engine
         protected abstract RoomDefinition GetRoomDefinition();
 
         protected abstract void WireRoom(WireManager wireManager);
+
+        protected IAction AddRoomObject(RoomObject roomObject, int x, int y)
+        {
+            return new AddRoomObjectAction(roomObject, x, y);
+        }
+
+        protected IAction Delay(TimeSpan time)
+        {
+            return new DelayAction(time);
+        }
+
+        protected IAction ShowCloseUp(RoomObject roomObject, IEnumerable<IAction> closeUpActions)
+        {
+            return new CloseUpAction(roomObject, closeUpActions);
+        }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {

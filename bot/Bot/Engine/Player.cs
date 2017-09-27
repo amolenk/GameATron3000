@@ -1,4 +1,6 @@
-﻿namespace GameATron3000.Bot.Engine
+﻿using GameATron3000.Bot.Engine.Actions;
+
+namespace GameATron3000.Bot.Engine
 {
     public static class Player
     {

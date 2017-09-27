@@ -4,7 +4,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
 
-namespace GameATron3000.Bot.Engine
+namespace GameATron3000.Bot.Engine.Actions
 {
     public class MessageAction : IAction
     {

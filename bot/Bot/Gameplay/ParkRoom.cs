@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using GameATron3000.Bot.Engine;
 
 namespace GameATron3000.Bot.Gameplay
@@ -13,59 +12,46 @@ namespace GameATron3000.Bot.Gameplay
                 "park",
                 "You've just done your grocery shopping and decided to take a detour through the park.\nIt's a nice day!");
 
-            // Let's keep our hero offscreen for now.
-            roomDefinition.Add(Actors.Guy, -50, 430);
+            roomDefinition.Add(Actors.Guy, 600, 430);
 
-            roomDefinition.Add(RoomObjects.Newspaper, 450, 400);
+            roomDefinition.Add(RoomObjects.Newspaper, 362, 400);
 
             return roomDefinition;
         }
 
         protected override void WireRoom(WireManager wireManager)
         {
-            // Full Shopping Gag
-
             wireManager.LookAt(RoomObjects.FullShoppingBag, _ =>
                 Actors.Guy.Say("It's my shopping bag with groceries.\nI managed to get some nice discounts!")
             );
 
-
-            wireManager.LookAt(RoomObjects.Newspaper, (gameState) =>
-            {
-                if (gameState.ContainsInventoryItem(RoomObjects.Newspaper))
-                {
-                    return new[]
-                    {
-                        Actors.Guy.Say("It's the newspaper I just picked up!")
-                    };
-                }
-                else
-                {
-                    return new[]
-                    {
-                        Actors.Guy.WalkTo(400, 400),
-                        Actors.Guy.Say("It's yesterday's newspaper.")
-                    };
-                }
-            });
-
-            wireManager.TalkTo(Actors.Guy, _ => Actors.Guy.StartConversation("graph"));
-
             wireManager.PickUp(RoomObjects.Newspaper, (gameState) =>
             {
-                if (gameState.ContainsInventoryItem(RoomObjects.Newspaper))
+                if (!gameState.ContainsInventoryItem(RoomObjects.Newspaper))
                 {
-                    return new[]
+                    return new []
                     {
-                        Actors.Guy.Say("I've already got it!")
+                        Actors.Guy.WalkTo(360, 430),
+                        Player.AddToInventory(RoomObjects.Newspaper),
+                        Actors.Guy.Say("It's yesterday's newspaper!"),
+                        ShowCloseUp(RoomObjects.Newspaper, new []
+                        {
+                            Delay(TimeSpan.FromSeconds(2)),
+                            Actors.Narrator.Say("Hmm, there seem to be a LOT of UFO sightings lately!"),
+                            Delay(TimeSpan.FromSeconds(0.5)),
+                        }),
+                        Actors.Guy.Say("They must have let the crazy people out again!"),
+                        Delay(TimeSpan.FromSeconds(1)),
+                        AddRoomObject(RoomObjects.TractorBeam, 360, 225),
+                        Delay(TimeSpan.FromSeconds(1)),
+                        Actors.Guy.Say("Uh oh...")
                     };
                 }
                 else
                 {
-                    return new[]
+                    return new []
                     {
-                        Player.AddToInventory(RoomObjects.Newspaper),
-                        Actors.Guy.Say("Got it!")
+                        Actors.Guy.Say("I've already picked that up!")
                     };
                 }
             });

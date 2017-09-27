@@ -1,4 +1,6 @@
-﻿namespace GameATron3000.Bot.Engine
+﻿using GameATron3000.Bot.Engine.Actions;
+
+namespace GameATron3000.Bot.Engine
 {
     public class Actor : RoomObject
     {
@@ -19,7 +21,7 @@
 
         public IAction WalkTo(int x, int y)
         {
-            return new WalkAction(Id, x, y); 
+            return new WalkToAction(Id, x, y); 
         }
     }
 }
