@@ -16,7 +16,7 @@ namespace GameATron3000.Bot.Engine
 
         public Task<bool> ExecuteAsync(IDialogContext context)
         {
-            context.Call(new ConversationTreeDialog(_topic), _resume);
+            context.Call(new ConversationTree(_topic), _resume);
 
             return Task.FromResult(true);
         }

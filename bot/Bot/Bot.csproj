@@ -117,14 +117,14 @@
     <Compile Include="Engine\Event.cs" />
     <Compile Include="Engine\GameState.cs" />
     <Compile Include="Engine\MessageAction.cs" />
-    <Compile Include="Engine\RoomDialog.cs" />
+    <Compile Include="Engine\Room.cs" />
     <Compile Include="Engine\Player.cs" />
     <Compile Include="Engine\RoomObject.cs" />
     <Compile Include="Engine\Actor.cs" />
     <Compile Include="Engine\TalkToAction.cs" />
     <Compile Include="Gameplay\Actors.cs" />
     <Compile Include="Engine\IAction.cs" />
-    <Compile Include="Engine\ConversationTreeDialog.cs" />
+    <Compile Include="Engine\ConversationTree.cs" />
     <Compile Include="Gameplay\RoomObjects.cs" />
     <Compile Include="Gameplay\ParkRoom.cs" />
     <Compile Include="Engine\RoomDefinition.cs" />

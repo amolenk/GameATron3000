@@ -11,23 +11,23 @@ using Newtonsoft.Json.Linq;
 namespace GameATron3000.Bot.Engine
 {
     [Serializable]
-    public class ConversationTreeDialog : IDialog<object>
+    public class ConversationTree : IDialog<object>
     {
-        public ConversationTreeDialog(string topic)
+        public ConversationTree(string topic)
         {
             Topic = topic;
         }
 
         public async Task StartAsync(IDialogContext context)
         {
-            ConversationTree = LoadConversationTree(Topic);
+            Model = LoadConversationTreeModel(Topic);
 
-            await PostReply(context, ConversationTree["text"].Value<string>());
+            await PostReply(context, Model["text"].Value<string>());
 
             context.Wait(MessageReceivedAsync);
         }
 
-        public JToken ConversationTree { get; private set; }
+        public JToken Model { get; private set; }
 
         public string Topic { get; private set; }
 
@@ -36,7 +36,7 @@ namespace GameATron3000.Bot.Engine
             var activity = await result as Activity;
 
             // Try to find the input text in the conversation tree actions.
-            var match = ConversationTree["actions"]
+            var match = Model["actions"]
                 .Children()
                 .Where(action => action["value"].Value<string>() == activity.Text)
                 .FirstOrDefault();
@@ -44,17 +44,17 @@ namespace GameATron3000.Bot.Engine
             // If we found the input text, position the graph at the reply.
             if (match != null)
             {
-                ConversationTree = match["reply"];
+                Model = match["reply"];
             }
 
-            var replyText = ConversationTree["text"].Value<string>();
-            var isDone = ConversationTree["done"] != null;
+            var replyText = Model["text"].Value<string>();
+            var isDone = Model["done"] != null;
 
             // If the reply does not contain any actions, we've reached a leaf and need to reset
             // back to the top.
-            if (ConversationTree["actions"] == null)
+            if (Model["actions"] == null)
             {
-                ConversationTree = LoadConversationTree(Topic);
+                Model = LoadConversationTreeModel(Topic);
             }
 
             await PostReply(context, replyText);
@@ -77,7 +77,7 @@ namespace GameATron3000.Bot.Engine
 
             reply.SuggestedActions = new SuggestedActions()
             {
-                Actions = ConversationTree["actions"].Select(
+                Actions = Model["actions"].Select(
                     action => new CardAction
                     {
                         Title = action["value"].Value<string>(),
@@ -90,7 +90,7 @@ namespace GameATron3000.Bot.Engine
             return context.PostAsync(reply);
         }
 
-        private static JObject LoadConversationTree(string name)
+        private static JObject LoadConversationTreeModel(string name)
         {
             var resourceName = $"GameATron3000.Bot.Gameplay.ConversationTrees.{name}.json";
 
