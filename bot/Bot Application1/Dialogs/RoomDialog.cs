@@ -38,12 +38,11 @@ namespace Bot_Application1.Dialogs
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
             var activity = (Activity)await result;
-
             if (activity.Type == ActivityTypes.Message)
             {
+                var wireManager = GetWireManager();
                 var gameState = new GameState(context);
 
-                var wireManager = GetWireManager();
                 var actions = wireManager.GetActions(activity.Text, gameState);
 
                 foreach (var action in actions)
