@@ -57,8 +57,6 @@ namespace GameATron3000.Bot.Engine
 
         private async Task ResumeAfterConversationTree(IDialogContext context, IAwaitable<object> result)
         {
-            // TODO Check this
-            await context.PostMessageAsync("End of conversation!");
             await context.PostEventAsync(Event.Idle);
 
             context.Wait(MessageReceivedAsync);

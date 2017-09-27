@@ -63,7 +63,7 @@ namespace GameATron3000.Bot.Engine
                 Model = LoadConversationTreeModel(Topic);
             }
 
-            await PostReply(context, replyText);
+            await PostReply(context, replyText, isDone);
 
             if (isDone)
             {
@@ -75,7 +75,7 @@ namespace GameATron3000.Bot.Engine
             }
         }
 
-        private Task PostReply(IDialogContext context, string replyText)
+        private Task PostReply(IDialogContext context, string replyText, bool isDone = false)
         {
             var reply = ((Activity)context.Activity).CreateReply(replyText);
             reply.Type = ActivityTypes.Message;
@@ -87,17 +87,20 @@ namespace GameATron3000.Bot.Engine
                 actorId = ActorId
             });
 
-            reply.SuggestedActions = new SuggestedActions()
+            if (!isDone)
             {
-                Actions = Model["actions"].Select(
-                    action => new CardAction
-                    {
-                        Title = action["value"].Value<string>(),
-                        Type = ActionTypes.ImBack,
-                        Value = action["value"].Value<string>()
-                    })
-                    .ToList()
-            };
+                reply.SuggestedActions = new SuggestedActions()
+                {
+                    Actions = Model["actions"].Select(
+                        action => new CardAction
+                        {
+                            Title = action["value"].Value<string>(),
+                            Type = ActionTypes.ImBack,
+                            Value = action["value"].Value<string>()
+                        })
+                        .ToList()
+                };
+            }
 
             return context.PostAsync(reply);
         }
