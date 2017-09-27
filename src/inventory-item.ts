@@ -3,9 +3,9 @@ import { UIMediator } from "./ui-mediator"
 
 export class InventoryItem extends RoomObject {
 
-    public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number) {
+    public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number, group: Phaser.Group) {
 
-        super.init(game, uiMediator, x, y);
+        super.init(game, uiMediator, x, y, group);
 
         this.sprite.anchor.set(0);
 

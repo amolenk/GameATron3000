@@ -18,9 +18,9 @@ export class Actor extends RoomObject {
     private talkAnimation: Phaser.Animation;
     private walkAnimation: Phaser.Animation;
 
-    public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number) {
-
-        super.init(game, uiMediator, x, y);
+    public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number, group: Phaser.Group) {
+        
+        super.init(game, uiMediator, x, y, group);
 
         this.game = game;
 
@@ -62,6 +62,8 @@ export class Actor extends RoomObject {
 
         this.spriteGroup = game.add.group();
         this.spriteGroup.addMultiple([ this.sprite, this.text, this.walkSprite ]);
+
+        group.add(this.spriteGroup);
     }
 
     public kill() {

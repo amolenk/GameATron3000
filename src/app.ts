@@ -2,16 +2,13 @@
 
 import { BotClient } from './botclient'
 import { Cursor } from './cursor'
+import { Room } from './room'
 import { Settings } from './settings'
 import { SecretSettings } from './settings-secrets'
-
 import { UIMediator } from "./ui-mediator"
 
-import { Room } from './room'
-// import { UfoRoom } from './rooms/room-ufo'
-import { VillageRoom } from './gameplay/room-village'
 
-import { DirectLine } from '../node_modules/botframework-directlinejs/built/directline';
+//import { DirectLine } from '../node_modules/botframework-directlinejs/built/directline';
 
 class GameATron {
 
@@ -49,25 +46,40 @@ class GameATron {
         this.game.load.bitmapFont("onesize", "../fonts/font.png", "../fonts/font.fnt");
 
         // Room backgrounds
-        this.game.load.image("park-room-background", "assets/backgrounds/village.png");
-        this.game.load.image("ufo-room-background", "assets/backgrounds/ufo.png");
+        this.game.load.image("room-park", "assets/backgrounds/park.png");
+        this.game.load.image("room-ufo", "assets/backgrounds/ufo.png");
         
+        // Room objects
+        this.game.load.image("object-newspaper", "../assets/objects/newspaper.png");
+        this.game.load.image("object-tractorbeam", "../assets/objects/tractorbeam.png");
+        
+        // Inventory items
+        this.game.load.image("inventory-newspaper", "../assets/inventory/newspaper.png");
+        this.game.load.image("inventory-fullshoppingbag", "../assets/inventory/fullshoppingbag.png");
+
+        // Closeups
+        this.game.load.image("closeup-newspaper", "../assets/closeups/newspaper.png");
+        
+        // Actors
         this.game.load.spritesheet("actor-guy", "../assets/objects/guybrush_talk.png", 69, 141);
         this.game.load.spritesheet("actor-guy-walk", "../assets/objects/guybrush_walk.png", 96, 144);
         
-        this.game.load.image("object-newspaper", "../assets/sprites/object-sonic.png");
-        this.game.load.image("inventory-newspaper", "../assets/sprites/inventory-sonic.png");
 
         this.uiMediator.preload();
 
-
-//        this.room.preload();
         this.cursor.preload();
     }
 
     private create() {
 
-        this.uiMediator.create();
+        var backgroundGroup = this.game.add.group();
+        var objectGroup = this.game.add.group();
+        var textGroup = this.game.add.group();
+        var uiGroup = this.game.add.group();
+        var cursorGroup = this.game.add.group();
+
+        this.uiMediator.create(backgroundGroup, objectGroup, textGroup, uiGroup);
+        this.cursor.create(cursorGroup);
 
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.game.stage.smoothed = true;
@@ -79,7 +91,7 @@ class GameATron {
         // this.game.scale.pageAlignVertically = true;
 
         //this.room.create();
-        this.cursor.create();
+        //this.cursor.create();
 
         // this.room.enter()
         //     .then(() => this.cursor.bringToTop());

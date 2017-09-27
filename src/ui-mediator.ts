@@ -25,6 +25,10 @@ export class UIMediator {
     private selectedAction: Action;
     private focussedObject: RoomObject;
 
+    private backgroundGroup: Phaser.Group;
+    private objectGroup: Phaser.Group;
+    private textGroup: Phaser.Group;
+
     private room: Room;
 
     constructor(private game: Phaser.Game, private cursor: Cursor, private botClient: BotClient) {
@@ -58,16 +62,53 @@ export class UIMediator {
                         break;
                     }
 
+                    case "CloseUpOpened": {
+                        var roomObject = new RoomObject("closeup-" + event.objectId, "");
+                        await this.room.add(roomObject, 400, 300);
+                        break;
+                    }
+
+                    case "CloseUpClosed": {
+                        var roomObject = this.room.getObject("closeup-" + event.objectId);
+                        console.log("CLOSEUPCLOSED");
+                        console.log(event.objectId);
+                        if (roomObject) {
+                            console.log('OK');
+                            await this.room.remove(roomObject);
+                        }
+                        else
+                        {
+                            console.log('NOK!');
+                        }
+                        break;
+                    }
+
+                    case "Delayed": {
+                        await new Promise(resolve => setTimeout(resolve, event.time));
+                        break;
+                    }
+
                     case "InventoryItemAdded": {
-                        var roomObject = this.room.getObject(event.objectId);
-                        await this.room.remove(roomObject);
-                        await this.inventoryUI.addToInventory(event.objectId, roomObject.displayName);
+                        // Remove the object from the room (if it currently exists in a room).
+                        if (this.room) {
+                            var roomObject = this.room.getObject("object-" + event.objectId);
+                            if (roomObject) {
+                                await this.room.remove(roomObject);
+                            }
+                        }
+                        await this.inventoryUI.addToInventory(event.objectId, event.description);
+                        break;
+                    }
+
+                    case "RoomObjectAdded": {
+                        var roomObject = new RoomObject("object-" + event.objectId, event.description);
+                        await this.room.add(roomObject, event.x, event.y);
                         break;
                     }
 
                     case "RoomEntered": {
                         this.room = new Room(event.roomId);
-                        await this.room.initialize(game, this, event.objects, event.actors);
+                        await this.room.initialize(game, this, this.backgroundGroup, this.objectGroup, this.textGroup, event.objects, event.actors);
 
                         // TODO Use layering from other branch.
                         this.cursor.bringToTop();
@@ -87,11 +128,17 @@ export class UIMediator {
         this.verbsUI.preload();
     }
 
-    public create() {
-        this.actionUI.create();
-        this.verbsUI.create();
+    public create(backgroundGroup: Phaser.Group, objectGroup: Phaser.Group, textGroup: Phaser.Group, uiGroup: Phaser.Group) {
 
-        this.setUIVisible(false);        
+        this.backgroundGroup = backgroundGroup;
+        this.objectGroup = objectGroup;
+        this.textGroup = textGroup;
+
+        this.actionUI.create(uiGroup);
+        this.inventoryUI.create(uiGroup);
+        this.verbsUI.create(uiGroup);
+
+        this.setUIVisible(false);
     }
 
     public selectAction(action: Action) {
@@ -124,14 +171,6 @@ export class UIMediator {
 
         this.updateText();
     }
-
-    // public addToInventory(item: InventoryItem) {
-    //     return this.inventoryUI.addToInventory(item);
-    // }
-
-    // public removeFromInventory(item: InventoryItem) {
-    //     return this.inventoryUI.removeFromInventory(item);
-    // }
 
     private setUIVisible(visible: boolean) {
         this.actionUI.setVisible(visible);

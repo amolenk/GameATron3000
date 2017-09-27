@@ -9,7 +9,7 @@ export class Narrator {
     constructor(private game: Phaser.Game) {
     }
 
-    public create(): void {
+    public create(group: Phaser.Group): void {
 
         var textStyle = {
             font: "54px Onesize", // Using a large font-size and scaling it back looks better.
@@ -26,6 +26,8 @@ export class Narrator {
         this.text.lineSpacing = -30;
         this.text.scale.x = 0.5;
         this.text.scale.y = 0.5;
+
+        group.add(this.text);
     }
 
     public async say(text: string) {

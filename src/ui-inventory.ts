@@ -7,6 +7,7 @@ export class InventoryUI {
 
     private items: Map<string, InventoryItem>;
     private visible: boolean;
+    private uiGroup: Phaser.Group;    
 
     constructor(private game: Phaser.Game, private uiMediator: UIMediator) {
         this.items = new Map<string, InventoryItem>();
@@ -17,12 +18,16 @@ export class InventoryUI {
 
         var item = new InventoryItem("inventory-" + objectId, description);
 
-        item.init(this.game, this.uiMediator, 400, 476);
+        item.init(this.game, this.uiMediator, 400 + (42 * this.items.size), 476, this.uiGroup);
         item.setVisible(this.visible);
 
         this.items.set(item.name, item);
 
         return Promise.resolve();
+    }
+
+    public create(uiGroup: Phaser.Group) {
+        this.uiGroup = uiGroup;
     }
 
     // public removeFromInventory(item: InventoryItem) {

@@ -7,10 +7,12 @@ export class ActionUI {
     constructor(private game: Phaser.Game) {
     }
 
-    public create() {
+    public create(group: Phaser.Group) {
 
         this.textBox = this.game.add.bitmapText(this.game.world.centerX, 466, "onesize", "", 20);
         this.textBox.anchor.setTo(0.5, 0.5);
+
+        group.add(this.textBox);
     }
 
     public setText(text: string) {
