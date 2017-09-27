@@ -123,7 +123,6 @@
     <Compile Include="Engine\Actions\MessageAction.cs" />
     <Compile Include="Engine\RootDialog.cs" />
     <Compile Include="Engine\LuisRoom.cs" />
-    <Compile Include="Engine\MessageAction.cs" />
     <Compile Include="Engine\Room.cs" />
     <Compile Include="Engine\Player.cs" />
     <Compile Include="Engine\RoomObject.cs" />
