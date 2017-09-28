@@ -9,12 +9,14 @@ namespace GameATron3000.Bot.Engine.Actions
         private readonly RoomObject _roomObject;
         private readonly int _x;
         private readonly int _y;
+        private readonly bool _foreground;
 
-        public AddRoomObjectAction(RoomObject roomObject, int x, int y)
+        public AddRoomObjectAction(RoomObject roomObject, int x, int y, bool foreground = false)
         {
             _roomObject = roomObject;
             _x = x;
             _y = y;
+            _foreground = foreground;
         }
 
         public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
@@ -24,7 +26,8 @@ namespace GameATron3000.Bot.Engine.Actions
                 objectId = _roomObject.Id,
                 description = _roomObject.Description,
                 x = _x,
-                y = _y
+                y = _y,
+                foreground = _foreground
             }));
 
             return false;

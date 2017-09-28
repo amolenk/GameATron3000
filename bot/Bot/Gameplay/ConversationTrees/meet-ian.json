@@ -1,0 +1,32 @@
+﻿{
+  "text": "%$# &#@$%# **#&^#%^$?",
+  "actions": [
+    {
+      "value": "Hmm, that's a nasty cold you have there my friend.",
+      "reply": {
+        "text": "&#$% %%$^## *#$&@&^## $#*&^#&@!!"
+      }
+    },
+    {
+      "value": "Perhaps you're speaking a foreign language. Please use a universal translator!",
+      "reply": {
+        "text": "Oh yeah, that's better\nI'm Ian. I'm from the planet Snork\nNice to meet you!",
+        "actions": [
+          {
+            "value": "I'm Guy Scotthrie.",
+            "reply": {
+              "text": "Ok, whatever."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "value": "Bye!",
+      "reply": {
+        "text": "Bye!",
+        "done":  true
+      }
+    }
+  ]
+}

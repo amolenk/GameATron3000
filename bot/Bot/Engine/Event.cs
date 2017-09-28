@@ -5,6 +5,12 @@
         // Actor has moved to a different position.
         ActorMoved,
 
+        // Actor has turned, facing away from the camera.
+        ActorTurnedAway,
+
+        // Actor has turned, facing the camera.
+        ActorTurnedFront,
+
         // Player has stopped looking closely at an object.
         CloseUpClosed,
 
@@ -23,7 +29,11 @@
         // A new object has been added to the room.
         RoomObjectAdded,
 
+        // An object is removed from the room.
+        RoomObjectRemoved,
+
         // Bot is waiting for input from client.
-        Idle
+        Idle,
+
     }
 }

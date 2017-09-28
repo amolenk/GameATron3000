@@ -36,13 +36,13 @@ namespace GameATron3000.Bot.Gameplay
                         Actors.Guy.Say("It's yesterday's newspaper!"),
                         ShowCloseUp(RoomObjects.Newspaper, new []
                         {
-                            Delay(TimeSpan.FromSeconds(2)),
-                            Actors.Narrator.Say("Hmm, there seem to be a LOT of UFO sightings lately!"),
+                            Delay(TimeSpan.FromSeconds(4)),
+                            Actors.Narrator.Say("Hmm, there seems to be a LOT of UFO sightings lately!"),
                             Delay(TimeSpan.FromSeconds(0.5)),
                         }),
                         Actors.Guy.Say("They must have let the crazy people out again!"),
                         Delay(TimeSpan.FromSeconds(1)),
-                        AddRoomObject(RoomObjects.TractorBeam, 360, 225),
+                        AddRoomObject(RoomObjects.TractorBeam, 360, 225, true),
                         Delay(TimeSpan.FromSeconds(1)),
                         Actors.Guy.Say("Uh oh...")
                     };
