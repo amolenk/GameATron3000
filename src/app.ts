@@ -7,9 +7,6 @@ import { Settings } from './settings'
 import { SecretSettings } from './settings-secrets'
 import { UIMediator } from "./ui-mediator"
 
-
-//import { DirectLine } from '../node_modules/botframework-directlinejs/built/directline';
-
 class GameATron {
 
     private game: Phaser.Game;
@@ -48,22 +45,32 @@ class GameATron {
         // Room backgrounds
         this.game.load.image("room-park", "assets/backgrounds/park.png");
         this.game.load.image("room-ufo", "assets/backgrounds/ufo.png");
+        this.game.load.image("room-beach", "assets/backgrounds/beach.png");
         
         // Room objects
+        this.game.load.image("object-fridge-closed", "../assets/objects/fridge-closed.png");
+        this.game.load.image("object-fridge-open-empty", "../assets/objects/fridge-open-empty.png");
+        this.game.load.image("object-fridge-open-full", "../assets/objects/fridge-open-full.png");
         this.game.load.image("object-newspaper", "../assets/objects/newspaper.png");
+        this.game.load.image("object-todolist", "../assets/objects/todolist.png");
         this.game.load.image("object-tractorbeam", "../assets/objects/tractorbeam.png");
         
         // Inventory items
         this.game.load.image("inventory-newspaper", "../assets/inventory/newspaper.png");
         this.game.load.image("inventory-fullshoppingbag", "../assets/inventory/fullshoppingbag.png");
-
+        this.game.load.image("inventory-todolist", "../assets/inventory/todolist.png");
+        
         // Closeups
         this.game.load.image("closeup-newspaper", "../assets/closeups/newspaper.png");
         
         // Actors
         this.game.load.spritesheet("actor-guy", "../assets/objects/guybrush_talk.png", 69, 141);
         this.game.load.spritesheet("actor-guy-walk", "../assets/objects/guybrush_walk.png", 96, 144);
-        
+        this.game.load.image("actor-guy-back", "../assets/objects/guybrush-back.png");
+
+        this.game.load.spritesheet("actor-al", "../assets/actors/al-talk.png", 66, 147);
+        this.game.load.spritesheet("actor-al-walk", "../assets/actors/al-walk.png", 96, 150);
+
 
         this.uiMediator.preload();
 
@@ -74,11 +81,12 @@ class GameATron {
 
         var backgroundGroup = this.game.add.group();
         var objectGroup = this.game.add.group();
+        var actorGroup = this.game.add.group();
         var textGroup = this.game.add.group();
         var uiGroup = this.game.add.group();
         var cursorGroup = this.game.add.group();
 
-        this.uiMediator.create(backgroundGroup, objectGroup, textGroup, uiGroup);
+        this.uiMediator.create(backgroundGroup, objectGroup, actorGroup, textGroup, uiGroup);
         this.cursor.create(cursorGroup);
 
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;

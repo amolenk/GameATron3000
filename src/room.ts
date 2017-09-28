@@ -16,6 +16,7 @@ export class Room {
     private uiMediator: UIMediator;
     private backgroundGroup: Phaser.Group;
     private objectGroup: Phaser.Group;
+    private actorGroup: Phaser.Group;
     private textGroup: Phaser.Group;
 
     constructor(private name: string) {
@@ -28,6 +29,7 @@ export class Room {
         uiMediator: UIMediator,
         backgroundGroup: Phaser.Group,
         objectGroup: Phaser.Group,
+        actorGroup: Phaser.Group,
         textGroup: Phaser.Group,
         objects?: any,
         actors?: any) : Promise<void> {
@@ -36,6 +38,7 @@ export class Room {
         this.uiMediator = uiMediator;
         this.backgroundGroup = backgroundGroup;
         this.objectGroup = objectGroup;
+        this.actorGroup = actorGroup;
         this.textGroup = textGroup;
 
         var background = this.game.add.sprite(0, 0, "room-" + this.name);
@@ -51,7 +54,7 @@ export class Room {
         if (actors) {
             for (var actorData of actors) {
                 var actor = new Actor("actor-" + actorData.id, actorData.description);
-                this.add(actor, actorData.x, actorData.y);
+                this.addActor(actor, actorData.x, actorData.y);
             }
         }
 
@@ -86,11 +89,21 @@ export class Room {
         this.roomObjects.push(object);
     }
 
+    public addActor(object: RoomObject, x: number, y: number) {
+        
+        object.init(this.game, this.uiMediator, x, y, this.actorGroup);
+
+        this.roomObjects.push(object);
+    }
+
     public remove(object: RoomObject) {
 
         // The object no longer needs a visual representation in the room.
         object.kill();
 
+        var index = this.roomObjects.indexOf(object);
+        this.roomObjects.splice(index, 1);
+        
         return Promise.resolve();
     }
 }
