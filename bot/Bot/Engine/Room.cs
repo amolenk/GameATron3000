@@ -22,7 +22,7 @@ namespace GameATron3000.Bot.Engine
             var roomDefinition = GetRoomDefinition();
 
             await context.PostEventAsync(Event.RoomEntered, roomDefinition.ToJObject());
-            await context.PostMessageAsync(roomDefinition.IntroductionText);
+            //await context.PostMessageAsync(roomDefinition.IntroductionText);
             await context.PostEventAsync(Event.Idle);
 
             context.Wait(MessageReceivedAsync);
@@ -32,9 +32,9 @@ namespace GameATron3000.Bot.Engine
 
         protected abstract void WireRoom(WireManager wireManager);
 
-        protected IAction AddRoomObject(RoomObject roomObject, int x, int y)
+        protected IAction AddRoomObject(RoomObject roomObject, int x, int y, bool foreground = false)
         {
-            return new AddRoomObjectAction(roomObject, x, y);
+            return new AddRoomObjectAction(roomObject, x, y, foreground);
         }
 
         protected IAction RemoveRoomObject(RoomObject roomObject)

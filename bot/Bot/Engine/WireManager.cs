@@ -43,6 +43,11 @@ namespace GameATron3000.Bot.Engine
             _wiredActions[$"close {roomObject.Description}".ToLowerInvariant()] = onExecute;
         }
 
+        public void Use(RoomObject use, RoomObject with, Func<GameState, IEnumerable<IAction>> onExecute)
+        {
+            _wiredActions[$"use {use.Description} with {with.Description}".ToLowerInvariant()] = onExecute;
+        }
+
         public void TalkTo(Actor actor, Func<GameState, IAction> onExecute)
         {
             TalkTo(actor, (state) => new[] { onExecute(state) });
