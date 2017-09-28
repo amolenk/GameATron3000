@@ -43,7 +43,7 @@ namespace GameATron3000.Bot.Gameplay
                     return new[]
                     {
                         Player.AddToInventory(RoomObjects.Newspaper),
-                        Actors.Guy.Say("Foo")
+                        Actors.Guy.Say("Nice, I'll save that for later!")
                     };
                 }
             });
