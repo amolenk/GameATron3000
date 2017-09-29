@@ -38,7 +38,8 @@ namespace GameATron3000.Bot.Engine
                 id = actor.Id,
                 description = actor.Description,
                 x = x,
-                y = y
+                y = y,
+                textColor = actor.TextColor
             }));
         }
 

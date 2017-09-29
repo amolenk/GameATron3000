@@ -21,7 +21,7 @@ namespace GameATron3000.Bot.Gameplay
 
         protected override void WireRoom(WireManager wireManager)
         {
-            wireManager.LookAt(RoomObjects.FullShoppingBag, _ =>
+            wireManager.LookAt(RoomObjects.Groceries, _ =>
                 Actors.Guy.Say("It's my shopping bag with groceries.\nI managed to get some nice discounts!")
             );
 
