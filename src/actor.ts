@@ -17,6 +17,11 @@ export class Actor extends RoomObject {
 
     private talkAnimation: Phaser.Animation;
     private walkAnimation: Phaser.Animation;
+    private backSprite: Phaser.Sprite;
+    
+    public constructor(name: string, displayName: string, private textColor: string) {
+        super(name, displayName);
+    }
 
     public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number, group: Phaser.Group) {
         
@@ -37,9 +42,13 @@ export class Actor extends RoomObject {
         this.walkSprite.input.pixelPerfectOver = true;
         this.walkSprite.visible = false;
 
+        this.backSprite = game.add.sprite(x, y, this.name + "-back");
+        this.backSprite.anchor.set(0.5, 1);
+        this.backSprite.visible = false;
+
         var textStyle = {
             font: "54px Onesize", // Using a large font-size and scaling it back looks better.
-            fill: "white",
+            fill: this.textColor,
             stroke: "black",
             strokeThickness: 12,
             align: "center",
@@ -61,7 +70,7 @@ export class Actor extends RoomObject {
         this.walkAnimation.play(6, true);
 
         this.spriteGroup = game.add.group();
-        this.spriteGroup.addMultiple([ this.sprite, this.text, this.walkSprite ]);
+        this.spriteGroup.addMultiple([ this.sprite, this.walkSprite, this.backSprite, this.text ]);
 
         group.add(this.spriteGroup);
     }
@@ -75,6 +84,16 @@ export class Actor extends RoomObject {
         for (var line of lines) {
             await this.sayLine(line);
         }
+    }
+
+    public async turnAway() {
+        this.sprite.visible = false;
+        this.backSprite.visible = true;
+    }
+
+    public async turnFront() {
+        this.backSprite.visible = false;
+        this.sprite.visible = true;
     }
 
     public walkTo(x: number, y: number): Promise<void> {
@@ -97,8 +116,8 @@ export class Actor extends RoomObject {
         // Otherwise, reset the sprite if it is already flipped.
         var rightToLeft = deltaX < this.spriteGroup.x;
         var isFlipped = this.walkSprite.scale.x < 0;
-        if (isFlipped || rightToLeft) {
-            
+
+        if ((rightToLeft && !isFlipped) || (!rightToLeft && isFlipped)) {
             this.walkSprite.scale.x *= -1;
         }
 

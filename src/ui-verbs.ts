@@ -20,7 +20,7 @@ export class VerbsUI {
         
         this.addVerb("01_give", 0, 0, () => new Action(Action.GiveVerb, "to"), this.game, group);
         this.addVerb("02_pickup", 1, 0, () => new Action(Action.PickUpVerb), this.game, group);
-        this.addVerb("03_use", 2, 0, () => new Action(Action.UseVerb/*, "with"*/), this.game, group);
+        this.addVerb("03_use", 2, 0, () => new Action(Action.UseVerb, "with"), this.game, group);
         this.addVerb("04_open", 0, 1, () => new Action(Action.OpenVerb), this.game, group);
         this.addVerb("05_lookat", 1, 1, () => new Action(Action.LookAtVerb), this.game, group);
         this.addVerb("06_push", 2, 1, () => new Action(Action.PushVerb), this.game, group);
@@ -65,7 +65,7 @@ export class VerbsUI {
         }, this);
 
         group.add(sprite);
-        
+
         this.verbSprites.push(sprite);
     }
 }

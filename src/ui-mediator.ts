@@ -27,6 +27,7 @@ export class UIMediator {
 
     private backgroundGroup: Phaser.Group;
     private objectGroup: Phaser.Group;
+    private actorGroup: Phaser.Group;
     private textGroup: Phaser.Group;
 
     private room: Room;
@@ -45,7 +46,9 @@ export class UIMediator {
                     await actor.say(message.text);
 
                     if (message.suggestedActions) {
-                        this.conversationUI.displaySuggestedActions(message.suggestedActions.actions);
+                        this.conversationUI.displaySuggestedActions(
+                            this.room.getActor("player"),
+                            message.suggestedActions.actions);
                     }
                 }
                 else {
@@ -62,23 +65,28 @@ export class UIMediator {
                         break;
                     }
 
+                    case "ActorTurnedAway": {
+                        var actor = this.room.getActor(event.actorId);
+                        await actor.turnAway();
+                        break;
+                    }
+
+                    case "ActorTurnedFront": {
+                        var actor = this.room.getActor(event.actorId);
+                        await actor.turnFront();
+                        break;
+                    }
+
                     case "CloseUpOpened": {
                         var roomObject = new RoomObject("closeup-" + event.objectId, "");
-                        await this.room.add(roomObject, 400, 300);
+                        await this.room.addActor(roomObject, 400, 300);
                         break;
                     }
 
                     case "CloseUpClosed": {
                         var roomObject = this.room.getObject("closeup-" + event.objectId);
-                        console.log("CLOSEUPCLOSED");
-                        console.log(event.objectId);
                         if (roomObject) {
-                            console.log('OK');
                             await this.room.remove(roomObject);
-                        }
-                        else
-                        {
-                            console.log('NOK!');
                         }
                         break;
                     }
@@ -100,18 +108,32 @@ export class UIMediator {
                         break;
                     }
 
+                    case "InventoryItemRemoved": {
+                        await this.inventoryUI.removeFromInventory(event.objectId);
+                        break;
+                    }
+
                     case "RoomObjectAdded": {
                         var roomObject = new RoomObject("object-" + event.objectId, event.description);
-                        await this.room.add(roomObject, event.x, event.y);
+                        if (event.foreground) {
+                            await this.room.addActor(roomObject, event.x, event.y);                            
+                        } else {
+                            await this.room.add(roomObject, event.x, event.y);
+                        }
+                        break;
+                    }
+
+                    case "RoomObjectRemoved": {
+                        var roomObject = this.room.getObject("object-" + event.objectId);
+                        if (roomObject) {
+                            await this.room.remove(roomObject);
+                        }
                         break;
                     }
 
                     case "RoomEntered": {
                         this.room = new Room(event.roomId);
-                        await this.room.initialize(game, this, this.backgroundGroup, this.objectGroup, this.textGroup, event.objects, event.actors);
-
-                        // TODO Use layering from other branch.
-                        this.cursor.bringToTop();
+                        await this.room.initialize(game, this, this.backgroundGroup, this.objectGroup, this.actorGroup, this.textGroup, event.objects, event.actors);
                         break;
                     }
 
@@ -128,10 +150,11 @@ export class UIMediator {
         this.verbsUI.preload();
     }
 
-    public create(backgroundGroup: Phaser.Group, objectGroup: Phaser.Group, textGroup: Phaser.Group, uiGroup: Phaser.Group) {
+    public create(backgroundGroup: Phaser.Group, objectGroup: Phaser.Group, actorGroup: Phaser.Group, textGroup: Phaser.Group, uiGroup: Phaser.Group) {
 
         this.backgroundGroup = backgroundGroup;
         this.objectGroup = objectGroup;
+        this.actorGroup = actorGroup;
         this.textGroup = textGroup;
 
         this.actionUI.create(uiGroup);
