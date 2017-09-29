@@ -1,5 +1,6 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 
+import { Actor } from "./actor"
 import { BotClient } from "./botclient"
 import { Settings } from "./settings"
 
@@ -8,7 +9,7 @@ export class ConversationUI {
     constructor(private game: Phaser.Game, private botClient: BotClient) {
     }
 
-    public displaySuggestedActions(suggestedActions) {
+    public displaySuggestedActions(actor: Actor, suggestedActions) {
         var options = [];
         var y = 460;
 
@@ -35,8 +36,8 @@ export class ConversationUI {
                     optionToDestroy.destroy();
                 }
 
-                this.botClient.sendMessageToBot(selectedText);
-
+                actor.say(selectedText).then(
+                    () => this.botClient.sendMessageToBot(selectedText));
             }, this);
 
             options.push(optionText);

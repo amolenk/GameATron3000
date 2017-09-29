@@ -18,6 +18,10 @@ export class Actor extends RoomObject {
     private talkAnimation: Phaser.Animation;
     private walkAnimation: Phaser.Animation;
     private backSprite: Phaser.Sprite;
+    
+    public constructor(name: string, displayName: string, private textColor: string) {
+        super(name, displayName);
+    }
 
     public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number, group: Phaser.Group) {
         
@@ -44,7 +48,7 @@ export class Actor extends RoomObject {
 
         var textStyle = {
             font: "54px Onesize", // Using a large font-size and scaling it back looks better.
-            fill: "white",
+            fill: this.textColor,
             stroke: "black",
             strokeThickness: 12,
             align: "center",

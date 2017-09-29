@@ -46,7 +46,9 @@ export class UIMediator {
                     await actor.say(message.text);
 
                     if (message.suggestedActions) {
-                        this.conversationUI.displaySuggestedActions(message.suggestedActions.actions);
+                        this.conversationUI.displaySuggestedActions(
+                            this.room.getActor("player"),
+                            message.suggestedActions.actions);
                     }
                 }
                 else {
@@ -106,6 +108,11 @@ export class UIMediator {
                         break;
                     }
 
+                    case "InventoryItemRemoved": {
+                        await this.inventoryUI.removeFromInventory(event.objectId);
+                        break;
+                    }
+
                     case "RoomObjectAdded": {
                         var roomObject = new RoomObject("object-" + event.objectId, event.description);
                         if (event.foreground) {
@@ -127,9 +134,6 @@ export class UIMediator {
                     case "RoomEntered": {
                         this.room = new Room(event.roomId);
                         await this.room.initialize(game, this, this.backgroundGroup, this.objectGroup, this.actorGroup, this.textGroup, event.objects, event.actors);
-
-                        // TODO Use layering from other branch.
-                        this.cursor.bringToTop();
                         break;
                     }
 

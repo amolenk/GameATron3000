@@ -53,7 +53,7 @@ export class Room {
 
         if (actors) {
             for (var actorData of actors) {
-                var actor = new Actor("actor-" + actorData.id, actorData.description);
+                var actor = new Actor("actor-" + actorData.id, actorData.description, actorData.textColor);
                 this.addActor(actor, actorData.x, actorData.y);
             }
         }

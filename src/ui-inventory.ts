@@ -26,17 +26,21 @@ export class InventoryUI {
         return Promise.resolve();
     }
 
+    public removeFromInventory(objectId: string) {
+        
+        var item = this.items.get("inventory-" + objectId);
+        if (item)
+        {
+            item.kill();
+            this.items.delete(item.name);
+        }
+
+        return Promise.resolve();
+    }
+
     public create(uiGroup: Phaser.Group) {
         this.uiGroup = uiGroup;
     }
-
-    // public removeFromInventory(item: InventoryItem) {
-
-    //     item.kill();
-    //     this.items.delete(item.name);
-
-    //     return Promise.resolve();
-    // }
 
     public setVisible(visible: boolean) {
         this.visible = visible;

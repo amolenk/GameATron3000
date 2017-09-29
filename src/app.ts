@@ -57,16 +57,16 @@ class GameATron {
         
         // Inventory items
         this.game.load.image("inventory-newspaper", "../assets/inventory/newspaper.png");
-        this.game.load.image("inventory-fullshoppingbag", "../assets/inventory/fullshoppingbag.png");
+        this.game.load.image("inventory-groceries", "../assets/inventory/groceries.png");
         this.game.load.image("inventory-todolist", "../assets/inventory/todolist.png");
         
         // Closeups
         this.game.load.image("closeup-newspaper", "../assets/closeups/newspaper.png");
         
         // Actors
-        this.game.load.spritesheet("actor-guy", "../assets/objects/guybrush_talk.png", 69, 141);
-        this.game.load.spritesheet("actor-guy-walk", "../assets/objects/guybrush_walk.png", 96, 144);
-        this.game.load.image("actor-guy-back", "../assets/objects/guybrush-back.png");
+        this.game.load.spritesheet("actor-player", "../assets/actors/guyscotthrie-talk.png", 69, 141);
+        this.game.load.spritesheet("actor-player-walk", "../assets/objects/guybrush_walk.png", 96, 144);
+        this.game.load.image("actor-player-back", "../assets/objects/guybrush-back.png");
 
         this.game.load.spritesheet("actor-al", "../assets/actors/al-talk.png", 66, 147);
         this.game.load.spritesheet("actor-al-walk", "../assets/actors/al-walk.png", 96, 150);
