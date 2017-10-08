@@ -17,7 +17,8 @@ namespace GameATron3000.Bot.Gameplay
                 "You are inside a brightly lit space.\nYou have no way of identifying what kind of object you're in, but it feels like you're flying!\nLet's just call it an Unidentified Flying Object.");
 
             // Mind the z-order
-            roomDefinition.Add(Actors.Al, 500, 390);
+            roomDefinition.Add(Actors.Al, 460, 390);
+            roomDefinition.Add(Actors.Ian, 530, 390);
             roomDefinition.Add(Actors.Guy, 100, 400);
 
             roomDefinition.Add(RoomObjects.TodoList, _todoListPosition.X, _todoListPosition.Y);

@@ -1,5 +1,14 @@
 ﻿{
-  "text": "%$# &#@$%# **#&^#%^$?",
+  "text": [
+    {
+      "actor": "al",
+      "text": "Hi, human!"
+    },
+    {
+      "actor": "ian",
+      "text": "Be quiet while we beam up some more of these tech nerds!"
+    }
+  ],
   "actions": [
     {
       "value": "Hmm, that's a nasty cold you have there my friend.",
@@ -24,8 +33,17 @@
     {
       "value": "Bye!",
       "reply": {
-        "text": "Yeah, don't touch anything!",
-        "done":  true
+        "text": [
+          {
+            "actor": "al",
+            "text": "Don't touch anything!"
+          },
+          {
+            "actor": "ian",
+            "text": "What he said!"
+          }
+        ],
+        "done": true
       }
     }
   ]
