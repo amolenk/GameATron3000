@@ -17,7 +17,8 @@ namespace GameATron3000.Bot.Gameplay
                 "You are inside a brightly lit space.\nYou have no way of identifying what kind of object you're in, but it feels like you're flying!\nLet's just call it an Unidentified Flying Object.");
 
             // Mind the z-order
-            roomDefinition.Add(Actors.Al, 500, 390);
+            roomDefinition.Add(Actors.Al, 460, 390);
+            roomDefinition.Add(Actors.Ian, 530, 390);
             roomDefinition.Add(Actors.Guy, 100, 400);
 
             roomDefinition.Add(RoomObjects.TodoList, _todoListPosition.X, _todoListPosition.Y);
@@ -34,7 +35,8 @@ namespace GameATron3000.Bot.Gameplay
                 Actors.Guy.TurnAway(),
                 Actors.Guy.Say("It's a big fridge!\nThe badge on the side reads 'Brrrr-a-tron 9000(TM)'."),
                 Actors.Guy.TurnFront(),
-                Actors.Guy.Say("Never heard of it!")
+                Actors.Guy.Say("Never heard of it!"),
+                Actors.Al.Say("It's top of the line!")
             });
 
             wireManager.LookAt(RoomObjects.TodoList, _ => new[]
@@ -49,40 +51,21 @@ namespace GameATron3000.Bot.Gameplay
 
             wireManager.TalkTo(Actors.Al, _ => new[]
             {
-                Actors.Guy.WalkTo(400, 420),
-                Actors.Al.StartConversation("meet-al")
+                Actors.Guy.WalkTo(430, 420),
+                Actors.Al.StartConversation("meet-al", true)
             });
 
             // open fridge
-            wireManager.Open(RoomObjects.ClosedFridge, (gameState) =>
+            wireManager.Open(RoomObjects.ClosedFridge, (gameState) => new[]
             {
-                if (gameState.Contains("fridgeFull"))
-                {
-                    return new[]
-                    {
-                        Actors.Guy.WalkTo(_fridgePosition.X, 400),
-                        Actors.Guy.TurnAway(),
-                        Delay(TimeSpan.FromSeconds(1)),
-                        AddRoomObject(RoomObjects.EmptyFridge, _fridgePosition.X, _fridgePosition.Y),
-                        Delay(TimeSpan.FromSeconds(0.5)),
-                        Actors.Guy.Say("WTF?!\nWhere are my organic, vegan, gluten-free, non-fat groceries?"),
-                        Actors.Guy.TurnFront(),
-                        Actors.Guy.Say("This must be a bug!\nI don't think this game is finished at all!!"),
-                        Actors.Al.Say("Yep, I don't have anything to do as well...\nHope they get this fixed before TechDays!")
-                    };
-                }
-                else
-                {
-                    return new[]
-                    {
-                        Actors.Guy.WalkTo(_fridgePosition.X, 400),
-                        Actors.Guy.TurnAway(),
-                        Delay(TimeSpan.FromSeconds(1)),
-                        AddRoomObject(RoomObjects.EmptyFridge, _fridgePosition.X, _fridgePosition.Y),
-                        Delay(TimeSpan.FromSeconds(0.5)),
-                        Actors.Guy.TurnFront()
-                    };
-                }
+                Actors.Guy.WalkTo(_fridgePosition.X, 400),
+                Actors.Guy.TurnAway(),
+                Delay(TimeSpan.FromSeconds(1)),
+                AddRoomObject(
+                    gameState.Contains("fridgeFull") ? RoomObjects.FullFridge : RoomObjects.EmptyFridge,
+                    _fridgePosition.X, _fridgePosition.Y),
+                Delay(TimeSpan.FromSeconds(0.5)),
+                Actors.Guy.TurnFront()
             });
 
             // close empty fridge
@@ -107,7 +90,7 @@ namespace GameATron3000.Bot.Gameplay
                 Actors.Guy.TurnFront()
             });
 
-            wireManager.Use(RoomObjects.FullShoppingBag, RoomObjects.EmptyFridge, (gameState) =>
+            wireManager.Use(RoomObjects.Groceries, RoomObjects.EmptyFridge, (gameState) =>
             {
                 gameState.SetValue("fridgeFull", true);
 
@@ -116,6 +99,7 @@ namespace GameATron3000.Bot.Gameplay
                     Actors.Guy.WalkTo(_fridgePosition.X, 400),
                     Actors.Guy.TurnAway(),
                     Delay(TimeSpan.FromSeconds(1)),
+                    Player.RemoveFromInventory(RoomObjects.Groceries),
                     AddRoomObject(RoomObjects.FullFridge, _fridgePosition.X, _fridgePosition.Y),
                     RemoveRoomObject(RoomObjects.EmptyFridge),
                     Delay(TimeSpan.FromSeconds(1)),

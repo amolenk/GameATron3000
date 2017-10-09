@@ -23,6 +23,9 @@
         // Player has added an item to his/her's inventory.
         InventoryItemAdded,
 
+        // Player has removed an item from his/her's inventory.
+        InventoryItemRemoved,
+
         // Player has entered a new room.
         RoomEntered,
 

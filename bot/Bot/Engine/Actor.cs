@@ -4,19 +4,22 @@ namespace GameATron3000.Bot.Engine
 {
     public class Actor : RoomObject
     {
-        public Actor(string id, string text)
+        public Actor(string id, string text, string textColor = "White")
             : base(id, text)
         {
+            this.TextColor = textColor;
         }
+
+        public string TextColor { get; private set; }
 
         public IAction Say(string text)
         {
             return new MessageAction(Id, text, Description);
         }
 
-        public IAction StartConversation(string topic)
+        public IAction StartConversation(string topic, bool turnedAway = false)
         {
-            return new TalkToAction(this, topic);
+            return new TalkToAction(this, topic, turnedAway);
         }
 
         public IAction TurnAway()

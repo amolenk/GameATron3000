@@ -8,5 +8,10 @@ namespace GameATron3000.Bot.Engine
         {
             return new AddToInventoryAction(@object);
         }
+
+        public static IAction RemoveFromInventory(RoomObject @object)
+        {
+            return new RemoveFromInventoryAction(@object);
+        }
     }
 }

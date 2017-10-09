@@ -5,11 +5,11 @@ namespace GameATron3000.Bot.Gameplay
 {
     public class Game
     {
-        public List<RoomObject> InitialInventoryItems => new List<RoomObject> { RoomObjects.FullShoppingBag };
+        public List<RoomObject> InitialInventoryItems => new List<RoomObject> { RoomObjects.Groceries };
 
         public Room CreateInitialRoom()
         {
-            return new BeachRoom();
+            return new UfoRoom();
         }
     }
 }
