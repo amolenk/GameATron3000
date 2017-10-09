@@ -143,7 +143,9 @@ export class Actor extends RoomObject {
 
     private sayLine(text: string) {
 
-        this.talkAnimation.play(6, true);
+        if (!this.backSprite.visible) {
+            this.talkAnimation.play(6, true);
+        }
         this.text.setText(text);
 
         return new Promise((resolve) => {
@@ -152,7 +154,9 @@ export class Actor extends RoomObject {
                 Math.max(text.length * Settings.TEXT_SPEED, Settings.MIN_TEXT_DURATION),
                 () => {
                     this.text.setText('');
-                    this.talkAnimation.stop(true);
+                    if (!this.backSprite.visible) {
+                        this.talkAnimation.stop(true);
+                    }
                     resolve();
                 });
         });

@@ -65,11 +65,14 @@ class GameATron {
         
         // Actors
         this.game.load.spritesheet("actor-player", "../assets/actors/guyscotthrie-talk.png", 69, 141);
-        this.game.load.spritesheet("actor-player-walk", "../assets/objects/guybrush_walk.png", 96, 144);
-        this.game.load.image("actor-player-back", "../assets/objects/guybrush-back.png");
+        this.game.load.spritesheet("actor-player-walk", "../assets/actors/guyscotthrie-walk.png", 96, 144);
+        this.game.load.image("actor-player-back", "../assets/actors/guyscotthrie-back.png");
 
         this.game.load.spritesheet("actor-al", "../assets/actors/al-talk.png", 66, 147);
         this.game.load.spritesheet("actor-al-walk", "../assets/actors/al-walk.png", 96, 150);
+
+        this.game.load.spritesheet("actor-ian", "../assets/actors/ian-talk.png", 66, 147);
+        this.game.load.spritesheet("actor-ian-walk", "../assets/actors/ian-walk.png", 96, 150);
 
 
         this.uiMediator.preload();
