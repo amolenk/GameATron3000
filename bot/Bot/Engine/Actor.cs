@@ -17,9 +17,9 @@ namespace GameATron3000.Bot.Engine
             return new MessageAction(Id, text, Description);
         }
 
-        public IAction StartConversation(string topic)
+        public IAction StartConversation(string topic, bool turnedAway = false)
         {
-            return new TalkToAction(this, topic);
+            return new TalkToAction(this, topic, turnedAway);
         }
 
         public IAction TurnAway()

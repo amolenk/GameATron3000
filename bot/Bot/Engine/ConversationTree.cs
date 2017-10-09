@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using GameATron3000.Bot.Engine.Actions;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
@@ -13,16 +14,25 @@ namespace GameATron3000.Bot.Engine
     [Serializable]
     public class ConversationTree : IDialog<object>
     {
-        public ConversationTree(Actor actor, string topic)
+        public ConversationTree(Actor actor, string topic, bool turnedAway)
         {
             ActorId = actor.Id;
             ActorDescription = actor.Description;
             Topic = topic;
+            TurnedAway = turnedAway;
         }
 
         public async Task StartAsync(IDialogContext context)
         {
             Model = LoadConversationTreeModel(Topic);
+
+            if (TurnedAway)
+            {
+                await context.PostEventAsync(Event.ActorTurnedAway, JObject.FromObject(new
+                {
+                    actorId = "player"
+                }));
+            }
 
             await PostReplies(context, (JArray)Model["text"]);
 
@@ -32,6 +42,8 @@ namespace GameATron3000.Bot.Engine
         public JToken Model { get; private set; }
 
         public string Topic { get; private set; }
+
+        public bool TurnedAway { get; private set; }
 
         public string ActorId { get; private set; }
 
@@ -67,6 +79,14 @@ namespace GameATron3000.Bot.Engine
 
             if (isDone)
             {
+                if (TurnedAway)
+                {
+                    await context.PostEventAsync(Event.ActorTurnedFront, JObject.FromObject(new
+                    {
+                        actorId = "player"
+                    }));
+                }
+
                 context.Done<object>(null);
             }
             else

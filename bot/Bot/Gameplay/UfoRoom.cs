@@ -35,7 +35,8 @@ namespace GameATron3000.Bot.Gameplay
                 Actors.Guy.TurnAway(),
                 Actors.Guy.Say("It's a big fridge!\nThe badge on the side reads 'Brrrr-a-tron 9000(TM)'."),
                 Actors.Guy.TurnFront(),
-                Actors.Guy.Say("Never heard of it!")
+                Actors.Guy.Say("Never heard of it!"),
+                Actors.Al.Say("It's top of the line!")
             });
 
             wireManager.LookAt(RoomObjects.TodoList, _ => new[]
@@ -50,8 +51,8 @@ namespace GameATron3000.Bot.Gameplay
 
             wireManager.TalkTo(Actors.Al, _ => new[]
             {
-                Actors.Guy.WalkTo(400, 420),
-                Actors.Al.StartConversation("meet-al")
+                Actors.Guy.WalkTo(430, 420),
+                Actors.Al.StartConversation("meet-al", true)
             });
 
             // open fridge
