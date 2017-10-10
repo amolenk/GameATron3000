@@ -1,16 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameATron3000.Bot.Engine.Actions;
 
 namespace GameATron3000.Bot.Engine
 {
     public class WireManager
     {
         private readonly Dictionary<string, Func<GameState, IEnumerable<IAction>>> _wiredActions;
+        private static readonly string[] _cannedResponses = new string[]
+        {
+            "I can't do that.",
+            "Why?",
+            "Hmm, better not.",
+            "That will probably crash the game!"
+        };
+
+        private readonly Random _random;
 
         public WireManager()
         {
             _wiredActions = new Dictionary<string, Func<GameState, IEnumerable<IAction>>>();
+            _random = new Random();
         }
 
         public void LookAt(RoomObject roomObject, Func<GameState, IAction> onExecute)
@@ -66,7 +77,10 @@ namespace GameATron3000.Bot.Engine
                 return _actionFactory(gameState);
             }
 
-            return Enumerable.Empty<IAction>();
+            return new IAction[]
+            {
+                new MessageAction("player", _cannedResponses[_random.Next(0, _cannedResponses.Length - 1)], "Player")
+            };
         }
     }
 }

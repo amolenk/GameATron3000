@@ -67,6 +67,13 @@ namespace GameATron3000.Bot.Engine
 
             var replyTexts = (JArray)Model["text"];
             var isDone = Model["done"] != null;
+            var achievement = Model["achievement"];
+
+            if (achievement != null)
+            {
+                var gameState = new GameState(context);
+                gameState.SetValue(achievement.Value<string>(), true);
+            }
 
             // If the reply does not contain any actions, we've reached a leaf and need to reset
             // back to the top.
