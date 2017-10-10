@@ -53,23 +53,28 @@ class GameATron {
         this.game.load.image("object-fridge-open-full", "../assets/objects/fridge-open-full.png");
         this.game.load.image("object-newspaper", "../assets/objects/newspaper.png");
         this.game.load.image("object-todolist", "../assets/objects/todolist.png");
+        this.game.load.image("object-grocerylist", "../assets/objects/grocerylist.png");
         this.game.load.image("object-tractorbeam", "../assets/objects/tractorbeam.png");
         
         // Inventory items
         this.game.load.image("inventory-newspaper", "../assets/inventory/newspaper.png");
         this.game.load.image("inventory-groceries", "../assets/inventory/groceries.png");
         this.game.load.image("inventory-todolist", "../assets/inventory/todolist.png");
+        this.game.load.image("inventory-grocerylist", "../assets/inventory/grocerylist.png");
         
         // Closeups
         this.game.load.image("closeup-newspaper", "../assets/closeups/newspaper.png");
         
         // Actors
         this.game.load.spritesheet("actor-player", "../assets/actors/guyscotthrie-talk.png", 69, 141);
-        this.game.load.spritesheet("actor-player-walk", "../assets/objects/guybrush_walk.png", 96, 144);
-        this.game.load.image("actor-player-back", "../assets/objects/guybrush-back.png");
+        this.game.load.spritesheet("actor-player-walk", "../assets/actors/guyscotthrie-walk.png", 96, 144);
+        this.game.load.image("actor-player-back", "../assets/actors/guyscotthrie-back.png");
 
         this.game.load.spritesheet("actor-al", "../assets/actors/al-talk.png", 66, 147);
         this.game.load.spritesheet("actor-al-walk", "../assets/actors/al-walk.png", 96, 150);
+
+        this.game.load.spritesheet("actor-ian", "../assets/actors/ian-talk.png", 66, 147);
+        this.game.load.spritesheet("actor-ian-walk", "../assets/actors/ian-walk.png", 96, 150);
 
 
         this.uiMediator.preload();
