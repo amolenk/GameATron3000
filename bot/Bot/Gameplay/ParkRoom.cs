@@ -15,6 +15,7 @@ namespace GameATron3000.Bot.Gameplay
             roomDefinition.Add(Actors.Guy, 600, 430);
 
             roomDefinition.Add(RoomObjects.Newspaper, 362, 400);
+            Player.AddToInventory(RoomObjects.GroceryList);
 
             return roomDefinition;
         }

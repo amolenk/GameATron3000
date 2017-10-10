@@ -9,6 +9,7 @@ namespace GameATron3000.Bot.Gameplay
     {
         private static readonly Point _fridgePosition = new Point(185, 242);
         private static readonly Point _todoListPosition = new Point(650, 300);
+        private static readonly Point _groceryListPosition = new Point(655, 295);
 
         protected override RoomDefinition GetRoomDefinition()
         {
@@ -105,6 +106,65 @@ namespace GameATron3000.Bot.Gameplay
                     Delay(TimeSpan.FromSeconds(1)),
                     Actors.Guy.TurnFront()
                 };
+            });
+
+            wireManager.Use(RoomObjects.GroceryList, RoomObjects.TodoList, (gameState) =>
+            {
+                if (gameState.Contains("listSwitch"))
+                {
+                    return new[]
+                    {
+                        Actors.Guy.WalkTo(_todoListPosition.X, 400),
+                        Actors.Guy.TurnAway(),
+                        Delay(TimeSpan.FromSeconds(1)),
+                        Actors.Guy.TurnFront(),
+                        Actors.Guy.Say("I already did that.\nLet's not undo the magic!")
+                    };
+                }
+                else
+                {
+                    gameState.SetValue("listSwitch", true);
+
+                    return new[]
+                    {
+                        Actors.Guy.WalkTo(_todoListPosition.X, 400),
+                        Actors.Guy.TurnAway(),
+                        Delay(TimeSpan.FromSeconds(1)),
+                        Player.RemoveFromInventory(RoomObjects.GroceryList),
+                        AddRoomObject(RoomObjects.GroceryList, _groceryListPosition.X, _groceryListPosition.Y),
+                        RemoveRoomObject(RoomObjects.TodoList),
+                        Player.AddToInventory(RoomObjects.TodoList),
+                        Delay(TimeSpan.FromSeconds(1)),
+                        Actors.Guy.TurnFront(),
+                        Actors.Guy.Say("That should do the trick!")
+                    };
+                }
+            });
+
+            wireManager.Use(RoomObjects.TodoList, RoomObjects.GroceryList, (gameState) =>
+            {
+                if (gameState.Contains("listSwitch"))
+                {
+                    return new[]
+                    {
+                        Actors.Guy.WalkTo(_todoListPosition.X, 400),
+                        Actors.Guy.TurnAway(),
+                        Delay(TimeSpan.FromSeconds(1)),
+                        Actors.Guy.TurnFront(),
+                        Actors.Guy.Say("Hmmm, there was I reason I switched these lists.\nI'll just keep it this way.")
+                    };
+                }
+                else
+                {
+                    return new[]
+                    {
+                        Actors.Guy.WalkTo(_todoListPosition.X, 400),
+                        Actors.Guy.TurnAway(),
+                        Delay(TimeSpan.FromSeconds(1)),
+                        Actors.Guy.TurnFront(),
+                        Actors.Guy.Say("I should probably do it the other way around.")
+                    };
+                }
             });
         }
     }

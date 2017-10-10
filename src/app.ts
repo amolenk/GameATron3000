@@ -53,12 +53,14 @@ class GameATron {
         this.game.load.image("object-fridge-open-full", "../assets/objects/fridge-open-full.png");
         this.game.load.image("object-newspaper", "../assets/objects/newspaper.png");
         this.game.load.image("object-todolist", "../assets/objects/todolist.png");
+        this.game.load.image("object-grocerylist", "../assets/objects/grocerylist.png");
         this.game.load.image("object-tractorbeam", "../assets/objects/tractorbeam.png");
         
         // Inventory items
         this.game.load.image("inventory-newspaper", "../assets/inventory/newspaper.png");
         this.game.load.image("inventory-groceries", "../assets/inventory/groceries.png");
         this.game.load.image("inventory-todolist", "../assets/inventory/todolist.png");
+        this.game.load.image("inventory-grocerylist", "../assets/inventory/grocerylist.png");
         
         // Closeups
         this.game.load.image("closeup-newspaper", "../assets/closeups/newspaper.png");
