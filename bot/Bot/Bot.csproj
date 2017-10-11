@@ -113,6 +113,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Engine\Actions\NextRoomAction.cs" />
     <Compile Include="Engine\Actions\RemoveFromInventoryAction.cs" />
     <Compile Include="Engine\Actions\RemoveRoomObjectAction.cs" />
     <Compile Include="Engine\Actions\DelayAction.cs" />
@@ -124,7 +125,7 @@
     <Compile Include="Engine\Actions\AddToInventoryAction.cs" />
     <Compile Include="Engine\Event.cs" />
     <Compile Include="Engine\GameState.cs" />
-    <Compile Include="Engine\Actions\MessageAction.cs" />
+    <Compile Include="Engine\Actions\SayAction.cs" />
     <Compile Include="Engine\RootDialog.cs" />
     <Compile Include="Engine\LuisRoom.cs" />
     <Compile Include="Engine\Room.cs" />
@@ -154,7 +155,6 @@
     </Content>
     <EmbeddedResource Include="Gameplay\ConversationTrees\graph.json" />
     <EmbeddedResource Include="Gameplay\ConversationTrees\meet-al.json" />
-    <EmbeddedResource Include="Gameplay\ConversationTrees\meet-ian.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

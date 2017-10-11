@@ -79,7 +79,7 @@ namespace GameATron3000.Bot.Engine
 
             return new IAction[]
             {
-                new MessageAction("player", _cannedResponses[_random.Next(0, _cannedResponses.Length - 1)], "Player")
+                new SayAction("player", _cannedResponses[_random.Next(0, _cannedResponses.Length - 1)])
             };
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GameATron3000.Bot.Engine.Actions;
 using Microsoft.Bot.Builder.Dialogs;
@@ -8,7 +9,7 @@ using Microsoft.Bot.Connector;
 namespace GameATron3000.Bot.Engine
 {
     [Serializable]
-    public abstract class Room : IDialog<object>
+    public abstract class Room : IDialog<Room>
     {
         [NonSerialized]
         private WireManager _wireManager;
@@ -23,12 +24,27 @@ namespace GameATron3000.Bot.Engine
 
             await context.PostEventAsync(Event.RoomEntered, roomDefinition.ToJObject());
             //await context.PostMessageAsync(roomDefinition.IntroductionText);
+
+            foreach (var action in OnEnterRoom())
+            {
+                var contextHandled = await action.ExecuteAsync(context, ResumeAfterConversationTree);
+                if (contextHandled)
+                {
+                    return;
+                }
+            }
+
             await context.PostEventAsync(Event.Idle);
 
             context.Wait(MessageReceivedAsync);
         }
 
         protected abstract RoomDefinition GetRoomDefinition();
+
+        protected virtual IEnumerable<IAction> OnEnterRoom()
+        {
+            return Enumerable.Empty<IAction>();
+        }
 
         protected abstract void WireRoom(WireManager wireManager);
 
@@ -45,6 +61,11 @@ namespace GameATron3000.Bot.Engine
         protected IAction Delay(TimeSpan time)
         {
             return new DelayAction(time);
+        }
+
+        protected IAction NextRoom(Room nextRoom)
+        {
+            return new NextRoomAction(nextRoom);
         }
 
         protected IAction ShowCloseUp(RoomObject roomObject, IEnumerable<IAction> closeUpActions)

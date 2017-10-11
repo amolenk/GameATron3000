@@ -6,17 +6,15 @@ using Newtonsoft.Json.Linq;
 
 namespace GameATron3000.Bot.Engine.Actions
 {
-    public class MessageAction : IAction
+    public class SayAction : IAction
     {
         private readonly string _actorId;
         private readonly string _text;
-        private readonly string _from;
 
-        public MessageAction(string actorId, string text, string from)
+        public SayAction(string actorId, string text)
         {
             _actorId = actorId;
             _text = text;
-            _from = from;
         }
 
         public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
@@ -24,7 +22,7 @@ namespace GameATron3000.Bot.Engine.Actions
             var reply = ((Activity)context.Activity).CreateReply();
             reply.Type = ActivityTypes.Message;
             reply.Text = _text;
-            reply.From.Name = _from;
+            reply.From.Name = _actorId;
 
             if (_actorId != Actors.Narrator.Id)
             {

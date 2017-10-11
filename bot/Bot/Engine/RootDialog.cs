@@ -29,14 +29,14 @@ namespace GameATron3000.Bot.Engine
                 }));
             }
 
-            context.Call(_game.CreateInitialRoom(), GameOver);
+            context.Call(_game.CreateInitialRoom(), OnLeftRoom);
         }
 
-        private Task GameOver(IDialogContext context, IAwaitable<object> result)
+        private async Task OnLeftRoom(IDialogContext context, IAwaitable<Room> result)
         {
-            context.Done<object>(null);
+            var roomToEnter = await result;
 
-            return Task.CompletedTask;
+            context.Call(roomToEnter, OnLeftRoom);
         }
     }
 }
