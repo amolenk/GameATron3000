@@ -2,7 +2,7 @@
   "text": [
     {
       "actor": "al",
-      "text": "Hi there human!"
+      "text": "Hi there!"
     }
   ],
   "actions": [
@@ -21,22 +21,89 @@
         ],
         "actions": [
           {
-            "value": "How's that working out for you?",
+            "value": "But we're decades away from realizing full Artifical General Intelligence!",
             "reply": {
               "text": [
                 {
                   "actor": "al",
-                  "text": "Hmm, not sure exactly..."
+                  "text": "I know, right!\nBut Ian is a bit paranoid!"
                 },
                 {
                   "actor": "ian",
-                  "text": "We'll have to check our to-do list."
+                  "text": "Those Azure data centers are hiding something!\nNo civilization needs that much compute power!"
                 }
               ]
             }
           }
         ]
-
+      }
+    },
+    {
+      "value": "Can you beam me down back to the park?",
+      "reply": {
+        "text": [
+          {
+            "actor": "al",
+            "text": "Sure!"
+          },
+          {
+            "actor": "ian",
+            "text": "NO WAY!\nYou're on the list!",
+            "achievement": "talkedAboutList"
+          }
+        ],
+        "actions": [
+          {
+            "value": "Please?",
+            "reply": {
+              "text": [
+                {
+                  "actor": "ian",
+                  "text": "NO! We're not leaving until we've got everything on the list!"
+                }
+              ]
+            }
+          },
+          {
+            "value": "Pretty please?",
+            "reply": {
+              "text": [
+                {
+                  "actor": "ian",
+                  "text": "NO! We're not leaving until we've got everything on the list!"
+                }
+              ]
+            }
+          },
+          {
+            "value": "Pretty please with a cherry on top?",
+            "reply": {
+            "reply": {
+              "text": [
+                {
+                  "actor": "ian",
+                  "text": "NO! We're not leaving until we've got everything on the list!"
+                }
+              ]
+            }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "value": "Is this an actual spaceship?",
+      "reply": {
+        "text": [
+          {
+            "actor": "al",
+            "text": "It's an 8-bit stellar class beam-er-upper™."
+          },
+          {
+            "actor": "ian",
+            "text": "Stop divulging top secret information!"
+          }
+        ]
       }
     },
     {
@@ -45,7 +112,7 @@
         "text": [
           {
             "actor": "al",
-            "text": "Don't touch anything!"
+            "text": "Don't touch anything or Ian will get mad!"
           }
         ],
         "done": true

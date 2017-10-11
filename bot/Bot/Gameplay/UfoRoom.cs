@@ -34,7 +34,7 @@ namespace GameATron3000.Bot.Gameplay
             {
                 Actors.Guy.WalkTo(_fridgePosition.X, 400),
                 Actors.Guy.TurnAway(),
-                Actors.Guy.Say("It's a big fridge!\nThe badge on the side reads 'Brrrr-a-tron 9000(TM)'."),
+                Actors.Guy.Say("It's a big fridge!\nThe badge on the side reads 'Brrrr-a-tron 9000™'."),
                 Actors.Guy.TurnFront(),
                 Actors.Guy.Say("Never heard of it!"),
                 Actors.Al.Say("It's top of the line!")

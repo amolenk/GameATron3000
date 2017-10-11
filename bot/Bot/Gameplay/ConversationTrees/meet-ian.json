@@ -1,21 +1,38 @@
 ﻿{
-  "text": "%$# &#@$%# **#&^#%^$?",
+  "text": [
+    {
+      "actor": "ian",
+      "text": "What do you want?"
+    }
+  ],
   "actions": [
     {
-      "value": "Hmm, that's a nasty cold you have there my friend.",
+      "value": "What's going on here?",
       "reply": {
-        "text": "&#$% %%$^## *#$&@&^## $#*&^#&@!!"
-      }
-    },
-    {
-      "value": "Perhaps you're speaking a foreign language. Please use a universal translator!",
-      "reply": {
-        "text": "Oh yeah, that's better\nI'm Ian. I'm from the planet Snork\nNice to meet you!",
+        "text": [
+          {
+            "actor": "al",
+            "text": "Oh, we're just removing all the tech nerds from this planet."
+          },
+          {
+            "actor": "ian",
+            "text": "Yeah, we don't need any super intelligence popping up here!"
+          }
+        ],
         "actions": [
           {
-            "value": "I'm Guy Scotthrie.",
+            "value": "How's that working out for you?",
             "reply": {
-              "text": "Ok, whatever."
+              "text": [
+                {
+                  "actor": "al",
+                  "text": "Hmm, not sure exactly..."
+                },
+                {
+                  "actor": "ian",
+                  "text": "We'll have to check our to-do list."
+                }
+              ]
             }
           }
         ]
@@ -24,8 +41,13 @@
     {
       "value": "Bye!",
       "reply": {
-        "text": "Bye!",
-        "done":  true
+        "text": [
+          {
+            "actor": "al",
+            "text": "Don't touch anything!"
+          }
+        ],
+        "done": true
       }
     }
   ]
