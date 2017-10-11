@@ -106,4 +106,15 @@ export class Room {
         
         return Promise.resolve();
     }
+
+    public kill() {
+        console.log("KILLING ROOM");
+        console.log(this.roomObjects.length);
+        console.log(this.roomObjects[0].displayName);
+        for (var object of this.roomObjects) {
+
+            console.log("KILLING OBJECT");
+            object.kill();
+        }
+    }
 }

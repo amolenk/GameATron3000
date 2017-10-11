@@ -132,6 +132,9 @@ export class UIMediator {
                     }
 
                     case "RoomEntered": {
+                        if (this.room != null) {
+                            this.room.kill();
+                        }
                         this.room = new Room(event.roomId);
                         await this.room.initialize(game, this, this.backgroundGroup, this.objectGroup, this.actorGroup, this.textGroup, event.objects, event.actors);
                         break;

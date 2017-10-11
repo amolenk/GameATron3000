@@ -76,6 +76,14 @@ export class Actor extends RoomObject {
     }
 
     public kill() {
+
+        this.walkSprite.destroy();
+        this.backSprite.destroy();
+        this.text.destroy();
+        this.talkAnimation.destroy();
+        this.walkAnimation.destroy();
+
+        super.kill();
     }
 
     public async say(text: string) {

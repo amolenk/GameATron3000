@@ -30,6 +30,7 @@ export class RoomObject {
     }
 
     public kill() {
+        console.log("KILLING " + this.name);
         this.sprite.destroy();
         this.sprite = null;
     }
