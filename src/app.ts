@@ -72,9 +72,11 @@ class GameATron {
 
         this.game.load.spritesheet("actor-al", "../assets/actors/al-talk.png", 66, 147);
         this.game.load.spritesheet("actor-al-walk", "../assets/actors/al-walk.png", 96, 150);
-
+        this.game.load.image("actor-al-back", "../assets/actors/al-back.png");
+        
         this.game.load.spritesheet("actor-ian", "../assets/actors/ian-talk.png", 66, 147);
         this.game.load.spritesheet("actor-ian-walk", "../assets/actors/ian-walk.png", 96, 150);
+        this.game.load.image("actor-ian-back", "../assets/actors/ian-back.png");
 
 
         this.uiMediator.preload();
