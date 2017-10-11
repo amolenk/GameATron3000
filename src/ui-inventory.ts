@@ -29,11 +29,17 @@ export class InventoryUI {
     public removeFromInventory(objectId: string) {
         
         var item = this.items.get("inventory-" + objectId);
-        if (item)
-        {
+        if (item) {
             item.kill();
             this.items.delete(item.name);
         }
+
+        // reorder itemss
+        var itemIndex = 0;
+        this.items.forEach((value: InventoryItem, key: string) => {
+            value.setposition(400 + (42 * itemIndex), 476);
+            itemIndex++;
+        });
 
         return Promise.resolve();
     }
