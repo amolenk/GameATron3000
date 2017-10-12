@@ -43,9 +43,9 @@ class GameATron {
         this.game.load.bitmapFont("onesize", "../fonts/font.png", "../fonts/font.fnt");
 
         // Room backgrounds
-        this.game.load.image("room-park", "assets/backgrounds/park.png");
-        this.game.load.image("room-ufo", "assets/backgrounds/ufo.png");
-        this.game.load.image("room-beach", "assets/backgrounds/beach.png");
+        this.game.load.image("room-park", "../assets/backgrounds/park.png");
+        this.game.load.image("room-ufo", "../assets/backgrounds/ufo.png");
+        this.game.load.image("room-beach", "../assets/backgrounds/beach.png");
         
         // Room objects
         this.game.load.image("object-fridge-closed", "../assets/objects/fridge-closed.png");
