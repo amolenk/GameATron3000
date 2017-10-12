@@ -142,6 +142,33 @@ namespace GameATron3000.Bot.Gameplay
                 return new IAction[0];
             });
 
+            wireManager.PickUp(RoomObjects.TodoList, (gameState) =>
+            {
+                if (!gameState.Contains("listSwitched"))
+                {
+                    return new[]
+                    {
+                        Actors.Guy.WalkTo(_todoListPosition.X, 400),
+                        Actors.Guy.TurnAway(),
+                        Delay(TimeSpan.FromSeconds(1)),
+                        RemoveRoomObject(RoomObjects.TodoList),
+                        Actors.Guy.TurnFront(),
+                        Actors.Guy.Say("Got it!"),
+                        Actors.Ian.Say("Hey, put that back!"),
+                        Actors.Al.Say("We need that to finish the mission!"),
+                        Actors.Guy.TurnAway(),
+                        Delay(TimeSpan.FromSeconds(0.5)),
+                        AddRoomObject(RoomObjects.TodoList, _todoListPosition.X, _todoListPosition.Y),
+                        Actors.Guy.TurnFront(),
+                        Actors.Guy.Say("I guess I have to think of something sneakier!"),
+                        Actors.Guy.WalkTo(_todoListPosition.X - 30, 420),
+                    };
+                }
+
+                return new IAction[0];
+            });
+
+
             wireManager.Close(RoomObjects.EmptyFridge, (gameState) =>
             {
                 gameState.RemoveValue("fridgeOpened");
@@ -248,6 +275,16 @@ namespace GameATron3000.Bot.Gameplay
                 }
             });
 
+            wireManager.Use(RoomObjects.GroceryList, RoomObjects.Groceries, (gameState) =>
+            {
+                return Actors.Guy.Say("Yep, I've got everything on the list!");
+            });
+
+            wireManager.Use(RoomObjects.Groceries, RoomObjects.GroceryList, (gameState) =>
+            {
+                return Actors.Guy.Say("Yep, I've got everything on the list!");
+            });
+
             wireManager.TalkTo(Actors.Ian, (gameState) =>
             {
                 if (gameState.Contains("talkedAboutList"))
@@ -264,7 +301,7 @@ namespace GameATron3000.Bot.Gameplay
 
                     if (!gameState.Contains("listSwitched"))
                     {
-                        actions.Add(Actors.Ian.Say("Hmm, we still need to find this Hansel Scottleman guy..."));
+                        actions.Add(Actors.Ian.Say("Hmm, we still need to find this Hans Scottleman guy..."));
                         actions.Add(Actors.Ian.TurnFront());
                         actions.Add(Actors.Ian.WalkTo(530, 390));
                     }

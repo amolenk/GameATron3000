@@ -155,6 +155,7 @@
     </Content>
     <EmbeddedResource Include="Gameplay\ConversationTrees\graph.json" />
     <EmbeddedResource Include="Gameplay\ConversationTrees\meet-al.json" />
+    <None Include="Properties\PublishProfiles\Bot20171012074458 - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

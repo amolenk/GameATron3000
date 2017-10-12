@@ -38,6 +38,14 @@ namespace GameATron3000.Bot.Gameplay
                 Actors.Guy.Say("It looks like an old newspaper!")
             );
 
+            wireManager.Use(RoomObjects.GroceryList, RoomObjects.Groceries, _ =>
+                Actors.Guy.Say("Yep, I've got everything on the list!")
+            );
+
+            wireManager.Use(RoomObjects.Groceries, RoomObjects.GroceryList, _ =>
+                Actors.Guy.Say("Yep, I've got everything on the list!")
+            );
+
             wireManager.PickUp(RoomObjects.Newspaper, (gameState) =>
             {
                 if (!gameState.ContainsInventoryItem(RoomObjects.Newspaper))
