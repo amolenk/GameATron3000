@@ -14,10 +14,9 @@ namespace GameATron3000.Bot.Engine
     [Serializable]
     public class ConversationTree : IDialog<object>
     {
-        public ConversationTree(Actor actor, string topic, bool turnedAway)
+        public ConversationTree(string actorId, string topic, bool turnedAway)
         {
-            ActorId = actor.Id;
-            ActorDescription = actor.Description;
+            ActorId = actorId;
             Topic = topic;
             TurnedAway = turnedAway;
         }
@@ -120,7 +119,7 @@ namespace GameATron3000.Bot.Engine
             reply.Type = ActivityTypes.Message;
             reply.TextFormat = TextFormatTypes.Plain;
 
-            reply.From.Name = ActorDescription;
+            reply.From.Name = actorId;
             reply.Properties = JObject.FromObject(new
             {
                 actorId = actorId

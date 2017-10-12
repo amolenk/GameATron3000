@@ -34,14 +34,12 @@ namespace GameATron3000.Bot.Engine
         {
             var key = GetKeyForInventoryItem(@object.Id);
 
-            _context.ConversationData.RemoveValue(key);
+            
         }
 
-        public void RemoveValue(string objectId)
+        public void RemoveValue(string key)
         {
-            var key = GetKeyForInventoryItem(objectId);
-
-            RemoveValue(key);
+            _context.ConversationData.RemoveValue(key);
         }
 
         public void SetValue<T>(string key, T value)

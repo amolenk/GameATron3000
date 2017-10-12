@@ -15,7 +15,6 @@ namespace GameATron3000.Bot.Gameplay
             roomDefinition.Add(Actors.Guy, 600, 430);
 
             roomDefinition.Add(RoomObjects.Newspaper, 362, 400);
-            Player.AddToInventory(RoomObjects.GroceryList);
 
             return roomDefinition;
         }
@@ -24,6 +23,27 @@ namespace GameATron3000.Bot.Gameplay
         {
             wireManager.LookAt(RoomObjects.Groceries, _ =>
                 Actors.Guy.Say("It's my shopping bag with groceries.\nI managed to get some nice discounts!")
+            );
+
+            wireManager.LookAt(RoomObjects.GroceryList, _ =>
+                Actors.Guy.Say("It's my grocery list!\nI've bought everything that's on it!")
+            );
+
+            wireManager.LookAt(Actors.Guy, _ => new[]
+            {
+                Actors.Narrator.Say("It's Guy Scotthrie, our fearless hero!")
+            });
+
+            wireManager.LookAt(RoomObjects.Newspaper, _ =>
+                Actors.Guy.Say("It looks like an old newspaper!")
+            );
+
+            wireManager.Use(RoomObjects.GroceryList, RoomObjects.Groceries, _ =>
+                Actors.Guy.Say("Yep, I've got everything on the list!")
+            );
+
+            wireManager.Use(RoomObjects.Groceries, RoomObjects.GroceryList, _ =>
+                Actors.Guy.Say("Yep, I've got everything on the list!")
             );
 
             wireManager.PickUp(RoomObjects.Newspaper, (gameState) =>
@@ -45,7 +65,9 @@ namespace GameATron3000.Bot.Gameplay
                         Delay(TimeSpan.FromSeconds(1)),
                         AddRoomObject(RoomObjects.TractorBeam, 360, 225, true),
                         Delay(TimeSpan.FromSeconds(1)),
-                        Actors.Guy.Say("Uh oh...")
+                        Actors.Guy.Say("Uh oh..."),
+                        Delay(TimeSpan.FromSeconds(3)),
+                        NextRoom(new UfoRoom())
                     };
                 }
                 else

@@ -14,12 +14,12 @@ namespace GameATron3000.Bot.Engine
 
         public IAction Say(string text)
         {
-            return new MessageAction(Id, text, Description);
+            return new SayAction(Id, text);
         }
 
         public IAction StartConversation(string topic, bool turnedAway = false)
         {
-            return new TalkToAction(this, topic, turnedAway);
+            return new TalkToAction(this.Id, topic, turnedAway);
         }
 
         public IAction TurnAway()

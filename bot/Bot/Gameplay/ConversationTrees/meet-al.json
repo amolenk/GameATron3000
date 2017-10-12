@@ -26,11 +26,43 @@
               "text": [
                 {
                   "actor": "al",
-                  "text": "I know, right!\nBut Ian is a bit paranoid!"
+                  "text": "I know, but Ian isn't convinced."
                 },
                 {
                   "actor": "ian",
-                  "text": "Those Azure data centers are hiding something!\nNo civilization needs that much compute power!"
+                  "text": "Those Azure data centers are doing something!"
+                }
+              ],
+              "actions": [
+                {
+                  "value": "But they're just mining BitCoin!",
+                  "reply": {
+                    "text": [
+                      {
+                        "actor": "al",
+                        "text": "You can probably make more money by just trading!"
+                      },
+                      {
+                        "actor": "ian",
+                        "text": "I'm not buying it!"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "value": "But they're just running Bot code for 8-bit adventure games!",
+                  "reply": {
+                    "text": [
+                      {
+                        "actor": "al",
+                        "text": "Nice try!"
+                      },
+                      {
+                        "actor": "ian",
+                        "text": "Nobody plays adventure games anymore!"
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -48,18 +80,22 @@
           },
           {
             "actor": "ian",
-            "text": "NO WAY!\nYou're on the list!",
-            "achievement": "talkedAboutList"
+            "text": "NO WAY!\nWe need to get everything on the list!"
           }
         ],
+        "achievement": "talkedAboutList",
         "actions": [
           {
             "value": "Please?",
             "reply": {
               "text": [
                 {
+                  "actor": "al",
+                  "text": "Ok, because you asked nicely!"
+                },
+                {
                   "actor": "ian",
-                  "text": "NO! We're not leaving until we've got everything on the list!"
+                  "text": "NO! The mission isn't complete yet!"
                 }
               ]
             }
@@ -69,8 +105,12 @@
             "reply": {
               "text": [
                 {
+                  "actor": "al",
+                  "text": "Ok, because you asked nicely!"
+                },
+                {
                   "actor": "ian",
-                  "text": "NO! We're not leaving until we've got everything on the list!"
+                  "text": "NO! The mission isn't complete yet!"
                 }
               ]
             }
@@ -78,14 +118,16 @@
           {
             "value": "Pretty please with a cherry on top?",
             "reply": {
-            "reply": {
               "text": [
                 {
+                  "actor": "al",
+                  "text": "Ok, because you asked nicely!"
+                },
+                {
                   "actor": "ian",
-                  "text": "NO! We're not leaving until we've got everything on the list!"
+                  "text": "NO! The mission isn't complete yet!"
                 }
               ]
-            }
             }
           }
         ]
@@ -97,7 +139,7 @@
         "text": [
           {
             "actor": "al",
-            "text": "It's an 8-bit stellar class beam-er-upper™."
+            "text": "Sure is!\nIt's an 8-bit stellar class beam-er-upper™ convertible!"
           },
           {
             "actor": "ian",
@@ -112,7 +154,7 @@
         "text": [
           {
             "actor": "al",
-            "text": "Don't touch anything or Ian will get mad!"
+            "text": "Don't touch anything!"
           }
         ],
         "done": true

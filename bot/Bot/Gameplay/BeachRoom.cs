@@ -1,6 +1,7 @@
 ﻿using System;
 using GameATron3000.Bot.Engine;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace GameATron3000.Bot.Gameplay
 {
@@ -9,25 +10,27 @@ namespace GameATron3000.Bot.Gameplay
     {
         protected override RoomDefinition GetRoomDefinition()
         {
-            var roomDefinition = new RoomDefinition(
-                "beach",
-                "");
+            var roomDefinition = new RoomDefinition("beach", "");
 
-            // Mind the z-order
-            roomDefinition.Add(Actors.Al, 500, 390);
+            roomDefinition.Add(Actors.Guy, 490, 420);
 
-            roomDefinition.Add(RoomObjects.Newspaper, 150, 380);
+            roomDefinition.Add(RoomObjects.TractorBeam, 490, 225);
 
             return roomDefinition;
         }
 
+        protected override IEnumerable<IAction> OnEnterRoom()
+        {
+            yield return Delay(TimeSpan.FromSeconds(1.5));
+            yield return RemoveRoomObject(RoomObjects.TractorBeam);
+            yield return Delay(TimeSpan.FromSeconds(1));
+            yield return Actors.Guy.Say("That's just great!\nI hope there's a supermarket around here...");
+            yield return Delay(TimeSpan.FromSeconds(1));
+            yield return Actors.Guy.WalkTo(850, 430);
+        }
+
         protected override void WireRoom(WireManager wireManager)
         {
-            wireManager.LookAt(RoomObjects.Newspaper, _ => new[]
-            {
-                Actors.Al.WalkTo(170, 390),
-                Actors.Al.Say("I can't read that...\nIt's not in Snork!!!")
-            });
         }
     }
 }

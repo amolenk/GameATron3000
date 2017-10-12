@@ -59,6 +59,11 @@ namespace GameATron3000.Bot.Engine
             _wiredActions[$"use {use.Description} with {with.Description}".ToLowerInvariant()] = onExecute;
         }
 
+        public void Use(RoomObject use, RoomObject with, Func<GameState, IAction> onExecute)
+        {
+            Use(use, with, (state) => new[] { onExecute(state) });
+        }
+
         public void TalkTo(Actor actor, Func<GameState, IAction> onExecute)
         {
             TalkTo(actor, (state) => new[] { onExecute(state) });
@@ -79,7 +84,7 @@ namespace GameATron3000.Bot.Engine
 
             return new IAction[]
             {
-                new MessageAction("player", _cannedResponses[_random.Next(0, _cannedResponses.Length - 1)], "Player")
+                new SayAction("player", _cannedResponses[_random.Next(0, _cannedResponses.Length - 1)])
             };
         }
     }
