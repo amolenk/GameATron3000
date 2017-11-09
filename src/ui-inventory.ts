@@ -1,15 +1,15 @@
 /// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 
 import { InventoryItem } from "./inventory-item"
+import { Layers } from "./layers"
 import { UIMediator } from "./ui-mediator"
 
 export class InventoryUI {
 
     private items: Map<string, InventoryItem>;
-    private visible: boolean;
-    private uiGroup: Phaser.Group;    
+    private visible: boolean; 
 
-    constructor(private game: Phaser.Game, private uiMediator: UIMediator) {
+    constructor(private game: Phaser.Game, private uiMediator: UIMediator, private layers: Layers) {
         this.items = new Map<string, InventoryItem>();
         this.visible = true;
     }
@@ -18,7 +18,7 @@ export class InventoryUI {
 
         var item = new InventoryItem("inventory-" + objectId, description);
 
-        item.init(this.game, this.uiMediator, 400 + (42 * this.items.size), 476, this.uiGroup);
+        item.create(this.game, this.uiMediator, 400 + (42 * this.items.size), 476, this.layers.ui);
         item.setVisible(this.visible);
 
         this.items.set(item.name, item);
@@ -37,15 +37,11 @@ export class InventoryUI {
         // reorder itemss
         var itemIndex = 0;
         this.items.forEach((value: InventoryItem, key: string) => {
-            value.setposition(400 + (42 * itemIndex), 476);
+            value.setPosition(400 + (42 * itemIndex), 476);
             itemIndex++;
         });
 
         return Promise.resolve();
-    }
-
-    public create(uiGroup: Phaser.Group) {
-        this.uiGroup = uiGroup;
     }
 
     public setVisible(visible: boolean) {

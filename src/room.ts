@@ -1,9 +1,10 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 /// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 
-import { Actor } from './actor'
-import { Narrator } from './narrator'
-import { RoomObject } from './room-object'
+import { Actor } from "./actor"
+import { Layers } from "./layers"
+import { Narrator } from "./narrator"
+import { RoomObject } from "./room-object"
 import { UIMediator } from "./ui-mediator"
 
 export class Room {
@@ -14,40 +15,31 @@ export class Room {
     private roomObjects: Array<RoomObject>;
     private actionMap: Map<string, Function>;
     private uiMediator: UIMediator;
-    private backgroundGroup: Phaser.Group;
-    private objectGroup: Phaser.Group;
-    private actorGroup: Phaser.Group;
-    private textGroup: Phaser.Group;
+    private layers: Layers;
 
     constructor(private name: string) {
         this.roomObjects = new Array<RoomObject>();
         this.actionMap = new Map<string, Function>();
     }
 
-    public initialize(
+    public create(
         game: Phaser.Game,
         uiMediator: UIMediator,
-        backgroundGroup: Phaser.Group,
-        objectGroup: Phaser.Group,
-        actorGroup: Phaser.Group,
-        textGroup: Phaser.Group,
+        layers: Layers,
         objects?: any,
-        actors?: any) : Promise<void> {
+        actors?: any) {
         
         this.game = game;
         this.uiMediator = uiMediator;
-        this.backgroundGroup = backgroundGroup;
-        this.objectGroup = objectGroup;
-        this.actorGroup = actorGroup;
-        this.textGroup = textGroup;
+        this.layers = layers;
 
         var background = this.game.add.sprite(0, 0, "room-" + this.name);
-        this.backgroundGroup.add(background);
+        this.layers.background.add(background);
 
         if (objects) {
             for (var objectData of objects) {
                 var object = new RoomObject("object-" + objectData.id, objectData.description);
-                this.add(object, objectData.x, objectData.y);
+                this.addObject(object, objectData.x, objectData.y);
             }
         }
 
@@ -58,10 +50,8 @@ export class Room {
             }
         }
 
-        this.narrator = new Narrator(game);
-        this.narrator.create(this.textGroup);
-
-        return Promise.resolve();
+        this.narrator = new Narrator(game, layers);
+        this.narrator.create();
     }
 
     public getObject(objectId: string) {
@@ -82,38 +72,31 @@ export class Room {
         return null;
     }
 
-    public add(object: RoomObject, x: number, y: number) {
+    public addObject(object: RoomObject, x: number, y: number) {
 
-        object.init(this.game, this.uiMediator, x, y, this.objectGroup);
+        object.create(this.game, this.uiMediator, x, y, this.layers.objects);
 
         this.roomObjects.push(object);
     }
 
     public addActor(object: RoomObject, x: number, y: number) {
         
-        object.init(this.game, this.uiMediator, x, y, this.actorGroup);
+        object.create(this.game, this.uiMediator, x, y, this.layers.actors);
 
         this.roomObjects.push(object);
     }
 
-    public remove(object: RoomObject) {
+    public removeObject(object: RoomObject) {
 
         // The object no longer needs a visual representation in the room.
         object.kill();
 
         var index = this.roomObjects.indexOf(object);
         this.roomObjects.splice(index, 1);
-        
-        return Promise.resolve();
     }
 
     public kill() {
-        console.log("KILLING ROOM");
-        console.log(this.roomObjects.length);
-        console.log(this.roomObjects[0].displayName);
         for (var object of this.roomObjects) {
-
-            console.log("KILLING OBJECT");
             object.kill();
         }
     }

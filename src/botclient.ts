@@ -2,9 +2,9 @@
 /// <reference path="../node_modules/rx/ts/rx.d.ts" />
 
 import { Action } from "./action"
-import { Activity, DirectLine } from '../node_modules/botframework-directlinejs/built/directline';
+import { Activity, DirectLine } from "../node_modules/botframework-directlinejs/built/directline";
 import { SecretSettings } from "./settings-secrets"
-import '../node_modules/rxjs/add/operator/concatMap';
+import "../node_modules/rxjs/add/operator/concatMap";
 
 export class BotClient {
 
@@ -14,8 +14,7 @@ export class BotClient {
     constructor() {
 
         this.directLine = new DirectLine({
-            secret: SecretSettings.BOT_DIRECT_LINE_SECRET,
-            //domain: "europe.directline.botframework.com"
+            secret: SecretSettings.BOT_DIRECT_LINE_SECRET
         });
     }
 
@@ -63,9 +62,6 @@ export class BotClient {
             type: "message",
             text: text
         })        
-        .subscribe(
-            // id => console.log("Posted activity, assigned ID ", id),
-            // error => console.log("Error posting activity", error)
-        );
+        .subscribe();
     }
 }

@@ -1,6 +1,6 @@
 /// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 
-import { RoomObject } from './room-object'
+import { RoomObject } from "./room-object"
 
 export class Action {
 
@@ -14,9 +14,9 @@ export class Action {
     public static TalkToVerb: string = "Talk to";
     public static PullVerb: string = "Pull";
 
-    public subjects: Array<RoomObject>;
+    private subjects: Array<RoomObject>;
 
-    constructor(public displayName: string, private subjectSeparator?: string) {
+    constructor(public text: string, private subjectSeparator?: string) {
         this.subjects = new Array<RoomObject>();
     }
 
@@ -33,7 +33,7 @@ export class Action {
             }
 
             // For the Give action, the second subject must always be an actor.
-            if (this.displayName == Action.GiveVerb
+            if (this.text == Action.GiveVerb
                 && this.subjects.length == 1
                 && !subject.name.startsWith("actor-")) {
                 return false;
@@ -47,9 +47,9 @@ export class Action {
 
         this.subjects.push(subject);
 
-        var readyToExecute = this.subjects.length == (isComplexAction ? 2 : 1);
+        var actionComplete = this.subjects.length == (isComplexAction ? 2 : 1);
 
-        return readyToExecute;
+        return actionComplete;
     }
 
     public getDisplayText(roomObject?: RoomObject) {
@@ -61,26 +61,26 @@ export class Action {
         }
 
         if (this.subjects.length == 2) {
-            return `${this.displayName} ${this.subjects[0].displayName} ${this.subjectSeparator} ${this.subjects[1].displayName}`;
+            return `${this.text} ${this.subjects[0].displayName} ${this.subjectSeparator} ${this.subjects[1].displayName}`;
         }
 
         if (this.subjects.length == 1) {
 
             if (roomObject != null) {
-                return `${this.displayName} ${this.subjects[0].displayName} ${this.subjectSeparator} ${roomObject.displayName}`;
+                return `${this.text} ${this.subjects[0].displayName} ${this.subjectSeparator} ${roomObject.displayName}`;
             }
 
             if (this.subjectSeparator != null) {
-                return `${this.displayName} ${this.subjects[0].displayName} ${this.subjectSeparator}`;
+                return `${this.text} ${this.subjects[0].displayName} ${this.subjectSeparator}`;
             }
 
-            return `${this.displayName} ${this.subjects[0].displayName}`;
+            return `${this.text} ${this.subjects[0].displayName}`;
         }
 
         if (this.subjects.length == 0 && roomObject != null) {
-            return `${this.displayName} ${roomObject.displayName}`;
+            return `${this.text} ${roomObject.displayName}`;
         }
 
-        return this.displayName;
+        return this.text;
     }
 }

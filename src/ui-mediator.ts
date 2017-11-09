@@ -9,6 +9,7 @@ import { ConversationUI } from "./ui-conversation"
 import { Cursor } from "./cursor"
 import { InventoryItem } from "./inventory-item"
 import { InventoryUI } from "./ui-inventory"
+import { Layers } from "./layers"
 import { Narrator } from "./narrator"
 import { Room } from "./room"
 import { RoomObject } from "./room-object"
@@ -25,18 +26,13 @@ export class UIMediator {
     private selectedAction: Action;
     private focussedObject: RoomObject;
 
-    private backgroundGroup: Phaser.Group;
-    private objectGroup: Phaser.Group;
-    private actorGroup: Phaser.Group;
-    private textGroup: Phaser.Group;
-
     private room: Room;
 
-    constructor(private game: Phaser.Game, private cursor: Cursor, private botClient: BotClient) {
-        this.actionUI = new ActionUI(game);
-        this.conversationUI = new ConversationUI(game, botClient);
-        this.inventoryUI = new InventoryUI(game, this);
-        this.verbsUI = new VerbsUI(game, this);
+    constructor(private game: Phaser.Game, private cursor: Cursor, private botClient: BotClient, private layers: Layers) {
+        this.actionUI = new ActionUI(game, layers);
+        this.conversationUI = new ConversationUI(game, botClient, layers);
+        this.inventoryUI = new InventoryUI(game, this, layers);
+        this.verbsUI = new VerbsUI(game, this, layers);
 
         botClient.connect(
             async message => {
@@ -67,26 +63,26 @@ export class UIMediator {
 
                     case "ActorTurnedAway": {
                         var actor = this.room.getActor(event.actorId);
-                        await actor.turnAway();
+                        await actor.faceBack();
                         break;
                     }
 
                     case "ActorTurnedFront": {
                         var actor = this.room.getActor(event.actorId);
-                        await actor.turnFront();
+                        await actor.faceFront();
                         break;
                     }
 
                     case "CloseUpOpened": {
                         var roomObject = new RoomObject("closeup-" + event.objectId, "");
-                        await this.room.addActor(roomObject, 400, 300);
+                        this.room.addActor(roomObject, 400, 300);
                         break;
                     }
 
                     case "CloseUpClosed": {
                         var roomObject = this.room.getObject("closeup-" + event.objectId);
                         if (roomObject) {
-                            await this.room.remove(roomObject);
+                            this.room.removeObject(roomObject);
                         }
                         break;
                     }
@@ -101,7 +97,7 @@ export class UIMediator {
                         if (this.room) {
                             var roomObject = this.room.getObject("object-" + event.objectId);
                             if (roomObject) {
-                                await this.room.remove(roomObject);
+                                this.room.removeObject(roomObject);
                             }
                         }
                         await this.inventoryUI.addToInventory(event.objectId, event.description);
@@ -116,9 +112,9 @@ export class UIMediator {
                     case "RoomObjectAdded": {
                         var roomObject = new RoomObject("object-" + event.objectId, event.description);
                         if (event.foreground) {
-                            await this.room.addActor(roomObject, event.x, event.y);                            
+                            this.room.addActor(roomObject, event.x, event.y);                            
                         } else {
-                            await this.room.add(roomObject, event.x, event.y);
+                            this.room.addObject(roomObject, event.x, event.y);
                         }
                         break;
                     }
@@ -126,7 +122,7 @@ export class UIMediator {
                     case "RoomObjectRemoved": {
                         var roomObject = this.room.getObject("object-" + event.objectId);
                         if (roomObject) {
-                            await this.room.remove(roomObject);
+                            this.room.removeObject(roomObject);
                         }
                         break;
                     }
@@ -136,7 +132,7 @@ export class UIMediator {
                             this.room.kill();
                         }
                         this.room = new Room(event.roomId);
-                        await this.room.initialize(game, this, this.backgroundGroup, this.objectGroup, this.actorGroup, this.textGroup, event.objects, event.actors);
+                        this.room.create(game, this, this.layers, event.objects, event.actors);
                         break;
                     }
 
@@ -149,20 +145,10 @@ export class UIMediator {
         )
     }
 
-    public preload() {
-        this.verbsUI.preload();
-    }
+    public create() {
 
-    public create(backgroundGroup: Phaser.Group, objectGroup: Phaser.Group, actorGroup: Phaser.Group, textGroup: Phaser.Group, uiGroup: Phaser.Group) {
-
-        this.backgroundGroup = backgroundGroup;
-        this.objectGroup = objectGroup;
-        this.actorGroup = actorGroup;
-        this.textGroup = textGroup;
-
-        this.actionUI.create(uiGroup);
-        this.inventoryUI.create(uiGroup);
-        this.verbsUI.create(uiGroup);
+        this.actionUI.create();
+        this.verbsUI.create();
 
         this.setUIVisible(false);
     }

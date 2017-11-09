@@ -1,15 +1,16 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 
-import { Settings } from './settings'
+import { Layers } from "./layers"
+import { Settings } from "./settings"
 
 export class Narrator {
 
     private text: Phaser.Text;
 
-    constructor(private game: Phaser.Game) {
+    constructor(private game: Phaser.Game, private layers: Layers) {
     }
 
-    public create(group: Phaser.Group): void {
+    public create(): void {
 
         var textStyle = {
             font: "54px Onesize", // Using a large font-size and scaling it back looks better.
@@ -27,7 +28,7 @@ export class Narrator {
         this.text.scale.x = 0.5;
         this.text.scale.y = 0.5;
 
-        group.add(this.text);
+        this.layers.text.add(this.text);
     }
 
     public async say(text: string) {

@@ -6,14 +6,13 @@ import { UIMediator } from "./ui-mediator"
 export class RoomObject {
 
     protected sprite: Phaser.Sprite;
-    private group: Phaser.Group;
     private stateMap: Map<string, any>;
 
     constructor(public name: string, public displayName: string) {
         this.stateMap = new Map<string, any>();
     }
 
-    public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number, group: Phaser.Group) {
+    public create(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number, group: Phaser.Group) {
 
         this.sprite = game.add.sprite(x, y, this.name);
         this.sprite.anchor.set(0.5);
@@ -21,7 +20,6 @@ export class RoomObject {
         this.sprite.input.pixelPerfectClick = true;
         this.sprite.input.pixelPerfectOver = true;
 
-        this.group = group;
         group.add(this.sprite);
 
         this.sprite.events.onInputOver.add(() => uiMediator.focusObject(this));
@@ -29,20 +27,12 @@ export class RoomObject {
         this.sprite.events.onInputDown.add(() => uiMediator.selectObject(this));
     }
 
+    public setVisible(visible: boolean) : void {
+        this.sprite.visible = visible;
+    }
+
     public kill() {
         this.sprite.destroy();
         this.sprite = null;
-    }
-
-    public getState(key: string) {
-        return this.stateMap.get(key);
-    }
-
-    public setState(key: string, value: any) {
-        this.stateMap.set(key, value);
-    }
-
-    public setVisible(visible: boolean) : void {
-        this.sprite.visible = visible;
     }
 }

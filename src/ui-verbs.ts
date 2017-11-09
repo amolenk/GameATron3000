@@ -1,35 +1,31 @@
 /// <reference path="../node_modules/phaser/typescript/phaser.d.ts" />
 
 import { Action } from "./action"
+import { Layers } from "./layers"
 import { UIMediator } from "./ui-mediator"
 
 export class VerbsUI {
 
     private verbSprites: Array<Phaser.Sprite>;
 
-    constructor(private game: Phaser.Game, private uiMediator: UIMediator) {
+    constructor(private game: Phaser.Game, private uiMediator: UIMediator, private layers: Layers) {
         this.verbSprites = new Array<Phaser.Sprite>();
     }
 
-    public preload() {
-
-        this.game.load.atlas("verbs", "../assets/sprites/verbs.png", "../assets/sprites/verbs.json");
-    }
-
-    public create(group: Phaser.Group) {
+    public create() {
         
-        this.addVerb("01_give", 0, 0, () => new Action(Action.GiveVerb, "to"), this.game, group);
-        this.addVerb("02_pickup", 1, 0, () => new Action(Action.PickUpVerb), this.game, group);
-        this.addVerb("03_use", 2, 0, () => new Action(Action.UseVerb, "with"), this.game, group);
-        this.addVerb("04_open", 0, 1, () => new Action(Action.OpenVerb), this.game, group);
-        this.addVerb("05_lookat", 1, 1, () => new Action(Action.LookAtVerb), this.game, group);
-        this.addVerb("06_push", 2, 1, () => new Action(Action.PushVerb), this.game, group);
-        this.addVerb("07_close", 0, 2, () => new Action(Action.CloseVerb), this.game, group);
-        this.addVerb("08_talkto", 1, 2, () => new Action(Action.TalkToVerb), this.game, group);
-        this.addVerb("09_pull", 2, 2, () => new Action(Action.PullVerb), this.game, group);
+        this.addVerb("01_give", 0, 0, () => new Action(Action.GiveVerb, "to"));
+        this.addVerb("02_pickup", 1, 0, () => new Action(Action.PickUpVerb));
+        this.addVerb("03_use", 2, 0, () => new Action(Action.UseVerb, "with"));
+        this.addVerb("04_open", 0, 1, () => new Action(Action.OpenVerb));
+        this.addVerb("05_lookat", 1, 1, () => new Action(Action.LookAtVerb));
+        this.addVerb("06_push", 2, 1, () => new Action(Action.PushVerb));
+        this.addVerb("07_close", 0, 2, () => new Action(Action.CloseVerb));
+        this.addVerb("08_talkto", 1, 2, () => new Action(Action.TalkToVerb));
+        this.addVerb("09_pull", 2, 2, () => new Action(Action.PullVerb));
     }
 
-    public setVisible(visible: boolean) : void {
+    public setVisible(visible: boolean) {
         for (var sprite of this.verbSprites) {
             sprite.visible = visible;
         }
@@ -39,16 +35,13 @@ export class VerbsUI {
         id: string,
         posX: number,
         posY: number,
-        actionFactory: Function,
-        game: Phaser.Game,
-        group: Phaser.Group) {
+        actionFactory: Function) {
 
         var x = 4;
         if (posX > 0) x += (posX == 1 ? 100 : 260);
-
         var y = 476 + (posY * 40);
 
-        var sprite = game.add.sprite(x, y, "verbs");
+        var sprite = this.game.add.sprite(x, y, "verbs");
         sprite.frameName = id + ".png";
         sprite.inputEnabled = true;
 
@@ -64,8 +57,7 @@ export class VerbsUI {
             this.uiMediator.selectAction(actionFactory());
         }, this);
 
-        group.add(sprite);
-
+        this.layers.ui.add(sprite);
         this.verbSprites.push(sprite);
     }
 }

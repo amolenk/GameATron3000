@@ -10,6 +10,7 @@ export class Actor extends RoomObject {
 
     private originX: number;
     private originY: number;
+    private facingFront: boolean;
 
     private text: Phaser.Text;
     private walkSprite: Phaser.Sprite;
@@ -23,14 +24,14 @@ export class Actor extends RoomObject {
         super(name, displayName);
     }
 
-    public init(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number, group: Phaser.Group) {
+    public create(game: Phaser.Game, uiMediator: UIMediator, x: number, y: number, group: Phaser.Group) {
         
-        super.init(game, uiMediator, x, y, group);
+        super.create(game, uiMediator, x, y, group);
 
         this.game = game;
-
         this.originX = x;
         this.originY = y;
+        this.facingFront = true;
 
         // Actors are anchored at the bottom instead of middle for easier placement.
         this.sprite.anchor.set(0.5, 1);
@@ -46,28 +47,14 @@ export class Actor extends RoomObject {
         this.backSprite.anchor.set(0.5, 1);
         this.backSprite.visible = false;
 
-        var textStyle = {
-            font: "54px Onesize", // Using a large font-size and scaling it back looks better.
-            fill: this.textColor,
-            stroke: "black",
-            strokeThickness: 12,
-            align: "center",
-            wordWrap: "true",
-            wordWrapWidth: 600 // Account for scaling.
-        };
-
-        this.text = this.game.add.text(x, y - this.sprite.height - 40, "", textStyle);
+        this.text = this.game.add.text(x, y - this.sprite.height - 40, "", this.createTextStyle());
         this.text.anchor.setTo(0.5);
         this.text.lineSpacing = -30;
         this.text.scale.x = 0.5;
         this.text.scale.y = 0.5;
 
         this.talkAnimation = this.sprite.animations.add("talk");
-
         this.walkAnimation = this.walkSprite.animations.add("walk");
-
-        // TODO JIT play
-        this.walkAnimation.play(6, true);
 
         this.spriteGroup = game.add.group();
         this.spriteGroup.addMultiple([ this.sprite, this.walkSprite, this.backSprite, this.text ]);
@@ -75,36 +62,36 @@ export class Actor extends RoomObject {
         group.add(this.spriteGroup);
     }
 
-    public kill() {
-
-        this.walkSprite.destroy();
-        this.backSprite.destroy();
-        this.text.destroy();
-        this.talkAnimation.destroy();
-        this.walkAnimation.destroy();
-
-        super.kill();
-    }
-
     public async say(text: string) {
-
+        
         var lines = text.split('\n');
         for (var line of lines) {
             await this.sayLine(line);
         }
     }
 
-    public async turnAway() {
-        this.sprite.visible = false;
-        this.backSprite.visible = true;
-    }
-
-    public async turnFront() {
+    public async faceFront() {
         this.backSprite.visible = false;
         this.sprite.visible = true;
+        this.facingFront = true;
+
+        return Promise.resolve();
     }
 
-    public walkTo(x: number, y: number): Promise<void> {
+    public async faceBack() {
+        this.sprite.visible = false;
+        this.backSprite.visible = true;
+        this.facingFront = false;
+
+        return Promise.resolve();
+    }
+
+    public async walkTo(x: number, y: number): Promise<void> {
+
+        // Ensure that we're facing front.
+        if (!this.facingFront) {
+            await this.faceFront();
+        }
 
         // Calculate the delta's compared to the original position.
         var deltaX = x - this.originX;
@@ -112,7 +99,7 @@ export class Actor extends RoomObject {
 
         // No need to walk anywhere if the actor's already there.
         if (deltaX == this.spriteGroup.x && deltaY == this.spriteGroup.y) {
-            return Promise.resolve();
+            return;
         }
 
         // Walk animation plays at 6 frames per second.
@@ -130,23 +117,36 @@ export class Actor extends RoomObject {
         }
 
         // Switch to the walk sprite.
+        this.walkAnimation.play(6, true);
         this.sprite.visible = false;
         this.walkSprite.visible = true;
-
+                
         // Animate!
         var tween = this.game.add.tween(this.spriteGroup)
             .to( { x: deltaX, y: deltaY }, duration, Phaser.Easing.Default, true);
 
-        return new Promise((resolve) => {
+        await new Promise((resolve) => {
             tween.onComplete.add(() => {
 
                 // Switch back to the default sprite.
                 this.walkSprite.visible = false;
                 this.sprite.visible = true;
-
+                this.walkAnimation.stop();
+                
                 resolve();
             });
         });
+    }
+
+    public kill() {
+
+        this.walkSprite.destroy();
+        this.backSprite.destroy();
+        this.text.destroy();
+        this.talkAnimation.destroy();
+        this.walkAnimation.destroy();
+
+        super.kill();
     }
 
     private sayLine(text: string) {
@@ -168,5 +168,18 @@ export class Actor extends RoomObject {
                     resolve();
                 });
         });
+    }
+
+    private createTextStyle() {
+
+        return {
+            font: "54px Onesize", // Using a large font-size and scaling it back looks better.
+            fill: this.textColor,
+            stroke: "black",
+            strokeThickness: 12,
+            align: "center",
+            wordWrap: "true",
+            wordWrapWidth: 600 // Account for scaling.
+        };
     }
 }

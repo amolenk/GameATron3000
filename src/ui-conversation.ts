@@ -2,11 +2,11 @@
 
 import { Actor } from "./actor"
 import { BotClient } from "./botclient"
-import { Settings } from "./settings"
+import { Layers } from "./layers"
 
 export class ConversationUI {
 
-    constructor(private game: Phaser.Game, private botClient: BotClient) {
+    constructor(private game: Phaser.Game, private botClient: BotClient, private layers: Layers) {
     }
 
     public displaySuggestedActions(actor: Actor, suggestedActions) {
@@ -16,12 +16,15 @@ export class ConversationUI {
         // Render suggested actions.
         for (var action of suggestedActions) {
 
-            var optionText = this.game.add.text(10, y, action.value, Settings.TEXTSTYLE_CONVERSATION_OPTION);
+            var optionText = this.game.add.text(10, y, action.value, this.createTextStyle());
+            optionText.scale.x = 0.5;
+            optionText.scale.y = 0.5;
             optionText.inputEnabled = true;
-            optionText.sendToBack(); // So the cursor stays on top.
+
+            this.layers.ui.add(optionText);
 
             optionText.events.onInputOver.add((option) => {
-                option.addColor("Yellow", 0); // TODO GET FROM SETTINGS
+                option.addColor("Yellow", 0);
             }, this);
 
             optionText.events.onInputOut.add((option) => {
@@ -43,5 +46,13 @@ export class ConversationUI {
             options.push(optionText);
             y += optionText.height;
         }
+    }
+
+    private createTextStyle()
+    {
+        return {
+            font: "36px Onesize", // Using a large font-size and scaling it back looks better.
+            fill: "#ff0044"
+        };
     }
 }
