@@ -1,35 +1,39 @@
 ﻿using GameATron3000.Bot.Engine.Actions;
+using System.Drawing;
 
 namespace GameATron3000.Bot.Engine
 {
     public class Actor : RoomObject
     {
-        public Actor(string id, string text, string textColor = "White")
-            : base(id, text)
+        public static readonly string NarratorId = "narrator";
+        public static readonly string PlayerId = "player";
+
+        public Actor(string id, string description, string textColor = "White")
+            : base(id, description)
         {
-            this.TextColor = textColor;
+            TextColor = textColor;
         }
 
         public string TextColor { get; private set; }
 
-        public IAction Say(string text)
+        public IAction FaceAway()
         {
-            return new SayAction(Id, text);
+            return new FaceAwayAction(Id);
         }
 
-        public IAction StartConversation(string topic, bool turnedAway = false)
+        public IAction FaceFront()
         {
-            return new TalkToAction(this.Id, topic, turnedAway);
+            return new FaceFrontAction(Id);
         }
 
-        public IAction TurnAway()
+        public IAction Speak(string text)
         {
-            return new TurnAwayAction(this);
+            return new SpeakAction(Id, text);
         }
 
-        public IAction TurnFront()
+        public IAction TalkTo(string topic, bool faceAway = false)
         {
-            return new TurnFrontAction(this);
+            return new TalkToAction(Id, topic, faceAway);
         }
 
         public IAction WalkTo(int x, int y)

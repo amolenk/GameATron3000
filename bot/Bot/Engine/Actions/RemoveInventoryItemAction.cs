@@ -4,11 +4,11 @@ using Newtonsoft.Json.Linq;
 
 namespace GameATron3000.Bot.Engine.Actions
 {
-    public class RemoveFromInventoryAction : IAction
+    public class RemoveInventoryItemAction : IAction
     {
         private readonly RoomObject _roomObject;
 
-        public RemoveFromInventoryAction(RoomObject roomObject)
+        public RemoveInventoryItemAction(RoomObject roomObject)
         {
             _roomObject = roomObject;
         }

@@ -4,20 +4,20 @@ using Newtonsoft.Json.Linq;
 
 namespace GameATron3000.Bot.Engine.Actions
 {
-    public class TurnFrontAction : IAction
+    public class FaceFrontAction : IAction
     {
-        private readonly Actor _actor;
+        private readonly string _actorId;
 
-        public TurnFrontAction(Actor actor)
+        public FaceFrontAction(string actorId)
         {
-            _actor = actor;
+            _actorId = actorId;
         }
 
         public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
         {
-            await context.PostEventAsync(Event.ActorTurnedFront, JObject.FromObject(new
+            await context.PostEventAsync(Event.ActorFacedFront, JObject.FromObject(new
             {
-                actorId = _actor.Id
+                actorId = _actorId
             }));
 
             return false;

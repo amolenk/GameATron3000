@@ -1,6 +1,5 @@
-﻿using System;
-using GameATron3000.Bot.Engine;
-using System.Drawing;
+﻿using GameATron3000.Bot.Engine;
+using System;
 using System.Collections.Generic;
 
 namespace GameATron3000.Bot.Gameplay
@@ -10,7 +9,7 @@ namespace GameATron3000.Bot.Gameplay
     {
         protected override RoomDefinition GetRoomDefinition()
         {
-            var roomDefinition = new RoomDefinition("beach", "");
+            var roomDefinition = new RoomDefinition("beach");
 
             roomDefinition.Add(Actors.Guy, 490, 420);
 
@@ -24,7 +23,7 @@ namespace GameATron3000.Bot.Gameplay
             yield return Delay(TimeSpan.FromSeconds(1.5));
             yield return RemoveRoomObject(RoomObjects.TractorBeam);
             yield return Delay(TimeSpan.FromSeconds(1));
-            yield return Actors.Guy.Say("That's just great!\nI hope there's a supermarket around here...");
+            yield return Actors.Guy.Speak("That's just great!\nI hope there's a supermarket around here...");
             yield return Delay(TimeSpan.FromSeconds(1));
             yield return Actors.Guy.WalkTo(850, 430);
         }

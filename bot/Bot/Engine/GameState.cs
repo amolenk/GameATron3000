@@ -34,7 +34,7 @@ namespace GameATron3000.Bot.Engine
         {
             var key = GetKeyForInventoryItem(@object.Id);
 
-            
+            RemoveValue(key);
         }
 
         public void RemoveValue(string key)

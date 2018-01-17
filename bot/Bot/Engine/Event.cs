@@ -6,10 +6,10 @@
         ActorMoved,
 
         // Actor has turned, facing away from the camera.
-        ActorTurnedAway,
+        ActorFacedAway,
 
         // Actor has turned, facing the camera.
-        ActorTurnedFront,
+        ActorFacedFront,
 
         // Player has stopped looking closely at an object.
         CloseUpClosed,
@@ -36,7 +36,6 @@
         RoomObjectRemoved,
 
         // Bot is waiting for input from client.
-        Idle,
-
+        Idle
     }
 }

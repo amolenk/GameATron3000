@@ -26,7 +26,7 @@ namespace GameATron3000.Bot.Controllers
                     // Support for emulator.
                     // When the bot is added to the emulator, start the game.
                     if (activity.MembersAdded.Any(m => m.Name == "Game-a-tron 3000 (TM)"
-                        || m.Name == "Bot"))
+                        || m.Name == "Bot" || m.Name == "gameatron3000"))
                     {
                         await Conversation.SendAsync(activity, () => new RootDialog(new Game()));
                     }

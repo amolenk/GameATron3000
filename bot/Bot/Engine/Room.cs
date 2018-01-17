@@ -23,7 +23,6 @@ namespace GameATron3000.Bot.Engine
             var roomDefinition = GetRoomDefinition();
 
             await context.PostEventAsync(Event.RoomEntered, roomDefinition.ToJObject());
-            //await context.PostMessageAsync(roomDefinition.IntroductionText);
 
             foreach (var action in OnEnterRoom())
             {
@@ -65,12 +64,12 @@ namespace GameATron3000.Bot.Engine
 
         protected IAction NextRoom(Room nextRoom)
         {
-            return new NextRoomAction(nextRoom);
+            return new EnterRoom(nextRoom);
         }
 
         protected IAction ShowCloseUp(RoomObject roomObject, IEnumerable<IAction> closeUpActions)
         {
-            return new CloseUpAction(roomObject, closeUpActions);
+            return new ShowCloseUpAction(roomObject, closeUpActions);
         }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)

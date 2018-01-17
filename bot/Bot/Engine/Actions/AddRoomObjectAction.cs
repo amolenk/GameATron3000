@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Drawing;
+using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json.Linq;
 

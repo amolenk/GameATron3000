@@ -1,7 +1,6 @@
-﻿using System;
+﻿using GameATron3000.Bot.Engine.Actions;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using GameATron3000.Bot.Engine.Actions;
 
 namespace GameATron3000.Bot.Engine
 {
@@ -76,15 +75,14 @@ namespace GameATron3000.Bot.Engine
 
         public IEnumerable<IAction> GetActions(string command, GameState gameState)
         {
-            Func<GameState, IEnumerable<IAction>> _actionFactory;
-            if (_wiredActions.TryGetValue(command.ToLowerInvariant(), out _actionFactory))
+            if (_wiredActions.TryGetValue(command.ToLowerInvariant(), out Func<GameState, IEnumerable<IAction>> _actionFactory))
             {
                 return _actionFactory(gameState);
             }
 
             return new IAction[]
             {
-                new SayAction("player", _cannedResponses[_random.Next(0, _cannedResponses.Length - 1)])
+                new SpeakAction(Actor.PlayerId, _cannedResponses[_random.Next(0, _cannedResponses.Length - 1)])
             };
         }
     }

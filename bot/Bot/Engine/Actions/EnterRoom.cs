@@ -3,11 +3,11 @@ using Microsoft.Bot.Builder.Dialogs;
 
 namespace GameATron3000.Bot.Engine.Actions
 {
-    public class NextRoomAction : IAction
+    public class EnterRoom : IAction
     {
         private readonly Room _room;
 
-        public NextRoomAction(Room room)
+        public EnterRoom(Room room)
         {
             _room = room;
         }

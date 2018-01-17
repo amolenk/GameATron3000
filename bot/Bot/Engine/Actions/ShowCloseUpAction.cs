@@ -6,12 +6,12 @@ using Newtonsoft.Json.Linq;
 
 namespace GameATron3000.Bot.Engine.Actions
 {
-    public class CloseUpAction : IAction
+    public class ShowCloseUpAction : IAction
     {
         private readonly RoomObject _roomObject;
         private readonly IEnumerable<IAction> _closeUpActions;
 
-        public CloseUpAction(RoomObject roomObject, IEnumerable<IAction> closeUpActions)
+        public ShowCloseUpAction(RoomObject roomObject, IEnumerable<IAction> closeUpActions)
         {
             _roomObject = roomObject;
             _closeUpActions = closeUpActions;
