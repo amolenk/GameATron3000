@@ -13,7 +13,7 @@ namespace GameATron3000.Bot.Gameplay
 
         public Room CreateInitialRoom()
         {
-            return new UfoRoom();
+            return new ParkRoom();
         }
     }
 }
