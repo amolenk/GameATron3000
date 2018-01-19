@@ -199,6 +199,14 @@ namespace GameATron3000.Bot.Gameplay
                 };
             });
 
+            wireManager.Use(RoomObjects.Groceries, RoomObjects.ClosedFridge, (gameState) =>
+            {
+                return new[]
+                {
+                    Actors.Guy.Speak("What do you expect me to do? Throw them at the fridge door?")
+                };
+            });
+
             wireManager.Use(RoomObjects.Groceries, RoomObjects.EmptyFridge, (gameState) =>
             {
                 gameState.SetValue("fridgeFull", true);
