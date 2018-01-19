@@ -44,7 +44,7 @@
 - Pretty please with a cherry on top? **NoBeamingDown**
 - I give up… *GiveUpBeamingDown*
 
- **talkedAboutList**
+ `talkedAboutList`
 
 # NoBeamingDown
 > al: Ok, because you asked nicely!

@@ -52,6 +52,16 @@ namespace GameATron3000.Bot.Engine
             var newTopic = Script.Topics[selectedOption.Action];
             TopicStack.Push(newTopic);
 
+            if (newTopic.Achievements.Count > 0)
+            {
+                var gameState = new GameState(context);
+
+                foreach (var achievement in newTopic.Achievements)
+                {
+                    gameState.SetValue(achievement, true);
+                }
+            }
+
             var conversationCompleted = await SendReplies(context, selectedOption).ConfigureAwait(false);
             if (conversationCompleted)
             {

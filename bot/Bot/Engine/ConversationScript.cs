@@ -12,7 +12,7 @@ namespace GameATron3000.Bot.Engine
     {
         private const string RegexConversationLine = @"^\>\s*(?<ActorId>.*?)\s*:\s*(?<Text>.*?)\s*$";
         private const string RegexConversationOption = @"^\-\s*(?<Text>.*?)\s*\*(?<Action>.*?)\*\s*$";
-        private const string RegexAchievement = @"^\*\*(?<Achievement>.*?)\*\*\s*$";
+        private const string RegexAchievement = @"^`(?<Achievement>.*?)`\s*$";
 
 
         public Dictionary<string, ConversationTopic> Topics { get; private set; }
@@ -128,7 +128,7 @@ namespace GameATron3000.Bot.Engine
             var achievements = new List<string>();
 
             var nextChar = Peek(reader);
-            while (nextChar == '*')
+            while (nextChar == '`')
             {
                 var line = reader.ReadLine();
                 var match = Regex.Match(line, RegexAchievement);
