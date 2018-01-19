@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using GameATron3000.Bot.Engine.Actions;
 using GameATron3000.Bot.Gameplay;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Connector;
-using Newtonsoft.Json.Linq;
+using System;
+using System.Threading.Tasks;
 
 namespace GameATron3000.Bot.Engine
 {
@@ -22,11 +21,8 @@ namespace GameATron3000.Bot.Engine
         {
             foreach (var item in _game.InitialInventoryItems)
             {
-                await context.PostEventAsync(Event.InventoryItemAdded, JObject.FromObject(new
-                {
-                    objectId = item.Id,
-                    description = item.Description
-                }));
+                var addInventoryItem = new AddInventoryItemAction(item);
+                await addInventoryItem.ExecuteAsync(context).ConfigureAwait(false);
             }
 
             context.Call(_game.CreateInitialRoom(), OnLeftRoom);

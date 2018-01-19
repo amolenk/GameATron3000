@@ -1,41 +1,41 @@
 ﻿namespace GameATron3000.Bot.Engine
 {
-    public enum Event
+    public sealed class Event
     {
         // Actor has moved to a different position.
-        ActorMoved,
+        public const string ActorMoved = "ActorMoved";
 
         // Actor has turned, facing away from the camera.
-        ActorFacedAway,
+        public const string ActorFacedAway = "ActorFacedAway";
 
         // Actor has turned, facing the camera.
-        ActorFacedFront,
+        public const string ActorFacedFront = "ActorFacedFront";
 
         // Player has stopped looking closely at an object.
-        CloseUpClosed,
+        public const string CloseUpClosed = "CloseUpClosed";
 
         // Player is looking closely at an object.
-        CloseUpOpened,
+        public const string CloseUpOpened = "CloseUpOpened";
 
         // Scene is paused for the given delay.
-        Delayed,
+        public const string Delayed = "Delayed";
 
         // Player has added an item to his/her's inventory.
-        InventoryItemAdded,
+        public const string InventoryItemAdded = "InventoryItemAdded";
 
         // Player has removed an item from his/her's inventory.
-        InventoryItemRemoved,
+        public const string InventoryItemRemoved = "InventoryItemRemoved";
 
         // Player has entered a new room.
-        RoomEntered,
+        public const string RoomEntered = "RoomEntered";
 
         // A new object has been added to the room.
-        RoomObjectAdded,
+        public const string RoomObjectAdded = "RoomObjectAdded";
 
         // An object is removed from the room.
-        RoomObjectRemoved,
+        public const string RoomObjectRemoved = "RoomObjectRemoved";
 
         // Bot is waiting for input from client.
-        Idle
+        public const string Idle = "Idle";
     }
 }

@@ -8,6 +8,7 @@ namespace GameATron3000.Bot.Engine
 {
     public static class DialogContextExtensions
     {
+        [Obsolete]
         public static Task PostMessageAsync(this IDialogContext context, string text)
         {
             var activity = ((Activity)context.Activity).CreateReply();
@@ -17,6 +18,7 @@ namespace GameATron3000.Bot.Engine
             return context.PostAsync(activity);
         }
 
+        [Obsolete]
         public static Task PostMessageAsync(this IDialogContext context, string text, string actorId)
         {
             var activity = ((Activity)context.Activity).CreateReply();
@@ -35,6 +37,7 @@ namespace GameATron3000.Bot.Engine
             return context.PostAsync(activity);
         }
 
+        [Obsolete]
         public static Task PostEventAsync(
             this IDialogContext context,
             Event @event,

@@ -1,6 +1,6 @@
-﻿using Microsoft.Bot.Builder.Dialogs;
+﻿using GameATron3000.Bot.Engine.Actions;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,10 +30,8 @@ namespace GameATron3000.Bot.Engine
         {
             if (FaceAway)
             {
-                await context.PostEventAsync(Event.ActorFacedAway, JObject.FromObject(new
-                {
-                    actorId = Actor.PlayerId
-                }));
+                var faceFront = new FaceAwayAction(Actor.PlayerId);
+                await faceFront.ExecuteAsync(context, null).ConfigureAwait(false);
             }
 
             var topic = Script.Topics["Start"];
@@ -57,7 +55,12 @@ namespace GameATron3000.Bot.Engine
             var conversationCompleted = await SendReplies(context, selectedOption).ConfigureAwait(false);
             if (conversationCompleted)
             {
-                // TODO Send Idle event.
+                if (FaceAway)
+                {
+                    var faceFront = new FaceFrontAction(Actor.PlayerId);
+                    await faceFront.ExecuteAsync(context, null).ConfigureAwait(false);
+                }
+
                 context.Done<object>(null);
             }
             else
@@ -78,11 +81,8 @@ namespace GameATron3000.Bot.Engine
             {
                 foreach (var line in lines)
                 {
-                    var reply = ((Activity)context.Activity).CreateReply(line.Text);
-                    reply.Type = ActivityTypes.Message;
-                    reply.From.Name = line.ActorId;
-
-                    await context.PostAsync(reply).ConfigureAwait(false);
+                    var speak = new SpeakAction(line.ActorId, line.Text);
+                    await speak.ExecuteAsync(context).ConfigureAwait(false);
                 }
 
                 return true;
@@ -106,35 +106,15 @@ namespace GameATron3000.Bot.Engine
                 // Send all lines back to the client instead of the last one.
                 for (var i = 0; i < lines.Count - 1; i++)
                 {
-                    var reply = ((Activity)context.Activity).CreateReply(lines[i].Text);
-                    reply.Type = ActivityTypes.Message;
-                    reply.From.Name = lines[i].ActorId;
-
-                    await context.PostAsync(reply).ConfigureAwait(false);
+                    var speak = new SpeakAction(lines[i].ActorId, lines[i].Text);
+                    await speak.ExecuteAsync(context).ConfigureAwait(false);
                 }
 
                 // Piggy-back the conversation options onto the last line.
-                if (topic.Options.Count > 0)
-                {
-                    var line = lines.Last();
+                var line = lines.Last();
 
-                    var reply = ((Activity)context.Activity).CreateReply(line.Text);
-                    reply.Type = ActivityTypes.Message;
-                    reply.From.Name = line.ActorId;
-                    reply.SuggestedActions = new SuggestedActions
-                    {
-                        Actions = topic.Options
-                            .Select(option => new CardAction
-                            {
-                                Title = option.Text,
-                                Type = ActionTypes.ImBack,
-                                Value = option.Text
-                            })
-                            .ToList()
-                    };
-
-                    await context.PostAsync(reply).ConfigureAwait(false);
-                }
+                var speakWithOptions = new SpeakAction(line.ActorId, line.Text, topic.Options);
+                await speakWithOptions.ExecuteAsync(context).ConfigureAwait(false);
 
                 return false;
             }

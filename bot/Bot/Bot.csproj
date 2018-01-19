@@ -127,6 +127,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Engine\Actions\EnterRoom.cs" />
+    <Compile Include="Engine\Actions\IdleAction.cs" />
     <Compile Include="Engine\Actions\RemoveInventoryItemAction.cs" />
     <Compile Include="Engine\Actions\RemoveRoomObjectAction.cs" />
     <Compile Include="Engine\Actions\DelayAction.cs" />

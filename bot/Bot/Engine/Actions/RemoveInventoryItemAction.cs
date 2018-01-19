@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
 
 namespace GameATron3000.Bot.Engine.Actions
@@ -18,10 +19,15 @@ namespace GameATron3000.Bot.Engine.Actions
             var gameState = new GameState(context);
             gameState.RemoveInventoryItem(_roomObject);
 
-            await context.PostEventAsync(Event.InventoryItemRemoved, JObject.FromObject(new
+            var activity = ((Activity)context.Activity).CreateReply();
+            activity.Type = ActivityTypes.Event;
+            activity.Name = Event.InventoryItemRemoved;
+            activity.Properties = JObject.FromObject(new
             {
                 objectId = _roomObject.Id
-            }));
+            });
+
+            await context.PostAsync(activity).ConfigureAwait(false);
 
             return false;
         }

@@ -22,9 +22,14 @@ namespace GameATron3000.Bot.Engine
         {
             var roomDefinition = GetRoomDefinition();
 
-            await context.PostEventAsync(Event.RoomEntered, roomDefinition.ToJObject());
+            // TODO
+            //            var roomEntered 
+            // await context.PostEventAsync(Event.RoomEntered, roomDefinition.ToJObject());
 
-            foreach (var action in OnEnterRoom())
+            var initialActions = OnEnterRoom().ToList();
+            initialActions.Add(new IdleAction());
+
+            foreach (var action in initialActions)
             {
                 var contextHandled = await action.ExecuteAsync(context, ResumeAfterConversationTree);
                 if (contextHandled)
@@ -32,8 +37,6 @@ namespace GameATron3000.Bot.Engine
                     return;
                 }
             }
-
-            await context.PostEventAsync(Event.Idle);
 
             context.Wait(MessageReceivedAsync);
         }
@@ -80,7 +83,8 @@ namespace GameATron3000.Bot.Engine
                 var wireManager = GetWireManager();
                 var gameState = new GameState(context);
 
-                var actions = wireManager.GetActions(activity.Text, gameState);
+                var actions = wireManager.GetActions(activity.Text, gameState).ToList();
+                actions.Add(new IdleAction());
 
                 foreach (var action in actions)
                 {
@@ -90,8 +94,6 @@ namespace GameATron3000.Bot.Engine
                         return;
                     }
                 }
-
-                await context.PostEventAsync(Event.Idle);
             }
 
             context.Wait(MessageReceivedAsync);
@@ -99,7 +101,8 @@ namespace GameATron3000.Bot.Engine
 
         private async Task ResumeAfterConversationTree(IDialogContext context, IAwaitable<object> result)
         {
-            await context.PostEventAsync(Event.Idle);
+            var idle = new IdleAction();
+            await idle.ExecuteAsync(context).ConfigureAwait(false);
 
             context.Wait(MessageReceivedAsync);
         }

@@ -1,7 +1,7 @@
-﻿using System.Drawing;
-using System.Threading.Tasks;
-using Microsoft.Bot.Builder.Dialogs;
+﻿using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace GameATron3000.Bot.Engine.Actions
 {
@@ -10,26 +10,31 @@ namespace GameATron3000.Bot.Engine.Actions
         private readonly RoomObject _roomObject;
         private readonly int _x;
         private readonly int _y;
-        private readonly bool _foreground;
+        private readonly bool _bringToFront;
 
-        public AddRoomObjectAction(RoomObject roomObject, int x, int y, bool foreground = false)
+        public AddRoomObjectAction(RoomObject roomObject, int x, int y, bool bringToFront = false)
         {
             _roomObject = roomObject;
             _x = x;
             _y = y;
-            _foreground = foreground;
+            _bringToFront = bringToFront;
         }
 
         public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
         {
-            await context.PostEventAsync(Event.RoomObjectAdded, JObject.FromObject(new
+            var activity = ((Activity)context.Activity).CreateReply();
+            activity.Type = ActivityTypes.Event;
+            activity.Name = Event.RoomObjectAdded;
+            activity.Properties = JObject.FromObject(new
             {
                 objectId = _roomObject.Id,
                 description = _roomObject.Description,
                 x = _x,
                 y = _y,
-                foreground = _foreground
-            }));
+                foreground = _bringToFront
+            });
+
+            await context.PostAsync(activity).ConfigureAwait(false);
 
             return false;
         }

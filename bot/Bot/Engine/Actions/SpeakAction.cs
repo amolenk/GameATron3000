@@ -1,6 +1,7 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GameATron3000.Bot.Engine.Actions
@@ -9,28 +10,35 @@ namespace GameATron3000.Bot.Engine.Actions
     {
         private readonly string _actorId;
         private readonly string _text;
+        private readonly List<ConversationOption> _options;
 
-        public SpeakAction(string actorId, string text)
+        public SpeakAction(string actorId, string text, List<ConversationOption> options = null)
         {
             _actorId = actorId;
             _text = text;
+            _options = options;
         }
 
-        public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
+        public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume = null)
         {
-            // TODO USE EXTENSION METHOD
-
             var reply = ((Activity)context.Activity).CreateReply();
             reply.Type = ActivityTypes.Message;
             reply.Text = _text;
             reply.From.Name = _actorId;
 
-            if (_actorId != Actor.NarratorId)
+            if (_options != null)
             {
-                reply.Properties = JObject.FromObject(new
+                reply.SuggestedActions = new SuggestedActions
                 {
-                    actorId = _actorId
-                });
+                    Actions = _options
+                        .Select(option => new CardAction
+                        {
+                            Title = option.Text,
+                            Type = ActionTypes.ImBack,
+                            Value = option.Text
+                        })
+                        .ToList()
+                };
             }
 
             await context.PostAsync(reply);

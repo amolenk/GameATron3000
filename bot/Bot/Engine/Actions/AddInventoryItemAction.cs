@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
 
 namespace GameATron3000.Bot.Engine.Actions
@@ -13,16 +14,21 @@ namespace GameATron3000.Bot.Engine.Actions
             _roomObject = roomObject;
         }
 
-        public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
+        public async Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume = null)
         {
             var gameState = new GameState(context);
             gameState.AddInventoryItem(_roomObject);
 
-            await context.PostEventAsync(Event.InventoryItemAdded, JObject.FromObject(new
+            var activity = ((Activity)context.Activity).CreateReply();
+            activity.Type = ActivityTypes.Event;
+            activity.Name = Event.InventoryItemAdded;
+            activity.Properties = JObject.FromObject(new
             {
                 objectId = _roomObject.Id,
                 description = _roomObject.Description
-            }));
+            });
+
+            await context.PostAsync(activity).ConfigureAwait(false);
 
             return false;
         }
