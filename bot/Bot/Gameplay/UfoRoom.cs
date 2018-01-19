@@ -330,7 +330,7 @@ namespace GameATron3000.Bot.Gameplay
                             actions.Add(Actors.Ian.FaceFront());
                             actions.Add(Actors.Ian.Speak("Ehm...\nWhy is that red shirt guy still in my spaceship?"));
                             actions.Add(Delay(TimeSpan.FromSeconds(2)));
-                            actions.Add(NextRoom(new BeachRoom()));
+                            actions.Add(SwitchRoom(new BeachRoom()));
                         }
                         else
                         {

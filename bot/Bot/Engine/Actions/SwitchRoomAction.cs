@@ -3,18 +3,18 @@ using Microsoft.Bot.Builder.Dialogs;
 
 namespace GameATron3000.Bot.Engine.Actions
 {
-    public class EnterRoom : IAction
+    public class SwitchRoomAction : IAction
     {
-        private readonly Room _room;
+        private readonly Room _newRoom;
 
-        public EnterRoom(Room room)
+        public SwitchRoomAction(Room newRoom)
         {
-            _room = room;
+            _newRoom = newRoom;
         }
 
         public Task<bool> ExecuteAsync(IDialogContext context, ResumeAfter<object> resume)
         {
-            context.Done(_room);
+            context.Done(_newRoom);
 
             return Task.FromResult(true);
         }

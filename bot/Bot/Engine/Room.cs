@@ -22,14 +22,15 @@ namespace GameATron3000.Bot.Engine
         {
             var roomDefinition = GetRoomDefinition();
 
-            // TODO
-            //            var roomEntered 
-            // await context.PostEventAsync(Event.RoomEntered, roomDefinition.ToJObject());
+            var actions = new List<IAction>
+            {
+                new SetupRoomAction(roomDefinition)
+            };
 
-            var initialActions = OnEnterRoom().ToList();
-            initialActions.Add(new IdleAction());
+            actions.AddRange(OnEnterRoom());
+            actions.Add(new IdleAction());
 
-            foreach (var action in initialActions)
+            foreach (var action in actions)
             {
                 var contextHandled = await action.ExecuteAsync(context, ResumeAfterConversationTree);
                 if (contextHandled)
@@ -65,9 +66,9 @@ namespace GameATron3000.Bot.Engine
             return new DelayAction(time);
         }
 
-        protected IAction NextRoom(Room nextRoom)
+        protected IAction SwitchRoom(Room newRoom)
         {
-            return new EnterRoom(nextRoom);
+            return new SwitchRoomAction(newRoom);
         }
 
         protected IAction ShowCloseUp(RoomObject roomObject, IEnumerable<IAction> closeUpActions)

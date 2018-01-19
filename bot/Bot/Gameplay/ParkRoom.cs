@@ -65,7 +65,7 @@ namespace GameATron3000.Bot.Gameplay
                         Delay(TimeSpan.FromSeconds(1)),
                         Actors.Guy.Speak("Uh oh..."),
                         Delay(TimeSpan.FromSeconds(3)),
-                        NextRoom(new UfoRoom())
+                        SwitchRoom(new UfoRoom())
                     };
                 }
                 else
