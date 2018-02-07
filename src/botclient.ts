@@ -3,6 +3,7 @@
 
 import { Action } from "./action"
 import { Activity, DirectLine } from "../node_modules/botframework-directlinejs/built/directline";
+import { Settings } from "./settings"
 import "../node_modules/rxjs/add/operator/concatMap";
 
 export class BotClient {
@@ -13,7 +14,7 @@ export class BotClient {
     constructor() {
 
         this.directLine = new DirectLine({
-            secret: "Wo7jEuQLS04.cwA.zRU.ol9BvJHbEP10n1yHYfp5jTIn7GxgY-KZkfGTY2uZP0c"
+            secret: Settings.DIRECT_LINE_SECRET
         });
     }
 
@@ -22,7 +23,7 @@ export class BotClient {
         console.log("Connecting to Botty McBot...");
         
         this.directLine.activity$
-            .filter(activity => (activity.type === "message" || activity.type === "event") && activity.from.id === "myoldskoolbot")
+            .filter(activity => (activity.type === "message" || activity.type === "event") && activity.from.id === Settings.BOT_ID)
             .concatMap(async x => {
 
                 var activity = <any>x;
