@@ -140,7 +140,6 @@
     <Compile Include="Engine\ConversationOption.cs" />
     <Compile Include="Engine\ConversationScript.cs" />
     <Compile Include="Engine\ConversationTopic.cs" />
-    <Compile Include="Engine\DialogContextExtensions.cs" />
     <Compile Include="Engine\Actions\AddInventoryItemAction.cs" />
     <Compile Include="Engine\Event.cs" />
     <Compile Include="Engine\GameState.cs" />
