@@ -37,8 +37,8 @@ export class UIMediator {
         botClient.connect(
             async message => {
 
-                if (message.actorId) {
-                    var actor = this.room.getActor(message.actorId);
+                if (message.from.name != 'narrator') {
+                    var actor = this.room.getActor(message.from.name);
                     await actor.say(message.text);
 
                     if (message.suggestedActions) {
@@ -61,13 +61,13 @@ export class UIMediator {
                         break;
                     }
 
-                    case "ActorTurnedAway": {
+                    case "ActorFacedAway": {
                         var actor = this.room.getActor(event.actorId);
                         await actor.faceBack();
                         break;
                     }
 
-                    case "ActorTurnedFront": {
+                    case "ActorFacedFront": {
                         var actor = this.room.getActor(event.actorId);
                         await actor.faceFront();
                         break;

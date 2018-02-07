@@ -5,7 +5,6 @@ import { BotClient } from "./botclient"
 import { Cursor } from "./cursor"
 import { Layers } from "./layers"
 import { Room } from "./room"
-import { SecretSettings } from "./settings-secrets"
 import { UIMediator } from "./ui-mediator"
 
 class GameATron {
