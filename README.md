@@ -19,7 +19,7 @@ ngrok http -host-header=rewrite 3979
 
 Some information is shown including an https forwarding address:
 
-![](CF3D41F6-EC44-487E-B1EA-F02564797AB6.png)
+![](images/server.png)
 
 Now go to the Azure portal and create a new *Bot Channels Registration* resource. Use the https address from ngrok for the messaging endpoint (postfixed with `/api/messages`):
 
