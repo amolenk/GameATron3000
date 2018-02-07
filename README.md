@@ -56,11 +56,15 @@ Navigate to *Channels* on the *Bot Channels Registration* resource. Here you can
 
 Click the *Show* button for the first secret key and copy its value. Then click *Done*.
 
-Open the front-end project (the *src* folder, we use Visual Studio Code) and open the *settings.ts* file.
+Open the front-end project by opening the root-folder of the repo in Visual Studio Code. 
+
+Execute an *npm install* in the root-folder of the repo to make sure you have everything to run the front-end.
+
+Open the *src/settings.ts* file.
 Set the *BOT_ID* variable to the name you’ve chosen for your bot (which is the name of the *Bot Channels Registration* resource).
 Set the *DIRECT_LINE_SECRET* variable to the secret key value you’ve copied from the Direct Line configuration page.
 
-Now you can run the front-end and it will communicate with the bot to start your adventure!
+Now you can run the front-end (*Ctrl-Shift-B*) and it will communicate with the bot to start your adventure!
 
 
 
