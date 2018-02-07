@@ -19,22 +19,22 @@ ngrok http -host-header=rewrite 3979
 
 Some information is shown including an https forwarding address:
 
-![](images/server.png)
+![](images/ngrok.png)
 
 Now go to the Azure portal and create a new *Bot Channels Registration* resource. Use the https address from ngrok for the messaging endpoint (postfixed with `/api/messages`):
 
-![](E40F95FF-7EFF-47B2-90D0-8BB23A03296C.png)
+![](images/botchannelsregistration.png)
 
 
 ## Setting up Bot security
 We now need to generate a new Microsoft App Password to secure the connection between the Portal and the bot.
 In the newly created *Bot Channels Registration* resource, go to *Settings*:
 
-![](901B1EFE-DAAD-4E13-B019-E3232E8EB53A.png)
+![](images/botchannelssettings.png)
 
 Click on the Microsoft App ID *Manage* link to open the bot registration page. Then click *Generate New Password* and save the password somewhere because you’ll need it later on. Also make a note of the *Application Id*.
 
-![](179A47EC-952E-449E-BCF1-32FCF588B223.png)
+![](images/microsoftappid.png)
 
 Click the *Save* button on the bottom on the page.
 
@@ -43,7 +43,7 @@ Open the **GameATron3000** solution from the *bot* folder. Edit the *Web.config*
 
 Now run the *Bot* project and a browser window should open showing the following message:
 
-![](12D5A9E4-F60C-44EA-9F0D-FB7F59263565.png)
+![](images/server.png)
 
 If you go back to the Portal and navigate to *Test in Web Chat* on the *Bot Channels Registration* resource, you can test whether the connection to the bot is set up successfully. Type in the `look at newspaper` command and you should receive a reply from the bot.
 
@@ -52,7 +52,7 @@ Because we want to play using an awesome 8-bit front-end instead of a chat box, 
 
 Navigate to *Channels* on the *Bot Channels Registration* resource. Here you can configure the Direct Line channel by clicking on the *Configure Direct Line channel* button (globe icon). 
 
-![](C0EFE02C-AC6C-4AE0-8D5B-F17A3682E473.png)
+![](images/directline.png)
 
 Click the *Show* button for the first secret key and copy its value. Then click *Done*.
 
