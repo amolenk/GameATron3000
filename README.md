@@ -5,7 +5,9 @@ The engine contains 2 parts: a front-end part ("the game") and a back-end part (
 The front-end is a Javascript (Typescript) based engine built on top of the **Phaser HTML5 game framework**.
 The back-end is built on top of the **Microsoft Bot framework**.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/0ZAaik-S9n8?rel=0&amp;start=410" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+Below video from the Tech Days NL conference shows the engine in action (video is in Dutch):
+
+[![TechDaysNL presentation](https://img.youtube.com/vi/0ZAaik-S9n8/0.jpg)](https://youtu.be/0ZAaik-S9n8?t=6m50s)
 
 This README will explain how to run both the front-end and back-end locally. You will need to use the Azure Portal to register the bot though.
 
