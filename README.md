@@ -1,3 +1,5 @@
+> This project is deprecated. For the latest version, see https://github.com/amolenk/GameATron4000
+
 # Game-A-Tron 3000
 This repo contains a game-engine for an old-skool 8 bit adventure game. The game was inspired by games from the eighties and nineties like Monkey Island, Day of the Tentacle, Full Throttle, Grim Fandango, etc.
 
